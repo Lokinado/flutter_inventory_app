@@ -1,4 +1,4 @@
-# inventory_app
+# firstproject
 
 A new Flutter project.
 
