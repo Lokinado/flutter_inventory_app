@@ -9,17 +9,14 @@ class ListPage extends StatelessWidget {
   Widget build(BuildContext context){
       return Scaffold(
         body: SafeArea(
-          child: Center(
-          child: Column(
-            children:[
-              for(var data in dataHere)
-              ListTile(
-                title: Text(data),
-              ),
-          ]
+          child: ListView.builder(
+            itemCount: dataHere.length,
+            itemBuilder:(context, index){
+              return Text('Test');
+            },
           ),
           ),
-        ),
-      );
+          );
+
   }
 }
