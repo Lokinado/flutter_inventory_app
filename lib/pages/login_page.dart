@@ -14,17 +14,18 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return Scaffold(
+      resizeToAvoidBottomInset : false, //to avoid the keyboard to resize the page
       backgroundColor: Colors.grey[300], //background color
       body: SafeArea( //to avoid the notch
         child: Center( //to center the content
         child:Column( //to stack widgets on top of each other
           children: [
-            const SizedBox(height: 100), //to add space between widgets
+            const SizedBox(height: 50), //to add space between widgets
 
             //logo
-            Image.asset('lib/images/sggw.png',height: 200,), //to add an image
+            Image.asset('lib/images/sggw.png',height: 150,), //to add an image
 
-            const SizedBox(height: 50),
+            const SizedBox(height: 20),
 
         //welcome back, you've been missed!
             Text(
@@ -39,7 +40,7 @@ class LoginPage extends StatelessWidget {
         //username textfield
         MyTextField( //to use the textfield from the components folder
           controller: usernameController, //to get what the user typed in the textfield in username
-          hintText: 'Username', //i hint to the user to that he should type his username
+          hintText: 'Nazwa Użytkownika', //i hint to the user to that he should type his username
           obscureText: false,), //here we dont hide the contents of the textfield
 
         const SizedBox(height: 10),
@@ -47,7 +48,7 @@ class LoginPage extends StatelessWidget {
         //password textfield
         MyTextField(
           controller: passwordController, 
-          hintText: 'Password', // i hint to the user to that he should type his password
+          hintText: 'Hasło', // i hint to the user to that he should type his password
           obscureText: true,),//here we hide the contents of the textfield
           const SizedBox(height: 25),
         

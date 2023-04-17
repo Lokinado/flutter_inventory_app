@@ -14,12 +14,12 @@ class MyButton extends StatelessWidget { //to create a button
         padding: const EdgeInsets.all(25), //to add space between the text and the border
         margin:  const EdgeInsets.symmetric(horizontal: 25), //to add space between the button and the border
         decoration: BoxDecoration( //to add decoration to the button
-          color: Colors.black, 
+          color: const Color.fromRGBO(0, 50, 39, 1),
           borderRadius: BorderRadius.circular(8), //to make the corners of the button rounded
         ),
         child:  const Center( //to center the text
           child: Text(
-            "Sign In",
+            "Zaloguj się",
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
