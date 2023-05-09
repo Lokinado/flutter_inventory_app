@@ -1,16 +1,66 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:inventory_app/components/my_button.dart';
 import 'package:inventory_app/components/my_text_field.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
-  final usernameController = TextEditingController(); //to get what the user typed in the textfield in username
-  final passwordController = TextEditingController(); //to get what the user typed in the textfield in password
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
 
-  //sign user in method
-  void signUserIn(){} // this methon in the futher will be used to sign the user in
+class _LoginPageState extends State<LoginPage> {
+  final usernameController = TextEditingController(); 
+ //to get what the user typed in the textfield in username
+  final passwordController = TextEditingController(); 
+ //to get what the user typed in the textfield in password
+  void signUserIn() async{
 
+    // show loading indicator
+    showDialog(
+      context: context, 
+      builder: (context){
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+    );
+    // try sign in
+    try{
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: usernameController.text, 
+      password: passwordController.text,
+      );
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+      } on FirebaseAuthException catch(e) {
+        if (e.code == 'user-not-found' || 
+        e.code == 'invalid-email' || 
+        e.code == 'wrong-password'){
+            Navigator.pop(context);
+            wrongLoginData();
+      }
+      
+    }
+
+  } 
+
+  wrongLoginData(){
+    showDialog(
+      context: context, 
+      builder: (context){
+        return const AlertDialog(
+          title: Text('Błąd logowania'),
+          content: Text('Nieprawidłowa nazwa użytkownika lub hasło'),
+          
+        );
+      }
+    );
+  }
+
+  
+ // this methon in the futher will be used to sign the user in
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -27,7 +77,7 @@ class LoginPage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-        //welcome back, you've been missed!
+        //welcome back, you've been missed
             Text(
               'Dzień dobry, witamy w aplikacji',
               style: TextStyle(
