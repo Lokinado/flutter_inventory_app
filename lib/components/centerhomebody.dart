@@ -34,10 +34,6 @@ class CenterBodySection extends StatelessWidget {
     );
   }
 
-  void gotoSkanowanie() {
-    // Implement your navigation logic here
-  }
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -69,7 +65,7 @@ class CenterBodySection extends StatelessWidget {
                   width: 382,
                   height: 70,
                   child: ElevatedButton(
-                    onPressed: gotoSkanowanie,
+                    onPressed: (){},
                     style: ElevatedButton.styleFrom(
                       primary: Color.fromARGB(228, 6, 139, 57),
                       shape: RoundedRectangleBorder(
