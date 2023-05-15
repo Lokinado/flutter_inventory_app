@@ -45,7 +45,7 @@ class ListPage extends StatelessWidget {
       body: Column(
         children:[
           Container(
-            width: MediaQuery.of(context).size.width,
+            width: mediaWidth,
             height: 120.0,
             decoration: const BoxDecoration(
               color: Color.fromARGB(255,0,50,40),
@@ -72,7 +72,7 @@ class ListPage extends StatelessWidget {
             child: CircleAvatar(
               backgroundColor: const Color.fromARGB(255 ,87, 178, 122),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {print("dodaje obiekt!");},
                 icon: const Icon(Icons.add, color: Colors.white,),
                 style: IconButton.styleFrom(
                   shape: const CircleBorder(),
@@ -143,7 +143,7 @@ class ListPage extends StatelessWidget {
 
                 width: mediaWidth*0.8,
                 height: 70.0,
-                margin: EdgeInsets.all(30.0),
+                margin: const EdgeInsets.all(30.0),
                 decoration: const BoxDecoration(
                   color: Color.fromARGB(255,148,175,159),
                   borderRadius: BorderRadius.all(
@@ -183,7 +183,7 @@ class ListPage extends StatelessWidget {
             height: 50.0,
             width: mediaWidth*0.7,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(50.0),
                 color: const Color.fromARGB(217, 217, 217, 217)),
             margin: const EdgeInsets.only(left: 5.0, bottom: 5.0),
             child: ListTile(
