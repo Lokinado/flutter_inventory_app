@@ -40,6 +40,7 @@ class ListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Column(
         children:[
@@ -47,7 +48,7 @@ class ListPage extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             height: 120.0,
             decoration: const BoxDecoration(
-              color: Colors.green,
+              color: Color.fromARGB(255,0,50,40),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(40.0),
                 bottomRight: Radius.circular(40.0),
@@ -64,66 +65,115 @@ class ListPage extends StatelessWidget {
               ),
             ),
           ),
-
+        Align(
+          alignment: Alignment.topLeft,
+          child: Container(
+            margin: const EdgeInsets.only(left: 8.0, top: 8.0),
+            child: CircleAvatar(
+              backgroundColor: const Color.fromARGB(255 ,87, 178, 122),
+              child: IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.add, color: Colors.white,),
+                style: IconButton.styleFrom(
+                  shape: const CircleBorder(),
+                  padding: const EdgeInsets.all(24.0),
+                ),
+              ),
+            ),
+          ),
+        ),
         Expanded(
         child: ListView(
           children: [
             for (int building in uniqueBuildings)
               Container(
                 margin: const EdgeInsets.only(left: 10.0),
-                child: ExpansionTile(
-                  title: Text('Budynek $building'),
-                  children: [
-                    for (int level in uniqueFloors)
-                      if (rooms
-                          .where((room) =>
-                      room.building == building && room.level == level)
-                          .isNotEmpty)
-                        Container(
-                          margin: const EdgeInsets.only(left: 12.0),
-                          child: ExpansionTile(
-                            title: Text('Piętro $level'),
-                            children: [
-                              Column(
-                                children: _buildRoomTiles(building, level),
+                child: Theme(
+                  data: Theme.of(context).copyWith(
+                    unselectedWidgetColor: Colors.black, // here for close state
+                    colorScheme: const ColorScheme.light(
+                      primary: Colors.black,
+                    ), // here for open state in replacement of deprecated accentColor
+                    dividerColor: Colors.transparent, // if you want to remove the border
+                  ),
+                  child: ExpansionTile(
+                    title: Text('Budynek $building'),
+                    textColor: Colors.black,
+                    collapsedTextColor: Colors.black,
+                    shape: const Border(),
+                    children: [
+                      for (int level in uniqueFloors)
+                        if (rooms
+                            .where((room) =>
+                        room.building == building && room.level == level)
+                            .isNotEmpty)
+                          Container(
+                            margin: const EdgeInsets.only(left: 12.0),
+                            child: Theme(
+                              data: Theme.of(context).copyWith(
+                                unselectedWidgetColor: Colors.black, // here for close state
+                                colorScheme: const ColorScheme.light(
+                                  primary: Colors.black,
+                                ), // here for open state in replacement of deprecated accentColor
+                                dividerColor: Colors.transparent, // if you want to remove the border
                               ),
-                            ],
+                              child: ExpansionTile(
+                                title: Text('Piętro $level'),
+                                textColor: Colors.black,
+                                collapsedTextColor: Colors.black,
+                                children: [
+                                  Column(
+                                    children: _buildRoomTiles(building, level, mediaWidth),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
+                    ],
+                  ),
+                ),
+              ),
+
+          ],
+        ),
+        ),
+          GestureDetector(
+            onTap: () => print("tu przekierowanie"),
+              child: Container(
+
+                width: mediaWidth*0.8,
+                height: 70.0,
+                margin: EdgeInsets.all(30.0),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255,148,175,159),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(40.0),
+                  ),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 10.0,
+                      offset: Offset(0.0, 0.75),
+                    ),
                   ],
                 ),
-              ),
-            GestureDetector(
-              onTap: () => print("tu przekierowanie"),
-              child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 70.0,
-              decoration: const BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.all(
-                  Radius.circular(40.0),
-                ),
-              ),
                 child: const Center(
                   child: Text(
-                    "Rozpocznij skanowanie",
+                    "Dodaj i Wygeneruj kody",
                     style: TextStyle(
                       fontSize: 22.0,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                   ),
                 ),
               ),
-            )
-          ],
-        ),
-        ),
+            ),
         ],
       ),
     );
   }
 
-  List<Widget> _buildRoomTiles(int building, int floor) {
+  List<Widget> _buildRoomTiles(int building, int floor, mediaWidth) {
     List<Widget> roomTiles = [];
 
     for (Room room in rooms) {
@@ -131,12 +181,13 @@ class ListPage extends StatelessWidget {
         roomTiles.add(
           Container(
             height: 50.0,
-            width: 300.0,
+            width: mediaWidth*0.7,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Colors.grey),
-            margin: const EdgeInsets.only(left: 20.0, bottom: 5.0),
+                color: const Color.fromARGB(217, 217, 217, 217)),
+            margin: const EdgeInsets.only(left: 5.0, bottom: 5.0),
             child: ListTile(
+
               title: Text('Sala ${room.roomNumber}'),
               onTap: ()=>print("tu mam przejśc gdzieś!"), //TODO: Przejście do innej strony
             ),
