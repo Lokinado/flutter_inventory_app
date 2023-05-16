@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/pages/home_page.dart';
 import 'package:camera/camera.dart';
-
+import 'package:inventory_app/main.dart';
 
 late List<CameraDescription> _cameras;
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
+void main() async {
   _cameras = await availableCameras();
-  runApp(const CameraApp());
 }
 
 /// CameraApp is the Main Application.
