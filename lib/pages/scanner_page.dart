@@ -5,25 +5,24 @@ import 'package:inventory_app/main.dart';
 
 late List<CameraDescription> _cameras;
 
-void main() async {
+void CameraCheck () async {
   _cameras = await availableCameras();
 }
 
-/// CameraApp is the Main Application.
-class CameraApp extends StatefulWidget {
-  /// Default Constructor
-  const CameraApp({super.key});
+class CameraPage extends StatefulWidget{
+  const CameraPage({super.key});
 
   @override
-  State<CameraApp> createState() => _CameraAppState();
+  State<CameraPage> createState() => _CameraAppState();
 }
 
-class _CameraAppState extends State<CameraApp> {
+class _CameraAppState extends State<CameraPage> {
   late CameraController controller;
 
   @override
   void initState() {
     super.initState();
+    CameraCheck();
     controller = CameraController(_cameras[0], ResolutionPreset.max);
     controller.initialize().then((_) {
       if (!mounted) {
@@ -44,7 +43,6 @@ class _CameraAppState extends State<CameraApp> {
     });
   }
 
-
   @override
   void dispose() {
     controller.dispose();
@@ -59,19 +57,5 @@ class _CameraAppState extends State<CameraApp> {
     return MaterialApp(
       home: CameraPreview(controller),
     );
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    final CameraController? cameraController = controller;
-
-    // App state changed before we got the chance to initialize.
-    if (cameraController == null || !cameraController.value.isInitialized) {
-      return;
-    }
-
-    if (state == AppLifecycleState.inactive) {
-      cameraController.dispose();
-    }
   }
 }

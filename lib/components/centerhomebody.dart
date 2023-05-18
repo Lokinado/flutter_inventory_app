@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:inventory_app/pages/scanner_page.dart';
 
 class CenterBodySection extends StatelessWidget {
   const CenterBodySection({Key? key}) : super(key: key);
 
-  Widget buildCircle({required String text, required double top, required double right}) {
+  Widget buildCircle({required String text, required double top,
+    required double right}) {
     return Positioned(
       top: top,
       right: right,
@@ -65,7 +67,11 @@ class CenterBodySection extends StatelessWidget {
                   width: 382,
                   height: 70,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      Navigator.push(
+                        context, MaterialPageRoute(builder: (context) => const CameraPage()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       primary: Color.fromARGB(228, 6, 139, 57),
                       shape: RoundedRectangleBorder(
