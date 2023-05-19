@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/pages/scanner/scanner_page.dart';
+import 'package:inventory_app/components/topbodysection.dart';
 
 class CenterBodySection extends StatelessWidget {
-  const CenterBodySection({Key? key, required this.size}) : super(key: key);
+   CenterBodySection({Key? key,
+    required this.size,
+    required this.location})
+      : super(key: key);
 
   final Size size;
+  final Location location;
+  double roundness = 75;
 
   Widget buildCircle({required String text, required double top,
     required double right, required double width}) {
@@ -74,10 +80,13 @@ class CenterBodySection extends StatelessWidget {
       child: Container(
         width: size.width,
         height: size.height,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
-            topRight: Radius.circular(75),
+            topRight: Radius.circular(
+                location == Location.right? roundness : 0),
+            topLeft: Radius.circular(
+                location == Location.left? roundness : 0),
           ),
         ),
         child: Stack(

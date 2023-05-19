@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:inventory_app/components/homebody.dart';
+import 'package:inventory_app/components/topbodysection.dart';
 
 class AddPage extends StatefulWidget {
   @override
@@ -8,11 +10,7 @@ class AddPage extends StatefulWidget {
 class _AddPageState extends State<AddPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.green,
-      child: Center(
-        child: Text('Add Page'),
-      ),
-    );
+    final Size rozmiar = MediaQuery .of(context) .size;
+    return Scaffold(body: Body(title: "Dodawanie", size: rozmiar, location: Location.left,));
   }
 }
