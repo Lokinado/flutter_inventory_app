@@ -57,9 +57,9 @@ class CenterBodySection extends StatelessWidget {
           ),
           child: Stack(
             children: <Widget>[
-              buildCircle(text: ' ${34}     |     Budynek', top: 110, right: 5),
-              buildCircle(text: ' ${3}     |     Piętro', top: 190, right: 5),
-              buildCircle(text: ' ${32}      |     Pomieszczenie', top: 270, right: 5),
+              buildCircle(text: '${34}     |     Budynek', top: 110, right: 5),
+              buildCircle(text: '${3}     |     Piętro', top: 190, right: 5),
+              buildCircle(text: '${32}      |     Pomieszczenie', top: 270, right: 5),
               Positioned(
                 bottom: 60,
                 left: (size.width - 382) / 2,
@@ -73,7 +73,7 @@ class CenterBodySection extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Color.fromARGB(228, 6, 139, 57),
+                      backgroundColor: const Color.fromARGB(228, 6, 139, 57),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),

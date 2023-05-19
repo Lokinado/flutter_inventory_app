@@ -11,7 +11,7 @@ class Body extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          TopBodySection(key: UniqueKey(), size: size),
+          TopBodySection(key: UniqueKey(), tekst: "Wybór miejsca",size: size),
           CenterBodySection(key: UniqueKey())
         ],
       ),
