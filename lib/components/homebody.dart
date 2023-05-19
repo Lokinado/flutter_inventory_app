@@ -13,7 +13,7 @@ class Body extends StatelessWidget {
       child: Column(
         children: <Widget>[
           TopBodySection(key: UniqueKey(), tekst: "Wybór miejsca",size: size),
-          CenterBodySection(key: UniqueKey())
+          CenterBodySection(key: UniqueKey(), size: size)
         ],
       ),
     );

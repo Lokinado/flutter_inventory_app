@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/pages/scanner/scanner_page.dart';
 
 class CenterBodySection extends StatelessWidget {
-  const CenterBodySection({Key? key}) : super(key: key);
+  const CenterBodySection({Key? key, required this.size}) : super(key: key);
+
+  final Size size;
 
   Widget buildCircle({required String text, required double top,
     required double right}) {
@@ -38,7 +40,6 @@ class CenterBodySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
 
     return Container(
       height: size.height * 0.70,
@@ -94,5 +95,6 @@ class CenterBodySection extends StatelessWidget {
         ),
       ),
     );
+
   }
 }
