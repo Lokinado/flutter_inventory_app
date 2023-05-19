@@ -58,14 +58,11 @@ class TopBodySection extends StatelessWidget {
 
               ),
               child: Row(
-                children: <Widget>[
-                  Center( child:
-                  Text(tekst, style: TextStyle(
-                      fontSize: 30,
-                      color: Colors.white,
-                      fontFamily: 'Montserrat',)
-                    ,)
-                    ,)
+                children: <Widget>[Text(tekst, style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.white,
+                  fontFamily: 'Montserrat',)
+                  ,)
                 ],
               ),
             ),
