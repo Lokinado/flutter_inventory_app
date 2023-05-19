@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/components/homebody.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class CustomBottomNavigationBar extends StatefulWidget {
-  const CustomBottomNavigationBar({Key? key, required this.size}) : super(key: key);
+class loggedMainPage extends StatefulWidget {
+  const loggedMainPage({Key? key, required this.size}) : super(key: key);
 
   final Size size;
 
   @override
-  State<CustomBottomNavigationBar> createState() => _CustomBottomNavigationBarState();
+  State<loggedMainPage> createState() => _loggedMainPageState();
 }
 
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
+class _loggedMainPageState extends State<loggedMainPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   var selected = 1;
@@ -19,7 +19,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this, initialIndex: 2);
+    _tabController = TabController(length: 3, vsync: this,
+        initialIndex: selected);
   }
 
   @override

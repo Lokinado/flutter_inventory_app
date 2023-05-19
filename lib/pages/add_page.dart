@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/homebody.dart';
-import '../components/bottom_navigation_bar.dart';
+import 'logged_page.dart';
 
 
 class AddPage extends StatefulWidget {
@@ -24,7 +24,7 @@ class _AddPageState extends State<AddPage> {
     return Scaffold(
         appBar: buildAppBar(),
         body: Body(title: "Dodawanie",size: rozmiar),
-        bottomNavigationBar: CustomBottomNavigationBar(size: rozmiar)
+        bottomNavigationBar: loggedMainPage(size: rozmiar)
     );
   }
 
