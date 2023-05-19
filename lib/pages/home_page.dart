@@ -11,6 +11,7 @@ class HomePage extends StatelessWidget {
   void signUserOut() async{
     await FirebaseAuth.instance.signOut();
   } // this methon in the futher will be used to sign the user out
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -26,7 +27,7 @@ class HomePage extends StatelessWidget {
       elevation: 0,
       actions: [
         IconButton(
-          onPressed: signUserOut, 
+          onPressed: signUserOut,
           icon: const Icon(Icons.logout))
       ],
     );

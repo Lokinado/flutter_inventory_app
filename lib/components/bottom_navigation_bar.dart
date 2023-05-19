@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:inventory_app/pages/home_page.dart';
+import 'package:inventory_app/pages/scanner_page.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   const CustomBottomNavigationBar({Key? key}) : super(key: key);
@@ -26,15 +28,16 @@ class CustomBottomNavigationBar extends StatelessWidget {
         children: <Widget>[
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.menu, size: 32, color: Colors.white),
+            icon: const Icon(Icons.add_circle_outlined, size: 32, color: Colors.white),
+          ),
+          IconButton(
+            onPressed: () {
+            },
+            icon: const Icon(Icons.camera_alt_rounded, size: 32, color: Colors.white),
           ),
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.barcode_reader, size: 32, color: Colors.white),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.file_copy_sharp, size: 32, color: Colors.white),
+            icon: const Icon(Icons.summarize_outlined, size: 32, color: Colors.white),
           ),
         ],
       ),

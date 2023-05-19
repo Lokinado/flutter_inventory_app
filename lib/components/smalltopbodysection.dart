@@ -29,7 +29,8 @@ class TopBodySection extends StatelessWidget {
               const BoxDecoration(
                 color: Color.fromRGBO(0, 50, 39, 1),
                 borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(75),
+                  bottomLeft: Radius.circular(75),
+                  bottomRight: Radius.circular(75)
                 ),
               ),
               child: Row(
