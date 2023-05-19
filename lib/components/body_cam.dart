@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_app/pages/scanner_page.dart';
+import 'package:inventory_app/pages/scanner/scanner_page.dart';
 
 class Body extends StatelessWidget {
   const Body({super.key});

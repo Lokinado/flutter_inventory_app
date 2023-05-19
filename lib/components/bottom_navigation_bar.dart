@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_app/pages/home_page.dart';
-import 'package:inventory_app/pages/scanner_page.dart';
+import 'package:inventory_app/pages/scanner_home_page.dart';
+import 'package:inventory_app/pages/scanner/scanner_page.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
-  const CustomBottomNavigationBar({Key? key}) : super(key: key);
+  const CustomBottomNavigationBar({Key? key, required this.size}) : super(key: key);
+
+  final Size size;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
+      height: size.height*0.1, // Bottom bar is 10% of the height
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(

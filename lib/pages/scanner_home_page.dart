@@ -6,7 +6,6 @@ import '../components/bottom_navigation_bar.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-
   //sign user out method
   void signUserOut() async{
     await FirebaseAuth.instance.signOut();
@@ -14,10 +13,12 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
+    final Size rozmiar = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: buildAppBar(),
-      body: const Body(),
-      bottomNavigationBar: const CustomBottomNavigationBar(),
+      body: Body(size: rozmiar),
+      bottomNavigationBar: CustomBottomNavigationBar(size: rozmiar),
     );
   }
 
@@ -32,4 +33,6 @@ class HomePage extends StatelessWidget {
       ],
     );
   }
+
+
 }

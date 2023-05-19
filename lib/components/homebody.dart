@@ -3,11 +3,12 @@ import 'package:inventory_app/components/centerhomebody.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 
 class Body extends StatelessWidget {
-  const Body({super.key});
+  const Body({super.key, required this.size});
+
+  final Size size;
 
   @override
   Widget build(BuildContext context){
-    Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_app/pages/scanner_page.dart';
+import 'package:inventory_app/pages/scanner/scanner_page.dart';
 
 class CenterBodySection extends StatelessWidget {
   const CenterBodySection({Key? key}) : super(key: key);
@@ -48,7 +48,7 @@ class CenterBodySection extends StatelessWidget {
         left: 0,
         child: Container(
           width: size.width,
-          height: size.height - size.height * 0.20 + 27,
+          height: size.height * 0.8 + 27,
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(

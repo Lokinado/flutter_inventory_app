@@ -14,7 +14,6 @@ class TopBodySection extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     // It will provide us total height and width of our screen
-    Size size = MediaQuery.of(context).size;
     return SizedBox(
         height: size.height * proportionalHeight,
         child: Stack(

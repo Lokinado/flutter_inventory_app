@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_app/pages/home_page.dart';
+import 'package:inventory_app/pages/scanner_home_page.dart';
 import 'package:camera/camera.dart';
 import 'package:inventory_app/main.dart';
 
