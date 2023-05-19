@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_app/components/homebody.dart';
+import 'package:inventory_app/pages/file_page.dart';
+import 'package:inventory_app/pages/scanner/scan_place_pick.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:inventory_app/pages/add_page.dart';
 
 class loggedMainPage extends StatefulWidget {
   const loggedMainPage({Key? key, required this.size}) : super(key: key);
@@ -41,9 +43,9 @@ class _loggedMainPageState extends State<loggedMainPage>
         controller: _tabController,
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
-          FirstPage(),
-          SecondPage(),
-          ThirdPage(),
+          AddPage(),
+          WyborMiejsca(),
+          FilePage(),
         ],
       ),
       bottomNavigationBar: Container(
@@ -118,57 +120,5 @@ class _loggedMainPageState extends State<loggedMainPage>
   }
 
 
-}
-
-class FirstPage extends StatefulWidget {
-  @override
-  _FirstPageState createState() => _FirstPageState();
-}
-
-class _FirstPageState extends State<FirstPage> {
-
-
-  @override
-  Widget build(BuildContext context) {
-    final Size rozmiar = MediaQuery
-        .of(context)
-        .size;
-    return Scaffold(body: Body(title: "Pierwsza", size: rozmiar));
-  }
-
-}
-
-class SecondPage extends StatefulWidget {
-  @override
-  _SecondPageState createState() => _SecondPageState();
-}
-
-class _SecondPageState extends State<SecondPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.green,
-      child: Center(
-        child: Text('Second Page'),
-      ),
-    );
-  }
-}
-
-class ThirdPage extends StatefulWidget {
-  @override
-  _ThirdPageState createState() => _ThirdPageState();
-}
-
-class _ThirdPageState extends State<ThirdPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.green,
-      child: Center(
-        child: Text('Third Page'),
-      ),
-    );
-  }
 }
 
