@@ -1,16 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/homebody.dart';
+import '../components/bottom_navigation_bar.dart';
 
 
-class ScannerHomePage extends StatefulWidget {
-  const ScannerHomePage({super.key});
+class AddPage extends StatefulWidget {
+  const AddPage({super.key});
 
   @override
-  State<ScannerHomePage> createState() => _ScannerHomePageState();
+  State<AddPage> createState() => _AddPageState();
 }
 
-class _ScannerHomePageState extends State<ScannerHomePage> {
+class _AddPageState extends State<AddPage> {
   //sign user out method
   void signUserOut() async{
     await FirebaseAuth.instance.signOut();
@@ -21,9 +22,9 @@ class _ScannerHomePageState extends State<ScannerHomePage> {
     final Size rozmiar = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: buildAppBar(),
-      body: Body(title: "Wybór miejsca", size: rozmiar),
-      //bottomNavigationBar: CustomBottomNavigationBar(size: rozmiar)
+        appBar: buildAppBar(),
+        body: Body(title: "Dodawanie",size: rozmiar),
+        bottomNavigationBar: CustomBottomNavigationBar(size: rozmiar)
     );
   }
 
@@ -33,8 +34,8 @@ class _ScannerHomePageState extends State<ScannerHomePage> {
       elevation: 0,
       actions: [
         IconButton(
-          onPressed: signUserOut,
-          icon: const Icon(Icons.logout))
+            onPressed: signUserOut,
+            icon: const Icon(Icons.logout))
       ],
     );
   }
