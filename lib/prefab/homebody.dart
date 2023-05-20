@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_app/components/centerhomebody.dart';
+import 'package:inventory_app/pages/scanner/scanerhomepagecenter.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 
-class Body extends StatelessWidget {
-  const Body({super.key,
+class ScannerHomeBody extends StatelessWidget {
+  const ScannerHomeBody({super.key,
     required this.title,
     required this.size,
     required this.location
@@ -20,7 +20,7 @@ class Body extends StatelessWidget {
         children: <Widget>[
           TopBodySection(key: UniqueKey(),
             tekst: title,size: size, location: location,),
-          CenterBodySection(key: UniqueKey(), size: size, location: location,)
+          CenterScanHomePage(key: UniqueKey(), size: size, location: location,)
         ],
       ),
     );

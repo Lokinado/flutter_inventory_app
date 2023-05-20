@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:inventory_app/main.dart';
 
 late List<CameraDescription> _cameras;
 

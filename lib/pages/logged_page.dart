@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_app/pages/file_page.dart';
+import 'package:inventory_app/pages/documents/file_page.dart';
 import 'package:inventory_app/pages/scanner/scan_place_pick.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:inventory_app/pages/add_page.dart';
+import 'package:inventory_app/pages/adding/add_page.dart';
 
 class loggedMainPage extends StatefulWidget {
   const loggedMainPage({Key? key, required this.size}) : super(key: key);
@@ -15,8 +15,16 @@ class loggedMainPage extends StatefulWidget {
 
 class _loggedMainPageState extends State<loggedMainPage>
     with SingleTickerProviderStateMixin {
+
   late TabController _tabController;
   var selected = 1;
+
+
+  void signUserOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
+
+  // Creatino and dispose of the element
 
   @override
   void initState() {
@@ -31,14 +39,13 @@ class _loggedMainPageState extends State<loggedMainPage>
     super.dispose();
   }
 
-  void signUserOut() async {
-    await FirebaseAuth.instance.signOut();
-  }
+  //  Main page
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: buildAppBar(),  // With logged button
+
       body: TabBarView(
         controller: _tabController,
         physics: NeverScrollableScrollPhysics(),
@@ -48,6 +55,8 @@ class _loggedMainPageState extends State<loggedMainPage>
           FilePage(),
         ],
       ),
+
+
       bottomNavigationBar: Container(
         height: widget.size.height * 0.1, // Bottom bar is 10% of the height
         decoration: BoxDecoration(
@@ -64,6 +73,8 @@ class _loggedMainPageState extends State<loggedMainPage>
             topRight: Radius.circular(30),
           ),
         ),
+
+        //  The bottm bar itself
         child: TabBar(
           indicator: BoxDecoration(),
           controller: _tabController,
@@ -73,6 +84,8 @@ class _loggedMainPageState extends State<loggedMainPage>
             });
           },
           tabs: <Widget>[
+
+            //  Addition page
             Tab(
               icon: Icon(
                 Icons.add_circle_outlined,
@@ -80,6 +93,8 @@ class _loggedMainPageState extends State<loggedMainPage>
                 color: Color.fromARGB(selected == 0 ? 255 : 100, 255, 255, 255),
               ),
             ),
+
+            // Scanner page
             Tab(
               icon: Icon(
                 Icons.camera_alt_rounded,
@@ -87,9 +102,11 @@ class _loggedMainPageState extends State<loggedMainPage>
                 color: Color.fromARGB(selected == 1 ? 255 : 100, 255, 255, 255),
               ),
             ),
+
+            // File Page
             Tab(
               icon: Icon(
-                Icons.summarize_outlined,
+                Icons.file_copy_sharp,
                 size: 32,
                 color: Color.fromARGB(selected == 2 ? 255 : 100, 255, 255, 255),
               ),
@@ -100,11 +117,13 @@ class _loggedMainPageState extends State<loggedMainPage>
     );
   }
 
+
+  // Custom AppBar
   AppBar buildAppBar() {
     return AppBar(
       backgroundColor: const Color.fromRGBO(0, 50, 39, 1),
       elevation: 0,
-      toolbarHeight: 80,
+      toolbarHeight: 60,
       actions: [
         Column(
           mainAxisAlignment: MainAxisAlignment.end, // Change the alignment here
@@ -118,7 +137,6 @@ class _loggedMainPageState extends State<loggedMainPage>
       ],
     );
   }
-
 
 }
 

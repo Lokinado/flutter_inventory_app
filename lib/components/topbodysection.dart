@@ -7,15 +7,21 @@ class TopBodySection extends StatelessWidget {
     required Key key,
     required this.size,
     required this.tekst,
-    required this.location
+    required this.location,
+     this.curveReverse = false,
   }) : super(key: key);
 
+   // Main parameters of the interface
   final Size size;
   final String tekst;
   final proportionalHeight = 0.1;
-  final Location location;
   double roundness = 75;
+  
+  Location location;
+  // if the roundness should be reversed
+  final bool curveReverse;
 
+  //  Setting the foundness of the box
   double leftRoundness = 0;
   double rightRoundness = 0;
   double proportion = 0.18;
@@ -23,6 +29,10 @@ class TopBodySection extends StatelessWidget {
   @override
   Widget build(BuildContext context){
 
+    if (curveReverse){
+      if (location == Location.left) { location = Location.right; }
+      if (location == Location.right) {location = Location.left; }
+    }
 
     //  Adjusting the top pannel depending on the screen
     if (location == Location.center)
@@ -40,7 +50,7 @@ class TopBodySection extends StatelessWidget {
     // It will provide us total height and width of our screen
     return SizedBox(
         height: size.height * proportionalHeight,
-        child: Wrap(
+        child: Column(
           children: [
             Container(
               padding:  EdgeInsets.only(

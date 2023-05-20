@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_app/components/homebody.dart';
 import 'package:inventory_app/components/topbodysection.dart';
+import 'package:inventory_app/pages/documents/filehomebody.dart';
 
 class FilePage extends StatefulWidget {
   @override
@@ -11,7 +11,7 @@ class _FilePageState extends State<FilePage> {
   @override
   Widget build(BuildContext context) {
     final Size rozmiar = MediaQuery .of(context) .size;
-    return Scaffold(body: Body(
+    return Scaffold(body: FileHomePage(
         title: "Dokumenty", size: rozmiar, location: Location.right,));
   }
 }

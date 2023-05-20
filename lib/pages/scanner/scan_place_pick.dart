@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_app/components/homebody.dart';
+import 'package:inventory_app/prefab/homebody.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 
 class WyborMiejsca extends StatefulWidget {
@@ -12,7 +12,7 @@ class _WyborMiejscaState extends State<WyborMiejsca> {
   @override
   Widget build(BuildContext context) {
     final Size rozmiar = MediaQuery .of(context) .size;
-    return Scaffold(body: Body(
+    return Scaffold(body: ScannerHomeBody(
         title: "Skanownanie", size: rozmiar, location: Location.center));
   }
 
