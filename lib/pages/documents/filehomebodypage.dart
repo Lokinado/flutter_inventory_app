@@ -7,15 +7,14 @@ import 'package:inventory_app/pages/scanner/scanner_page.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/components/rounded_rectangle.dart';
 
-class CenterFileHomePage extends StatelessWidget {
-   CenterFileHomePage({Key? key,
+class CenterFileHomePage extends StatefulWidget {
+  CenterFileHomePage({Key? key,
     required this.size,
     required this.location})
       : super(key: key);
 
   final Size size;
   final Location location;
-
 
   @override
   State<CenterFileHomePage> createState() => _CenterFileHomePageState();
