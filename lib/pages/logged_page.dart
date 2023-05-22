@@ -14,109 +14,90 @@ class loggedMainPage extends StatefulWidget {
 }
 
 class _loggedMainPageState extends State<loggedMainPage>
-    with SingleTickerProviderStateMixin {
-
-  late TabController _tabController;
-  var selected = 1;
-
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  var _selectedPageIndex = 1;
+  late PageController _pageController;
+  List<Widget> _pages = [AddPage(), WyborMiejsca(), FilePage()];
 
   void signUserOut() async {
     await FirebaseAuth.instance.signOut();
   }
 
-  // Creatino and dispose of the element
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this,
-        initialIndex: selected);
+    _pageController = PageController(initialPage: _selectedPageIndex);
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
-  //  Main page
-
   @override
   Widget build(BuildContext context) {
+    super.build(context); // Ensure the super build method is called
     return Scaffold(
-      appBar: buildAppBar(),  // With logged button
-
-      body: TabBarView(
-        controller: _tabController,
-        physics: NeverScrollableScrollPhysics(),
-        children: <Widget>[
-          AddPage(),
-          WyborMiejsca(),
-          FilePage(),
-        ],
+      appBar: buildAppBar(),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedPageIndex = index;
+          });
+        },
+        pageSnapping: true,
+        children: _pages,
       ),
-
-
       bottomNavigationBar: Container(
-        height: widget.size.height * 0.1, // Bottom bar is 10% of the height
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              offset: const Offset(0, -10),
-              blurRadius: 35,
-              color: const Color.fromRGBO(0, 50, 39, 1).withOpacity(0.38),
-            ),
-          ],
-          color: const Color.fromRGBO(0, 50, 39, 1),
+        height: widget.size.height * 0.11,
+        child: ClipRRect(
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
+            topRight: Radius.circular(24),
+            topLeft: Radius.circular(24),
           ),
-        ),
-
-        //  The bottm bar itself
-        child: TabBar(
-          indicator: BoxDecoration(),
-          controller: _tabController,
-          onTap: (index) {
-            setState(() {
-              selected = index;
-            });
-          },
-          tabs: <Widget>[
-
-            //  Addition page
-            Tab(
-              icon: Icon(
-                Icons.add_circle_outlined,
-                size: 32,
-                color: Color.fromARGB(selected == 0 ? 255 : 100, 255, 255, 255),
-              ),
+          child: BottomNavigationBar(
+            currentIndex: _selectedPageIndex,
+            selectedIconTheme: const IconThemeData(
+              color: Colors.white,
+              size: 32,
             ),
-
-            // Scanner page
-            Tab(
-              icon: Icon(
-                Icons.camera_alt_rounded,
-                size: 32,
-                color: Color.fromARGB(selected == 1 ? 255 : 100, 255, 255, 255),
-              ),
+            unselectedIconTheme: const IconThemeData(
+              color: Colors.white60,
+              size: 30,
             ),
-
-            // File Page
-            Tab(
-              icon: Icon(
-                Icons.file_copy_sharp,
-                size: 32,
-                color: Color.fromARGB(selected == 2 ? 255 : 100, 255, 255, 255),
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            backgroundColor: const Color.fromRGBO(0, 50, 39, 1),
+            onTap: (selectedPageIndex) {
+              setState(() {
+                _selectedPageIndex = selectedPageIndex;
+                _pageController.jumpToPage(selectedPageIndex);
+              });
+            },
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.add_circle_outlined),
+                label: "addpage",
               ),
-            ),
-          ],
+              BottomNavigationBarItem(
+                icon: Icon(Icons.camera_alt_rounded),
+                label: "Camera",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.file_copy),
+                label: "Files",
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-
 
   // Custom AppBar
   AppBar buildAppBar() {
@@ -137,6 +118,4 @@ class _loggedMainPageState extends State<loggedMainPage>
       ],
     );
   }
-
 }
-
