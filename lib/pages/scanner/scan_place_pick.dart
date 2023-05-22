@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_app/prefab/homebody.dart';
+import 'package:inventory_app/pages/scanner/scannerhomebody.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 
 class WyborMiejsca extends StatefulWidget {

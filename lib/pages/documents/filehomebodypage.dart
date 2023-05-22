@@ -43,7 +43,7 @@ class _CenterFileHomePageState extends State<CenterFileHomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton(
-                onPressed: () => _showList('Kody'),
+                onPressed: () {},//=> _showList('Kody'),
                 style: ButtonStyle(
                     minimumSize: MaterialStateProperty.all(const Size(100, 40)),
                     textStyle: MaterialStateProperty.all(
@@ -68,7 +68,7 @@ class _CenterFileHomePageState extends State<CenterFileHomePage> {
 
               ),
               ElevatedButton(
-                onPressed: () => _showList('Raporty'),
+                onPressed: () {},// _showList('Raporty'),
                 style: ButtonStyle(
                     minimumSize: MaterialStateProperty.all(const Size(100, 40)),
                     textStyle: MaterialStateProperty.all(
@@ -96,9 +96,7 @@ class _CenterFileHomePageState extends State<CenterFileHomePage> {
 
 
 
-          _selectedList == ''
-              ? Container()
-              : Expanded(
+          _selectedList == '' ? Container() : Expanded(
             child: ListView.separated(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 6),
               separatorBuilder: (context, index) => const SizedBox(height: 16),
