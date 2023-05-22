@@ -26,10 +26,12 @@ class _loggedMainPageState extends State<loggedMainPage>
   @override
   bool get wantKeepAlive => true;
 
+
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _selectedPageIndex);
+
   }
 
   @override
@@ -94,11 +96,11 @@ class _loggedMainPageState extends State<loggedMainPage>
               ),
             ],
           ),
+
         ),
       ),
     );
   }
-
   // Custom AppBar
   AppBar buildAppBar() {
     return AppBar(
@@ -119,3 +121,4 @@ class _loggedMainPageState extends State<loggedMainPage>
     );
   }
 }
+

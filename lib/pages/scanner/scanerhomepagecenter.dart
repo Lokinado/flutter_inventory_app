@@ -8,7 +8,6 @@ class CenterScanHomePage extends StatefulWidget {
 
   final Size size;
   final Location location;
-
   @override
   State<CenterScanHomePage> createState() => _CenterScanHomePageState();
 }
