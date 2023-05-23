@@ -19,7 +19,7 @@ class FileHomePage extends StatelessWidget {
       children: <Widget>[
         TopBodySection(key: UniqueKey(),
           tekst: title,size: size, location: location,),
-        CenterFileHomePage(key: UniqueKey(), size: size, location: location,)
+
       ],
     );
   }

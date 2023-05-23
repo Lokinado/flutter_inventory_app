@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/pages/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:inventory_app/pages/documents/file_page.dart';
 import 'firebase_options.dart';
 
 
@@ -14,14 +15,18 @@ void main() async{
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context){
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false, 
-      home: AuthPage( ),
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: {
+        '/': (context) => AuthPage(),
+        '/details': (context) => DetailsPage(title: this.toString(),),
+      },
     );
   }
-  }
+}
+
