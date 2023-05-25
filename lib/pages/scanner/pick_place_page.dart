@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/components/place_choose_button.dart';
+import 'package:inventory_app/pages/scanner/scanner_page.dart';
 
 //  ###########################################################################
 
@@ -49,6 +50,7 @@ class PickPlaceContent extends StatefulWidget {
 
   final Size size;
   final Location location;
+
   @override
   State<PickPlaceContent> createState() => _PickPlaceContentState();
 }
@@ -60,6 +62,17 @@ class _PickPlaceContentState extends State<PickPlaceContent>
   //  Wymagane by strona została przechowana w pamięci
   @override
   bool get wantKeepAlive => true;
+
+  // Zaokrąglony, Szary, guzik
+  var style1 = ElevatedButton.styleFrom(
+    minimumSize: const Size(100, 50),
+    backgroundColor: Colors.white60,
+    foregroundColor: Colors.black,
+    shadowColor: Colors.black,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(30),
+    ));
+
 
   @override
   Widget build(BuildContext context) {
@@ -79,9 +92,42 @@ class _PickPlaceContentState extends State<PickPlaceContent>
               children: [
                 // Kontener do trzymania zakładek z wybieranim
                 Container(
+                  margin: const EdgeInsets.fromLTRB(0, 120, 0, 0),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     // Budynek, piętro, pomieszczenie
-                    children: [],
+                    children: [
+                      SizedBox(
+                        width: widget.size.width - 80,
+                        height: 60.0,
+                        child: ElevatedButton(
+                          style: style1,
+                          onPressed: () {},
+                          child: Text("Uśmiech do kamery", style: TextStyle(fontSize: 20),),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      SizedBox(
+                        width: widget.size.width - 80,
+                        height: 60.0,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll<Color>(
+                                  Colors.purple)),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const CameraPage()),
+                            );
+                          },
+                          child: Text("Uśmiech do kamery"),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 

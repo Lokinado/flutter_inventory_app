@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/topbodysection.dart';
-import 'package:inventory_app/pages/documents/details_arguments.dart';
-import 'package:inventory_app/pages/documents/kody.dart';
-import 'package:inventory_app/pages/documents/raporty.dart';
-import 'package:inventory_app/pages/scanner/scanner_page.dart';
-import 'package:inventory_app/components/topbodysection.dart';
-import 'package:inventory_app/components/rounded_rectangle.dart';
 
 class CenterFileHomePage extends StatefulWidget {
   CenterFileHomePage({Key? key, required this.size, required this.location})
