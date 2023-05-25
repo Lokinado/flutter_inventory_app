@@ -2,16 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/components/place_choose_button.dart';
 
-class CenterScanHomePage extends StatefulWidget {
-  CenterScanHomePage({Key? key, required this.size, required this.location})
-      : super(key: key);
-
-  final Size size;
-  final Location location;
-  @override
-  State<CenterScanHomePage> createState() => _CenterScanHomePageState();
-}
-
 class _CenterScanHomePageState extends State<CenterScanHomePage>
     with AutomaticKeepAliveClientMixin<CenterScanHomePage>{
   double roundness = 75;
@@ -60,4 +50,14 @@ class _CenterScanHomePageState extends State<CenterScanHomePage>
           ),
         ));
   }
+}
+
+class CenterScanHomePage extends StatefulWidget {
+  CenterScanHomePage({Key? key, required this.size, required this.location})
+      : super(key: key);
+
+  final Size size;
+  final Location location;
+  @override
+  State<CenterScanHomePage> createState() => _CenterScanHomePageState();
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_app/pages/scanner/scanerhomepagecenter.dart';
+import 'package:inventory_app/prefab/scanerhomepagecenter.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 
 class ScannerHomeBody extends StatelessWidget {

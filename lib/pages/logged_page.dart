@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/pages/documents/file_page.dart';
-import 'package:inventory_app/pages/scanner/scan_place_pick.dart';
+import 'package:inventory_app/pages/scanner/pick_place_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:inventory_app/pages/adding/add_page.dart';
 
@@ -17,7 +17,7 @@ class _loggedMainPageState extends State<loggedMainPage>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   var _selectedPageIndex = 1;
   late PageController _pageController;
-  List<Widget> _pages = [AddPage(), WyborMiejsca(), FilePage()];
+  List<Widget> _pages = [AddPage(), PickPlace(), FilePage()];
 
   void signUserOut() async {
     await FirebaseAuth.instance.signOut();
