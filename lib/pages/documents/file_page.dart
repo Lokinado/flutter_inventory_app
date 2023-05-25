@@ -66,6 +66,7 @@ class _MainPageState extends State<MainPage>
               topRight: Radius.circular(75),
             )),
         child: Container(
+          margin: const EdgeInsets.fromLTRB(0, 30, 00, 0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             //crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -74,7 +75,7 @@ class _MainPageState extends State<MainPage>
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    onPressed: () => _showList('Kody'),
+                    onPressed: () => _selectedList == "" ? _showList('Kody') : _showList("") ,
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(100, 50),
                       primary: Color.fromRGBO(0, 50, 39, 1),
@@ -91,7 +92,7 @@ class _MainPageState extends State<MainPage>
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () => _showList('Raporty'),
+                    onPressed: () => _selectedList == "" ? _showList('Raporty') : _showList(""),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(100, 50),
                       primary: Color.fromRGBO(0, 50, 39, 1),
@@ -108,7 +109,10 @@ class _MainPageState extends State<MainPage>
                     ),
                   ),
                 ],
+
               ),
+              Container(margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),),
+
               _selectedList == ''
                   ? Container()
                   : Expanded(
@@ -174,6 +178,8 @@ class DetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromRGBO(0, 50, 39, 1),
+        toolbarHeight: 80,
         title: Text('Szczegóły: $title'),
       ),
       body: Center(
