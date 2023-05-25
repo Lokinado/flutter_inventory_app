@@ -27,6 +27,8 @@ class TopBodySection extends StatelessWidget {
   double rightRoundness = 0;
   double proportion = 0.18;
 
+  var alignment;
+
   @override
   Widget build(BuildContext context){
 
@@ -41,11 +43,14 @@ class TopBodySection extends StatelessWidget {
       leftRoundness = roundness;
       rightRoundness = roundness;
       proportion = 0.26;
+      alignment = Alignment.center;
     }
     else if (location == Location.right)
-      { leftRoundness = roundness; }
+      { leftRoundness = roundness;
+      alignment = Alignment.centerLeft;}
     else
-      { rightRoundness = roundness; }
+      { rightRoundness = roundness;
+      alignment = Alignment.centerLeft;}
 
 
     // It will provide us total height and width of our screen
@@ -54,8 +59,10 @@ class TopBodySection extends StatelessWidget {
         child: Column(
           children: [
             Container(
+              width: size.width,
               padding:  EdgeInsets.only(
                 left: size.width*proportion,
+                right: size.width*proportion,
                 bottom: 20,
               ),
               height: size.height * proportionalHeight,
@@ -68,13 +75,15 @@ class TopBodySection extends StatelessWidget {
                 ),
 
               ),
-              child: Row(
-                children: <Widget>[Text(tekst, style: TextStyle(
+              child: Container(
+                width: double.infinity,
+                alignment: alignment,
+                child: Text(tekst, style: TextStyle(
                   fontSize: 30,
                   color: Colors.white,
                   fontFamily: 'Montserrat',)
                   ,)
-                ],
+
               ),
             ),
           ],
