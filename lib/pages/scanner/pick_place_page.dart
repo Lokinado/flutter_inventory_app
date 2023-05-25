@@ -70,31 +70,29 @@ class _PickPlaceContentState extends State<PickPlaceContent>
 
         //  Kontener odpowiedzialny za tło z zaokrąglonymi rogami
         child: Container(
-          width: widget.size.width,
-          height: widget.size.height,
-          color: Colors.white,
+            width: widget.size.width,
+            height: widget.size.height,
+            color: Colors.white,
 
-          // Główna zawartość naszej strony
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              PlaceButton(
-                onTap: () {},
-                locationHorizontally: 0.0,
-                locationVertically: 0.0,
-              ),
-              PlaceButton(
-                onTap: () {},
-                locationHorizontally: 0.0,
-                locationVertically: 0.0,
-              ),
-              PlaceButton(
-                onTap: () {},
-                locationHorizontally: 0.0,
-                locationVertically: 0.0,
-              )
-            ],
-          ),
-        ));
+            // Główna zawartość naszej strony
+            child: Column(
+              children: [
+                // Kontener do trzymania zakładek z wybieranim
+                Container(
+                  child: Column(
+                    // Budynek, piętro, pomieszczenie
+                    children: [],
+                  ),
+                ),
+
+                // Kontener do trzymania przycisków dolnych
+                Container(
+                  child: Row(
+                    // Rozpocznij, zakończ raport
+                    children: [],
+                  ),
+                )
+              ],
+            )));
   }
 }
