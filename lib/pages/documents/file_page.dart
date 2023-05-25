@@ -75,7 +75,7 @@ class _MainPageState extends State<MainPage>
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    onPressed: () => _selectedList == "" ? _showList('Kody') : _showList("") ,
+                    onPressed: () => _selectedList != "Kody" ? _showList('Kody') : _showList("") ,
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(100, 50),
                       primary: Color.fromRGBO(0, 50, 39, 1),
@@ -92,7 +92,7 @@ class _MainPageState extends State<MainPage>
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () => _selectedList == "" ? _showList('Raporty') : _showList(""),
+                    onPressed: () => _selectedList != "Raporty" ? _showList('Raporty') : _showList(""),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(100, 50),
                       primary: Color.fromRGBO(0, 50, 39, 1),
