@@ -44,8 +44,9 @@ class _PickPlaceState extends State<PickPlace> {
 
 //  ###########################################################################
 
+@immutable
 class PickPlaceContent extends StatefulWidget {
-  PickPlaceContent({Key? key, required this.size, required this.location})
+  const PickPlaceContent({Key? key, required this.size, required this.location})
       : super(key: key);
 
   final Size size;
@@ -61,12 +62,13 @@ class _PickPlaceContentState extends State<PickPlaceContent>
   @override
   bool get wantKeepAlive => true;
 
-  var budynek = 20;
-  var pietro = 20;
-  var pomieszczenie = 20;
+  var budynek = 0;
+  var pietro = 0;
+  var pomieszczenie = 0;
   double numberBoxSize = 60;
 
   var zielonySGGW = const Color.fromRGBO(0, 50, 39, 1);
+  var zielonySlabaSGGW = const Color.fromRGBO(0, 50, 39, 0.5);
 
   var rozpoczeteSkanowanie = false;
 
@@ -78,7 +80,6 @@ class _PickPlaceContentState extends State<PickPlaceContent>
     // Zmienne stylistyczne
     var roundness = 20.0;
     double space = 20;
-    double space2 = 2 * space;
 
     //  "Kontener" wnętrza, ograniczający wysokość całkowitą
     // i ustawiający kolor tła
@@ -167,7 +168,7 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                           height: numberBoxSize,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(roundness),
-                              color: zielonySGGW),
+                              color: budynek != 0 ? zielonySGGW : zielonySlabaSGGW),
                           child: Text(
                             "${pietro > 0 ? pietro : ""}",
                             style: const TextStyle(
@@ -181,12 +182,12 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                           width: widget.size.width - 120,
                           height: 60.0,
                           child: ElevatedButton(
-                            style: budynek > 20
+                            style: budynek > 0
                                 ? leftTextActive
                                 : leftTextNotActive,
                             onPressed: () {
                               setState(() {
-                                if (budynek > 20) {
+                                if (budynek > 0) {
                                   pietro = pietro + 1;
                                 }
                               });
@@ -222,7 +223,7 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                           height: numberBoxSize,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(roundness),
-                              color: zielonySGGW),
+                              color: pietro != 0 ? zielonySGGW : zielonySlabaSGGW),
                           child: Text(
                             "${pomieszczenie > 0 ? pomieszczenie : ""}",
                             style: const TextStyle(
@@ -236,12 +237,12 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                           width: widget.size.width - 120,
                           height: 60.0,
                           child: ElevatedButton(
-                            style: pietro > 20
+                            style: pietro > 0
                                 ? leftTextActive
                                 : leftTextNotActive,
                             onPressed: () {
                               setState(() {
-                                if (pietro > 20) {
+                                if (pietro > 0) {
                                   pomieszczenie = pomieszczenie + 1;
                                 }
                               });
@@ -271,11 +272,11 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                         width: widget.size.width - 40,
                         height: 60.0,
                         child: ElevatedButton(
-                          style: pomieszczenie > 20
+                          style: pomieszczenie > 0
                               ? centerTextActive
                               : centerTextNotActive,
                           onPressed: () {
-                            if (pomieszczenie > 20) {
+                            if (pomieszczenie > 0) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
