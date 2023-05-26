@@ -1,16 +1,14 @@
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:inventory_app/pages/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'menu.dart';
 
-
-void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
+Future<void> main() async {
+  runApp(const MyApp());
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -18,10 +16,14 @@ class MyApp extends StatelessWidget {
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context){
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false, 
-      home: AuthPage( ),
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+      ),
+      // home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Menu(),
     );
   }
-  }
+}
