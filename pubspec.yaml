@@ -38,6 +38,7 @@ dependencies:
   firebase_core: ^2.10.0
   firebase_auth: ^4.4.2
   camera: ^0.10.5
+  list_picker: ^1.1.0
 
 dev_dependencies:
   flutter_test:

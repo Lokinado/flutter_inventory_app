@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/components/element_styling.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/pages/scanner/scanner_page.dart';
+import 'dart:math';
+
+import 'package:list_picker/list_picker.dart';
 
 //  ###########################################################################
 
@@ -62,24 +65,64 @@ class _PickPlaceContentState extends State<PickPlaceContent>
   @override
   bool get wantKeepAlive => true;
 
+  //  Zmienne i funkcje niezbędne do tej strony
+
   var budynek = 0;
   var pietro = 0;
   var pomieszczenie = 0;
   double numberBoxSize = 60;
+  var rozpoczeteSkanowanie = false;
 
   var zielonySGGW = const Color.fromRGBO(0, 50, 39, 1);
   var zielonySlabaSGGW = const Color.fromRGBO(0, 50, 39, 0.5);
 
-  var rozpoczeteSkanowanie = false;
+  separator(value) => SizedBox(
+        height: value,
+      );
+  final controller = TextEditingController();
+
+  List<String> listaBudynkow = [];
+  List<List<String>> pietra = [];
+  List<List<List<String>>> pomieszczenia = [];
+
+  void inicjalizujPusteDane() {
+    for (int i = 1; i <= 40; i++) {
+      listaBudynkow.add(i.toString());
+    }
+
+    for (int i = 0; i < listaBudynkow.length; i++) {
+      List<String> tmp = [];
+      for (int j = 1; j <= 1 + Random().nextInt(2); j++) {
+        tmp.add(j.toString());
+      }
+      pietra.add(tmp);
+    }
+
+    for (int i = 0; i < listaBudynkow.length; i++) {
+      List<List<String>> bud = [];
+      for (int j = 0; j < pietra[i].length + 1; j++) {
+        List<String> piet = [];
+        for (int p = 1; p <= 10 + Random().nextInt(50); p++) {
+          piet.add(p.toString());
+        }
+        bud.add(piet);
+      }
+      pomieszczenia.add(bud);
+    }
+  }
+
+  // Właściwy kod budujący tą stronę
 
   @override
   Widget build(BuildContext context) {
     // Wywołuje "AutomaticKeepAliveClientMixin" -> Alive
     super.build(context);
 
-    // Zmienne stylistyczne
+    // Zmienne które można zainicjalizować dopiero w konstruktorze
     var roundness = 20.0;
     double space = 20;
+    inicjalizujPusteDane();
+    var szerokoscPrzycisku = widget.size.width - 120;
 
     //  "Kontener" wnętrza, ograniczający wysokość całkowitą
     // i ustawiający kolor tła
@@ -93,7 +136,6 @@ class _PickPlaceContentState extends State<PickPlaceContent>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-
               // Wszystkie elementy są ułożone tutaj
               // po co Columna w Columne?
               // Jedna umieszcz an środku "pudełko" (column poniżej)
@@ -105,7 +147,6 @@ class _PickPlaceContentState extends State<PickPlaceContent>
 
                 // Budynek, piętro, pomieszczenie i przycisk
                 children: [
-
                   // Wybor budynku
                   // Dokładny opis komponentu w place_choose_button.dart
                   Container(
@@ -122,27 +163,44 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                               borderRadius: BorderRadius.circular(roundness),
                               color: zielonySGGW),
                           child: Text(
+                            // Podstawienie wybranego numeru jeśli > 0
                             "${budynek > 0 ? budynek : ""}",
                             style: const TextStyle(
                                 fontSize: 22, color: Colors.white),
                           ),
                         ),
+                        // Pusty separator
                         Container(
                           margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
                         ),
                         SizedBox(
-                          width: widget.size.width - 120,
+                          width: szerokoscPrzycisku,
                           height: 60.0,
                           child: ElevatedButton(
                             style: leftTextActive,
-                            onPressed: () {
-                              setState(() {
-                                budynek = budynek + 1;
-                              });
+                            onPressed: () async {
+                              String? wyborBudynku = await showPickerDialog(
+                                context: context,
+                                label: "Budynek",
+                                items: listaBudynkow,
+                              );
+                              if (wyborBudynku != null) {
+                                var value = int.parse(wyborBudynku);
+                                setState(() {
+                                  if (budynek != value) {
+                                    budynek = value;
+                                    pietro = 0;
+                                    pomieszczenie = 0;
+                                  }
+                                });
+                              }
                             },
                             child: const Text(
                               "Budynek",
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                              textAlign: TextAlign.left,
                             ),
                           ),
                         ),
@@ -151,9 +209,7 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                   ),
 
                   // Separator
-                  const SizedBox(
-                    height: 20.0,
-                  ),
+                  separator(space),
 
                   // Wybor pietra
                   Container(
@@ -168,7 +224,9 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                           height: numberBoxSize,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(roundness),
-                              color: budynek != 0 ? zielonySGGW : zielonySlabaSGGW),
+                              color: budynek != 0
+                                  ? zielonySGGW
+                                  : zielonySlabaSGGW),
                           child: Text(
                             "${pietro > 0 ? pietro : ""}",
                             style: const TextStyle(
@@ -179,18 +237,27 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                           margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
                         ),
                         SizedBox(
-                          width: widget.size.width - 120,
+                          width: szerokoscPrzycisku,
                           height: 60.0,
                           child: ElevatedButton(
-                            style: budynek > 0
+                            style: budynek != 0
                                 ? leftTextActive
                                 : leftTextNotActive,
-                            onPressed: () {
-                              setState(() {
-                                if (budynek > 0) {
-                                  pietro = pietro + 1;
-                                }
-                              });
+                            onPressed: () async {
+                              String? wyborPietra = await showPickerDialog(
+                                context: context,
+                                label: "",
+                                items: pietra[budynek],
+                              );
+                              if (wyborPietra != null) {
+                                var value = int.parse(wyborPietra);
+                                setState(() {
+                                  if (pietro != value) {
+                                    pietro = value;
+                                    pomieszczenie = 0;
+                                  }
+                                });
+                              }
                             },
                             child: const Text(
                               "Piętro",
@@ -206,9 +273,7 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                   ),
 
                   // Separator
-                  const SizedBox(
-                    height: 20.0,
-                  ),
+                  separator(space),
 
                   // Wybor pomieszczenia
                   Container(
@@ -223,7 +288,8 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                           height: numberBoxSize,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(roundness),
-                              color: pietro != 0 ? zielonySGGW : zielonySlabaSGGW),
+                              color:
+                                  pietro != 0 ? zielonySGGW : zielonySlabaSGGW),
                           child: Text(
                             "${pomieszczenie > 0 ? pomieszczenie : ""}",
                             style: const TextStyle(
@@ -234,22 +300,31 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                           margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
                         ),
                         SizedBox(
-                          width: widget.size.width - 120,
+                          width: szerokoscPrzycisku,
                           height: 60.0,
                           child: ElevatedButton(
-                            style: pietro > 0
+                            style: pietro != 0 && budynek != 0
                                 ? leftTextActive
                                 : leftTextNotActive,
-                            onPressed: () {
-                              setState(() {
-                                if (pietro > 0) {
-                                  pomieszczenie = pomieszczenie + 1;
-                                }
-                              });
+                            onPressed: () async {
+                              String? wyborPomieszczenia =
+                                  await showPickerDialog(
+                                context: context,
+                                label: "Budynek",
+                                items: pomieszczenia[budynek][pietro],
+                              );
+                              if (wyborPomieszczenia != null) {
+                                setState(() {
+                                  pomieszczenie = int.parse(wyborPomieszczenia);
+                                });
+                              }
                             },
                             child: const Text(
                               "Pomieszczenie",
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                              textAlign: TextAlign.left,
                             ),
                           ),
                         ),
@@ -258,9 +333,7 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                   ),
 
                   // Separator
-                  const SizedBox(
-                    height: 100.0,
-                  ),
+                  separator(4 * space),
 
                   // Przycisk rozpoczęcia skanowania
                   Row(

@@ -216,6 +216,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  list_picker:
+    dependency: "direct main"
+    description:
+      name: list_picker
+      sha256: "81bc25a76f693e752a32996c25fa2cc1b5caa159ccb12b8ceeaa452eca45b729"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   matcher:
     dependency: transitive
     description:
