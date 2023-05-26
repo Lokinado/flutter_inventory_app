@@ -3,7 +3,7 @@ import 'package:camera/camera.dart';
 
 late List<CameraDescription> _cameras;
 
-void CameraCheck() async {
+void cameraCheck() async {
   _cameras = await availableCameras();
 }
 
@@ -20,7 +20,7 @@ class _CameraAppState extends State<CameraPage> {
   @override
   void initState() {
     super.initState();
-    CameraCheck();
+    cameraCheck();
     controller = CameraController(_cameras[0], ResolutionPreset.max);
     controller.initialize().then((_) {
       if (!mounted) {

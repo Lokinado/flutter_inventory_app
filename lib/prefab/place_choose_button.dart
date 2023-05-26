@@ -14,9 +14,9 @@ import 'package:inventory_app/components/element_styling.dart';
 
 */
 
-
+@immutable
 class PlaceButton extends StatefulWidget {
-  PlaceButton({Key? key,
+  const PlaceButton({Key? key,
     required this.size,
     required this.gboxWidth,
     required this.buttonWidht,
@@ -27,9 +27,9 @@ class PlaceButton extends StatefulWidget {
 
   // To są potrzebne parametry - są one specyficzne dla konkretnych użyć
   final Size size;            // Rozmiar dostępnej przestrzeni
-  final gboxWidth;            // Bok zieloneg kwadratu na wybraną wartość
-  final buttonWidht;          // Szerokość samego guzika
-  final height;               // Wysookość elementów (guzik i kwadracik)
+  final double gboxWidth;            // Bok zieloneg kwadratu na wybraną wartość
+  final double buttonWidht;          // Szerokość samego guzika
+  final double height;               // Wysookość elementów (guzik i kwadracik)
   final Function()? onTap;
 
 
@@ -59,7 +59,6 @@ class _PlaceButtonState extends State<PlaceButton>
     // a space odpowiada za
     roundness = 20;
     double space = 20;
-    double space2 = 2 * space;
 
     return Container(
 
