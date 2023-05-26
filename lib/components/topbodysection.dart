@@ -67,7 +67,7 @@ class TopBodySection extends StatelessWidget {
               ),
               height: size.height * proportionalHeight,
               decoration: BoxDecoration(
-                color: Color.fromRGBO(0, 50, 39, 1),
+                color: const Color.fromRGBO(0, 50, 39, 1),
                 borderRadius: BorderRadius.only(
                   //  Roundness is on the opposite site
                   bottomRight: Radius.circular(rightRoundness),

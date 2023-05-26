@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/topbodysection.dart';
-import 'package:inventory_app/components/place_choose_button.dart';
+import 'package:inventory_app/prefab/place_choose_button.dart';
 
 class _CenterScanHomePageState extends State<CenterScanHomePage>
     with AutomaticKeepAliveClientMixin<CenterScanHomePage>{

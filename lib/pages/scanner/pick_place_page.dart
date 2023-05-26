@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:inventory_app/components/element_styling.dart';
 import 'package:inventory_app/components/topbodysection.dart';
-import 'package:inventory_app/components/place_choose_button.dart';
 import 'package:inventory_app/pages/scanner/scanner_page.dart';
 
 //  ###########################################################################
@@ -24,7 +24,7 @@ class _PickPlaceState extends State<PickPlace> {
       children: <Widget>[
         TopBodySection(
           key: UniqueKey(),
-          tekst: "Skanowanie",
+          tekst: "Skanuj",
           size: rozmiar,
           location: Location.center,
         ),
@@ -61,15 +61,18 @@ class _PickPlaceContentState extends State<PickPlaceContent>
   @override
   bool get wantKeepAlive => true;
 
-  var budynek = 10;
-  var pietro = 1;
-  var pomieszczenie = 10;
+  var budynek = 20;
+  var pietro = 20;
+  var pomieszczenie = 20;
   double numberBoxSize = 60;
+
+  var zielonySGGW = const Color.fromRGBO(0, 50, 39, 1);
 
   var rozpoczeteSkanowanie = false;
 
   @override
   Widget build(BuildContext context) {
+    // Wywołuje "AutomaticKeepAliveClientMixin" -> Alive
     super.build(context);
 
     // Zmienne stylistyczne
@@ -77,237 +80,220 @@ class _PickPlaceContentState extends State<PickPlaceContent>
     double space = 20;
     double space2 = 2 * space;
 
-    // Zaokrąglony, Szary, guzik
-    var style1 = ElevatedButton.styleFrom(
-        backgroundColor: Colors.white60,
-        foregroundColor: Colors.black,
-        shadowColor: Colors.black,
-        alignment: Alignment(-0.9, 0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(roundness),
-        ));
-
-    var style2 = ElevatedButton.styleFrom(
-        backgroundColor: Colors.white60,
-        foregroundColor: Colors.black,
-        shadowColor: Colors.black,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(roundness),
-        ));
-
-    // Wywołuje "AutomaticKeepAliveClientMixin" -> Alive
-    return Container(
+    //  "Kontener" wnętrza, ograniczający wysokość całkowitą
+    return SizedBox(
         height: widget.size.height * 0.7,
-        color: const Color.fromRGBO(0, 50, 39, 1),
+        width: widget.size.width,
 
-        //  Kontener odpowiedzialny za tło z zaokrąglonymi rogami
-        child: Container(
-            width: widget.size.width,
-            height: widget.size.height,
-            color: Colors.white,
+        //  Największe pudełko - tutaj jest cała zawartość równo ułożone
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
 
-            // Główna zawartość naszej strony
-            child: Column(
+            // Wszystkie elementy są ułożone tutaj
+            // po co Columna w Columne?
+            // Jedna umieszcz an środku "pudełko" (column poniżej)
+            // w którym sa już ręcznie rozmieszczonoe elementy
+            // (przyciski i separatory z Column poniżej)
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+
+              // Budynek, piętro, pomieszczenie i przycisk
               children: [
-                // Kontener do trzymania zakładek z wybieranim
+
+                // Wybor budynku
+                // Dokładny opis komponentu w place_choose_button.dart
                 Container(
-                  margin: const EdgeInsets.fromLTRB(0, 120, 0, 0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                  child: Row(
+                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 
-                    // Budynek, piętro, pomieszczenie
                     children: [
-                      // Wybor budynku
                       Container(
-                        margin: EdgeInsets.fromLTRB(space2, 0, 0, 0),
-                        child: Row(
-                          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                          children: [
-                            Container(
-                              alignment: Alignment.center,
-                              width: numberBoxSize,
-                              height: numberBoxSize,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.circular(roundness),
-                                  color: Color.fromRGBO(0, 50, 39, 1)),
-                              child: Text(
-                                "${budynek > 0 ? budynek : ""}",
-                                style: TextStyle(
-                                    fontSize: 22, color: Colors.white),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                            ),
-                            SizedBox(
-                              width: widget.size.width - 160,
-                              height: 60.0,
-                              child: ElevatedButton(
-                                style: style1,
-                                onPressed: () {
-                                  setState(() {
-                                    budynek = budynek + 1;
-                                  });
-                                },
-                                child: Text(
-                                  "Budynek",
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ),
-                            ),
-                          ],
+                        alignment: Alignment.center,
+                        width: numberBoxSize,
+                        height: numberBoxSize,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(roundness),
+                            color: zielonySGGW),
+                        child: Text(
+                          "${budynek > 0 ? budynek : ""}",
+                          style: const TextStyle(
+                              fontSize: 22, color: Colors.white),
                         ),
                       ),
-
-                      // Separator
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-
-                      // Wybor pietra
                       Container(
-                        margin: EdgeInsets.fromLTRB(space2, 0, 0, 0),
-                        child: Row(
-                          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                          children: [
-                            Container(
-                              alignment: Alignment.center,
-                              width: numberBoxSize,
-                              height: numberBoxSize,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.circular(roundness),
-                                  color: Color.fromRGBO(0, 50, 39, 1)),
-                              child: Text(
-                                "${pietro > 0 ? pietro : ""}",
-                                style: TextStyle(
-                                    fontSize: 22, color: Colors.white),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                            ),
-                            SizedBox(
-                              width: widget.size.width - 160,
-                              height: 60.0,
-                              child: ElevatedButton(
-                                style: style1,
-                                onPressed: () {
-                                  setState(() {
-                                    pietro = pietro + 1;
-                                  });
-                                },
-                                child: Text(
-                                  "Piętro",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                            ),
-                          ],
+                        margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                      ),
+                      SizedBox(
+                        width: widget.size.width - 120,
+                        height: 60.0,
+                        child: ElevatedButton(
+                          style: leftTextActive,
+                          onPressed: () {
+                            setState(() {
+                              budynek = budynek + 1;
+                            });
+                          },
+                          child: const Text(
+                            "Budynek",
+                            style: TextStyle(fontSize: 20),
+                          ),
                         ),
                       ),
-
-                      // Separator
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-
-                      // Wybor pomieszczenia
-                      Container(
-                        margin: EdgeInsets.fromLTRB(space2, 0, 0, 0),
-                        child: Row(
-                          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                          children: [
-                            Container(
-                              alignment: Alignment.center,
-                              width: numberBoxSize,
-                              height: numberBoxSize,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.circular(roundness),
-                                  color: Color.fromRGBO(0, 50, 39, 1)),
-                              child: Text(
-                                "${pomieszczenie > 0 ? pomieszczenie : ""}",
-                                style: TextStyle(
-                                    fontSize: 22, color: Colors.white),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                            ),
-                            SizedBox(
-                              width: widget.size.width - 160,
-                              height: 60.0,
-                              child: ElevatedButton(
-                                style: style1,
-                                onPressed: () {
-                                  setState(() {
-                                    pomieszczenie = pomieszczenie + 1;
-                                  });
-                                },
-                                child: Text(
-                                  "Pomieszczenie",
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // Separator
-                      const SizedBox(
-                        height: 140.0,
-                      ),
-
-                      Container(
-                        child: Row(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                            ),
-                            SizedBox(
-                              width: widget.size.width - 40,
-                              height: 60.0,
-                              child: ElevatedButton(
-                                style: style2,
-                                onPressed: () {
-                                  rozpoczeteSkanowanie = true;
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const CameraPage()),
-                                  );
-                                },
-                                child: Text(
-                                  "Rozpocznij Skanowanie",
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
                     ],
                   ),
                 ),
 
-                // Kontener do trzymania przycisków dolnych
+                // Separator
+                const SizedBox(
+                  height: 20.0,
+                ),
+
+                // Wybor pietra
                 Container(
+                  margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
                   child: Row(
-                    // Rozpocznij, zakończ raport
-                    children: [],
+                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        width: numberBoxSize,
+                        height: numberBoxSize,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(roundness),
+                            color: zielonySGGW),
+                        child: Text(
+                          "${pietro > 0 ? pietro : ""}",
+                          style: const TextStyle(
+                              fontSize: 22, color: Colors.white),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                      ),
+                      SizedBox(
+                        width: widget.size.width - 120,
+                        height: 60.0,
+                        child: ElevatedButton(
+                          style: budynek > 20
+                              ? leftTextActive
+                              : leftTextNotActive,
+                          onPressed: () {
+                            setState(() {
+                              if (budynek > 20) {
+                                pietro = pietro + 1;
+                              }
+                            });
+                          },
+                          child: const Text(
+                            "Piętro",
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                )
+                ),
+
+                // Separator
+                const SizedBox(
+                  height: 20.0,
+                ),
+
+                // Wybor pomieszczenia
+                Container(
+                  margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                  child: Row(
+                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        width: numberBoxSize,
+                        height: numberBoxSize,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(roundness),
+                            color: zielonySGGW),
+                        child: Text(
+                          "${pomieszczenie > 0 ? pomieszczenie : ""}",
+                          style: const TextStyle(
+                              fontSize: 22, color: Colors.white),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                      ),
+                      SizedBox(
+                        width: widget.size.width - 120,
+                        height: 60.0,
+                        child: ElevatedButton(
+                          style: pietro > 20
+                              ? leftTextActive
+                              : leftTextNotActive,
+                          onPressed: () {
+                            setState(() {
+                              if (pietro > 20) {
+                                pomieszczenie = pomieszczenie + 1;
+                              }
+                            });
+                          },
+                          child: const Text(
+                            "Pomieszczenie",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Separator
+                const SizedBox(
+                  height: 100.0,
+                ),
+
+                // Przycisk rozpoczęcia skanowania
+                Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                    ),
+                    SizedBox(
+                      width: widget.size.width - 40,
+                      height: 60.0,
+                      child: ElevatedButton(
+                        style: pomieszczenie > 20
+                            ? centerTextActive
+                            : centerTextNotActive,
+                        onPressed: () {
+                          if (pomieszczenie > 20) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const CameraPage()),
+                            );
+                          }
+                        },
+                        child: const Text(
+                          "Rozpocznij Skanowanie",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
-            )));
+            ),
+
+            // Kontener do trzymania przycisków dolnych
+            //Row( Rozpocznij, zakończ raport children: [],
+          ],
+        ));
   }
 }

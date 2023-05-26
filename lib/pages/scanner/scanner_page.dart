@@ -3,11 +3,11 @@ import 'package:camera/camera.dart';
 
 late List<CameraDescription> _cameras;
 
-void CameraCheck () async {
+void CameraCheck() async {
   _cameras = await availableCameras();
 }
 
-class CameraPage extends StatefulWidget{
+class CameraPage extends StatefulWidget {
   const CameraPage({super.key});
 
   @override
@@ -31,10 +31,10 @@ class _CameraAppState extends State<CameraPage> {
       if (e is CameraException) {
         switch (e.code) {
           case 'CameraAccessDenied':
-          // Handle access errors here.
+            // Handle access errors here.
             break;
           default:
-          // Handle other errors here.
+            // Handle other errors here.
             break;
         }
       }
@@ -49,11 +49,16 @@ class _CameraAppState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!controller.value.isInitialized) {
-      return Container();
-    }
-    return MaterialApp(
-      home: CameraPreview(controller),
-    );
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color.fromRGBO(0, 50, 39, 1),
+        ),
+        body: Container(
+            alignment: Alignment.center,
+            child: SizedBox(
+              height: 200,
+              width: 200,
+              child: CameraPreview(controller),
+            )));
   }
 }
