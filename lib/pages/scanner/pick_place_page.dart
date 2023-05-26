@@ -81,219 +81,223 @@ class _PickPlaceContentState extends State<PickPlaceContent>
     double space2 = 2 * space;
 
     //  "Kontener" wnętrza, ograniczający wysokość całkowitą
-    return SizedBox(
-        height: widget.size.height * 0.7,
-        width: widget.size.width,
+    // i ustawiający kolor tła
+    return Container(
+      color: Colors.white,
+      child: SizedBox(
+          height: widget.size.height * 0.7,
+          width: widget.size.width,
 
-        //  Największe pudełko - tutaj jest cała zawartość równo ułożone
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
+          //  Największe pudełko - tutaj jest cała zawartość równo ułożone
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
 
-            // Wszystkie elementy są ułożone tutaj
-            // po co Columna w Columne?
-            // Jedna umieszcz an środku "pudełko" (column poniżej)
-            // w którym sa już ręcznie rozmieszczonoe elementy
-            // (przyciski i separatory z Column poniżej)
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              // Wszystkie elementy są ułożone tutaj
+              // po co Columna w Columne?
+              // Jedna umieszcz an środku "pudełko" (column poniżej)
+              // w którym sa już ręcznie rozmieszczonoe elementy
+              // (przyciski i separatory z Column poniżej)
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
 
-              // Budynek, piętro, pomieszczenie i przycisk
-              children: [
+                // Budynek, piętro, pomieszczenie i przycisk
+                children: [
 
-                // Wybor budynku
-                // Dokładny opis komponentu w place_choose_button.dart
-                Container(
-                  margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                  child: Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  // Wybor budynku
+                  // Dokładny opis komponentu w place_choose_button.dart
+                  Container(
+                    margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                    child: Row(
+                      //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        width: numberBoxSize,
-                        height: numberBoxSize,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(roundness),
-                            color: zielonySGGW),
-                        child: Text(
-                          "${budynek > 0 ? budynek : ""}",
-                          style: const TextStyle(
-                              fontSize: 22, color: Colors.white),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                      ),
-                      SizedBox(
-                        width: widget.size.width - 120,
-                        height: 60.0,
-                        child: ElevatedButton(
-                          style: leftTextActive,
-                          onPressed: () {
-                            setState(() {
-                              budynek = budynek + 1;
-                            });
-                          },
-                          child: const Text(
-                            "Budynek",
-                            style: TextStyle(fontSize: 20),
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          width: numberBoxSize,
+                          height: numberBoxSize,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(roundness),
+                              color: zielonySGGW),
+                          child: Text(
+                            "${budynek > 0 ? budynek : ""}",
+                            style: const TextStyle(
+                                fontSize: 22, color: Colors.white),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Separator
-                const SizedBox(
-                  height: 20.0,
-                ),
-
-                // Wybor pietra
-                Container(
-                  margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                  child: Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        width: numberBoxSize,
-                        height: numberBoxSize,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(roundness),
-                            color: zielonySGGW),
-                        child: Text(
-                          "${pietro > 0 ? pietro : ""}",
-                          style: const TextStyle(
-                              fontSize: 22, color: Colors.white),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                      ),
-                      SizedBox(
-                        width: widget.size.width - 120,
-                        height: 60.0,
-                        child: ElevatedButton(
-                          style: budynek > 20
-                              ? leftTextActive
-                              : leftTextNotActive,
-                          onPressed: () {
-                            setState(() {
-                              if (budynek > 20) {
-                                pietro = pietro + 1;
-                              }
-                            });
-                          },
-                          child: const Text(
-                            "Piętro",
-                            style: TextStyle(
-                              fontSize: 20,
+                        SizedBox(
+                          width: widget.size.width - 120,
+                          height: 60.0,
+                          child: ElevatedButton(
+                            style: leftTextActive,
+                            onPressed: () {
+                              setState(() {
+                                budynek = budynek + 1;
+                              });
+                            },
+                            child: const Text(
+                              "Budynek",
+                              style: TextStyle(fontSize: 20),
                             ),
-                            textAlign: TextAlign.left,
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
 
-                // Separator
-                const SizedBox(
-                  height: 20.0,
-                ),
+                  // Separator
+                  const SizedBox(
+                    height: 20.0,
+                  ),
 
-                // Wybor pomieszczenia
-                Container(
-                  margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                  child: Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  // Wybor pietra
+                  Container(
+                    margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                    child: Row(
+                      //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        width: numberBoxSize,
-                        height: numberBoxSize,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(roundness),
-                            color: zielonySGGW),
-                        child: Text(
-                          "${pomieszczenie > 0 ? pomieszczenie : ""}",
-                          style: const TextStyle(
-                              fontSize: 22, color: Colors.white),
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          width: numberBoxSize,
+                          height: numberBoxSize,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(roundness),
+                              color: zielonySGGW),
+                          child: Text(
+                            "${pietro > 0 ? pietro : ""}",
+                            style: const TextStyle(
+                                fontSize: 22, color: Colors.white),
+                          ),
                         ),
-                      ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                        ),
+                        SizedBox(
+                          width: widget.size.width - 120,
+                          height: 60.0,
+                          child: ElevatedButton(
+                            style: budynek > 20
+                                ? leftTextActive
+                                : leftTextNotActive,
+                            onPressed: () {
+                              setState(() {
+                                if (budynek > 20) {
+                                  pietro = pietro + 1;
+                                }
+                              });
+                            },
+                            child: const Text(
+                              "Piętro",
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Separator
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+
+                  // Wybor pomieszczenia
+                  Container(
+                    margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                    child: Row(
+                      //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          width: numberBoxSize,
+                          height: numberBoxSize,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(roundness),
+                              color: zielonySGGW),
+                          child: Text(
+                            "${pomieszczenie > 0 ? pomieszczenie : ""}",
+                            style: const TextStyle(
+                                fontSize: 22, color: Colors.white),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                        ),
+                        SizedBox(
+                          width: widget.size.width - 120,
+                          height: 60.0,
+                          child: ElevatedButton(
+                            style: pietro > 20
+                                ? leftTextActive
+                                : leftTextNotActive,
+                            onPressed: () {
+                              setState(() {
+                                if (pietro > 20) {
+                                  pomieszczenie = pomieszczenie + 1;
+                                }
+                              });
+                            },
+                            child: const Text(
+                              "Pomieszczenie",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Separator
+                  const SizedBox(
+                    height: 100.0,
+                  ),
+
+                  // Przycisk rozpoczęcia skanowania
+                  Row(
+                    children: [
                       Container(
                         margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
                       ),
                       SizedBox(
-                        width: widget.size.width - 120,
+                        width: widget.size.width - 40,
                         height: 60.0,
                         child: ElevatedButton(
-                          style: pietro > 20
-                              ? leftTextActive
-                              : leftTextNotActive,
+                          style: pomieszczenie > 20
+                              ? centerTextActive
+                              : centerTextNotActive,
                           onPressed: () {
-                            setState(() {
-                              if (pietro > 20) {
-                                pomieszczenie = pomieszczenie + 1;
-                              }
-                            });
+                            if (pomieszczenie > 20) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const CameraPage()),
+                              );
+                            }
                           },
                           child: const Text(
-                            "Pomieszczenie",
+                            "Rozpocznij Skanowanie",
                             style: TextStyle(fontSize: 20),
                           ),
                         ),
                       ),
                     ],
                   ),
-                ),
+                ],
+              ),
 
-                // Separator
-                const SizedBox(
-                  height: 100.0,
-                ),
-
-                // Przycisk rozpoczęcia skanowania
-                Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                    ),
-                    SizedBox(
-                      width: widget.size.width - 40,
-                      height: 60.0,
-                      child: ElevatedButton(
-                        style: pomieszczenie > 20
-                            ? centerTextActive
-                            : centerTextNotActive,
-                        onPressed: () {
-                          if (pomieszczenie > 20) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const CameraPage()),
-                            );
-                          }
-                        },
-                        child: const Text(
-                          "Rozpocznij Skanowanie",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-
-            // Kontener do trzymania przycisków dolnych
-            //Row( Rozpocznij, zakończ raport children: [],
-          ],
-        ));
+              // Kontener do trzymania przycisków dolnych
+              //Row( Rozpocznij, zakończ raport children: [],
+            ],
+          )),
+    );
   }
 }

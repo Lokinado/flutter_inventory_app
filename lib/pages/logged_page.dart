@@ -52,8 +52,9 @@ class _loggedMainPageState extends State<loggedMainPage>
             _selectedPageIndex = index;
           });
         },
-        pageSnapping: true,
+        //pageSnapping: true,
         children: _pages,
+        physics: PageScrollPhysics(),
       ),
       bottomNavigationBar: Container(
         height: widget.size.height * 0.11,
@@ -78,7 +79,7 @@ class _loggedMainPageState extends State<loggedMainPage>
             onTap: (selectedPageIndex) {
               setState(() {
                 _selectedPageIndex = selectedPageIndex;
-                _pageController.jumpToPage(selectedPageIndex);
+                _pageController.animateToPage(selectedPageIndex, duration: Duration(milliseconds: 400), curve: Curves.fastOutSlowIn);
               });
             },
             items: const [

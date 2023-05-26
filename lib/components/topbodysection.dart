@@ -54,40 +54,43 @@ class TopBodySection extends StatelessWidget {
 
 
     // It will provide us total height and width of our screen
-    return SizedBox(
-        height: size.height * proportionalHeight,
-        child: Column(
-          children: [
-            Container(
-              width: size.width,
-              padding:  EdgeInsets.only(
-                left: size.width*proportion,
-                right: size.width*proportion,
-                bottom: 20,
-              ),
-              height: size.height * proportionalHeight,
-              decoration: BoxDecoration(
-                color: const Color.fromRGBO(0, 50, 39, 1),
-                borderRadius: BorderRadius.only(
-                  //  Roundness is on the opposite site
-                  bottomRight: Radius.circular(rightRoundness),
-                  bottomLeft: Radius.circular(leftRoundness),
+    return Container(
+      color: Colors.white,
+      child: SizedBox(
+          height: size.height * proportionalHeight,
+          child: Column(
+            children: [
+              Container(
+                width: size.width,
+                padding:  EdgeInsets.only(
+                  left: size.width*proportion,
+                  right: size.width*proportion,
+                  bottom: 20,
                 ),
+                height: size.height * proportionalHeight,
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(0, 50, 39, 1),
+                  borderRadius: BorderRadius.only(
+                    //  Roundness is on the opposite site
+                    bottomRight: Radius.circular(rightRoundness),
+                    bottomLeft: Radius.circular(leftRoundness),
+                  ),
 
-              ),
-              child: Container(
-                width: double.infinity,
-                alignment: alignment,
-                child: Text(tekst, style: TextStyle(
-                  fontSize: 30,
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',)
-                  ,)
+                ),
+                child: Container(
+                    width: double.infinity,
+                    alignment: alignment,
+                    child: Text(tekst, style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                      fontFamily: 'Montserrat',)
+                      ,)
 
+                ),
               ),
-            ),
-          ],
-        )
+            ],
+          )
+      ),
     );
   }
 }
