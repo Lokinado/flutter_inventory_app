@@ -31,6 +31,7 @@ class _CenterScanHomePageState extends State<CenterScanHomePage>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              /*
               PlaceButton(
                 onTap: () {},
                 locationHorizontally: 0.0,
@@ -45,7 +46,7 @@ class _CenterScanHomePageState extends State<CenterScanHomePage>
                 onTap: () {},
                 locationHorizontally: 0.0,
                 locationVertically: 0.0,
-              )
+              )*/
             ],
           ),
         ));
