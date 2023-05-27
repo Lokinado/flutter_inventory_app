@@ -353,7 +353,7 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const CameraPage()),
+                                    builder: (context) => const CameraPagePrev()),
                               );
                             }
                           },
