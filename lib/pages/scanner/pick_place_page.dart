@@ -336,34 +336,28 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                   separator(4 * space),
 
                   // Przycisk rozpoczęcia skanowania
-                  Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                    width: widget.size.width - 40,
+                    height: 60.0,
+                    child: ElevatedButton(
+                      style: pomieszczenie > 0
+                          ? centerTextActive
+                          : centerTextNotActive,
+                      onPressed: () {
+                        if (pomieszczenie > 0) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const CameraPagePrev()),
+                          );
+                        }
+                      },
+                      child: const Text(
+                        "Rozpocznij Skanowanie",
+                        style: TextStyle(fontSize: 20),
                       ),
-                      SizedBox(
-                        width: widget.size.width - 40,
-                        height: 60.0,
-                        child: ElevatedButton(
-                          style: pomieszczenie > 0
-                              ? centerTextActive
-                              : centerTextNotActive,
-                          onPressed: () {
-                            if (pomieszczenie > 0) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const CameraPagePrev()),
-                              );
-                            }
-                          },
-                          child: const Text(
-                            "Rozpocznij Skanowanie",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
