@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
+double cameraHeight = 300;
+double cameraWidth = 380;
+
 late List<CameraDescription> _cameras;
 
 void cameraCheck() async {
@@ -21,7 +24,7 @@ class _CameraAppState extends State<CameraPage> {
   void initState() {
     super.initState();
     cameraCheck();
-    controller = CameraController(_cameras[0], ResolutionPreset.low, );
+    controller = CameraController(_cameras[0], ResolutionPreset.low,);
     controller.initialize().then((_) {
       if (!mounted) {
         return;
@@ -31,10 +34,10 @@ class _CameraAppState extends State<CameraPage> {
       if (e is CameraException) {
         switch (e.code) {
           case 'CameraAccessDenied':
-            // Handle access errors here.
+          // Handle access errors here.
             break;
           default:
-            // Handle other errors here.
+          // Handle other errors here.
             break;
         }
       }
@@ -49,15 +52,17 @@ class _CameraAppState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Size rozmiar = MediaQuery.of(context).size;
+    final Size rozmiar = MediaQuery
+        .of(context)
+        .size;
 
     return Container(
-      height: 220,
-      width: rozmiar.width*0.7,
+      height: 280,
+      width: 340,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(30),
         child: AspectRatio(
-          aspectRatio: 1,
+          aspectRatio: 0.1,
           child: CameraPreview(controller),
         ),
       ),
@@ -72,7 +77,8 @@ class CameraPagePrev extends StatefulWidget {
   State<CameraPagePrev> createState() => _CameraPagePrevState();
 }
 
-class _CameraPagePrevState extends State<CameraPagePrev> with SingleTickerProviderStateMixin {
+class _CameraPagePrevState extends State<CameraPagePrev>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -89,7 +95,12 @@ class _CameraPagePrevState extends State<CameraPagePrev> with SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
-    final Size rozmiar = MediaQuery.of(context).size;
+    final Size rozmiar = MediaQuery
+        .of(context)
+        .size;
+
+    double textHeighOffset = 40;
+    const double elementsOffset = 20;
 
     return Scaffold(
       appBar: AppBar(
@@ -115,34 +126,116 @@ class _CameraPagePrevState extends State<CameraPagePrev> with SingleTickerProvid
         alignment: Alignment.topCenter,
         child: Column(
           children: [
-            SizedBox(height: 20,),
-            Container(
-              child: Stack(
-                children: [
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    height: 260,
-                    width: rozmiar.width*0.7,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: Colors.black38,
-                    ),
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 40,
-                      child: Text("Jakiś tekst"),
-                    ),
+            const SizedBox(height: elementsOffset,),
+            Stack(
+              children: [
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  height: 280 + textHeighOffset,
+                  width: 340,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    color: Colors.black38,
                   ),
-                  Container(
-                    child: CameraPage(),
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: textHeighOffset,
+                    child: Text("Kliknij, by wpisać kod ręcznie",
+                        style: TextStyle(fontSize: 16)),
                   ),
-                ],
-              ),
+                ),
+                Container(
+                  child: CameraPage(),
+                ),
+              ],
             ),
+            const SizedBox(height: elementsOffset,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: elementsOffset*3,
+                  width: rozmiar.width*0.5,
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(
+                      color: Color.fromRGBO(88, 178, 122, 1),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        bottomLeft: Radius.circular(20))
+                  ),
+                  child: Container(
+                    width: rozmiar.width*0.5,
+                    alignment: Alignment.center,
+                    child: Text("WX-4212" , style: TextStyle(fontSize: 26, color: Colors.white)),
+                  ),
+                ),
+                Container(
+                  width: rozmiar.width*0.3,
+                  height: elementsOffset*3,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(217, 217, 217, 1),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(20),
+                      bottomRight: Radius.circular(20)
+                    )
+                  ),
+                  child: Text("Dodaj komentarz" , style: TextStyle(fontSize: 18, color: Colors.black,), textAlign: TextAlign.center,),
+                ),
+              ],
+            ),
+            const SizedBox(height: elementsOffset*1.5,),
+            Column(
+              children: [
+                Container(
+                  color: Color.fromRGBO(145, 198, 163, 1),
+                  width: rozmiar.width*0.8,
+                  padding: EdgeInsets.all(10),
+                  height: 2.5*elementsOffset,
+                ),
+                const SizedBox(height: 2,),
+                Container(
+                  color: Color.fromRGBO(145, 198, 163, 1),
+                  width: rozmiar.width*0.8,
+                  padding: EdgeInsets.all(10),
+                  height: 2.5*elementsOffset,
+                ),
+                const SizedBox(height: 2,),
+                Container(
+                  color: Color.fromRGBO(145, 198, 163, 1),
+                  width: rozmiar.width*0.8,
+                  padding: EdgeInsets.all(10),
+                  height: 2.5*elementsOffset,
+                )
+              ],
+            ),
+            const SizedBox(height: elementsOffset*1.5,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  height: elementsOffset*4,
+                  width: rozmiar.width*0.3,
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(
+                      color: Color.fromRGBO(245, 123, 107, 1),
+                      borderRadius: BorderRadius.circular(20),),
+                  child: Text("Zakończ raport" , style: TextStyle(fontSize: 22, color: Colors.black, fontWeight: FontWeight.w500), textAlign: TextAlign.center,),
+                ),
+                Container(
+                  height: elementsOffset*4,
+                  width: rozmiar.width*0.5,
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(250, 185, 90, 1),
+                    borderRadius: BorderRadius.circular(20),),
+                  child: Text("Zmień pomieszczenie" , style: TextStyle(fontSize: 22, color: Colors.black, fontWeight: FontWeight.w500), textAlign: TextAlign.center,),
+                )
+              ],
+            )
           ],
         ),
       ),
     );
   }
 }
-
