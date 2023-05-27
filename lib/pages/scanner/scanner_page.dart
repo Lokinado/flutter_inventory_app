@@ -101,23 +101,21 @@ class _CameraPagePrevState extends State<CameraPagePrev>
     double textHeighOffset = rozmiar.height * 0.04;
     double elementsOffset = rozmiar.height * 0.023;
 
+
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(0, 50, 39, 1),
-        toolbarHeight: 100,
-        title: Container(
-            alignment: Alignment.center,
-            child: SizedBox(
-              width: 200,
-              child: Text(
-                "Skanuj kody",
-                style: TextStyle(
-                  fontSize: elementsOffset*1.2,
-                  fontWeight: FontWeight.w500
-                ),
-                textAlign: TextAlign.left,
-              ),
-            )),
+        toolbarHeight: textHeighOffset*3,
+        centerTitle: true,
+        title: Text(
+          "Skanuj kody",
+          style: TextStyle(
+              fontSize: elementsOffset*1.2,
+              fontWeight: FontWeight.w500
+          ),
+          textAlign: TextAlign.center,
+        ),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(40),
