@@ -24,7 +24,10 @@ class _CameraAppState extends State<CameraPage> {
   void initState() {
     super.initState();
     cameraCheck();
-    controller = CameraController(_cameras[0], ResolutionPreset.low,);
+    controller = CameraController(
+      _cameras[0],
+      ResolutionPreset.low,
+    );
     controller.initialize().then((_) {
       if (!mounted) {
         return;
@@ -34,10 +37,10 @@ class _CameraAppState extends State<CameraPage> {
       if (e is CameraException) {
         switch (e.code) {
           case 'CameraAccessDenied':
-          // Handle access errors here.
+            // Handle access errors here.
             break;
           default:
-          // Handle other errors here.
+            // Handle other errors here.
             break;
         }
       }
@@ -52,13 +55,11 @@ class _CameraAppState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Size rozmiar = MediaQuery
-        .of(context)
-        .size;
+    final Size rozmiar = MediaQuery.of(context).size;
 
-    return Container(
-      height: 280,
-      width: 340,
+    return SizedBox(
+      height: rozmiar.height * 0.3,
+      width: rozmiar.width * 0.8,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(30),
         child: AspectRatio(
@@ -95,12 +96,10 @@ class _CameraPagePrevState extends State<CameraPagePrev>
 
   @override
   Widget build(BuildContext context) {
-    final Size rozmiar = MediaQuery
-        .of(context)
-        .size;
+    final Size rozmiar = MediaQuery.of(context).size;
 
-    double textHeighOffset = 40;
-    const double elementsOffset = 20;
+    double textHeighOffset = rozmiar.height * 0.04;
+    double elementsOffset = rozmiar.height * 0.023;
 
     return Scaffold(
       appBar: AppBar(
@@ -126,13 +125,18 @@ class _CameraPagePrevState extends State<CameraPagePrev>
         alignment: Alignment.topCenter,
         child: Column(
           children: [
-            const SizedBox(height: elementsOffset,),
+            /// Separator
+            SizedBox(
+              height: elementsOffset,
+            ),
+
+            /// Kamera razem z polem komentarz
             Stack(
               children: [
                 Container(
                   alignment: Alignment.bottomCenter,
-                  height: 280 + textHeighOffset,
-                  width: 340,
+                  height: rozmiar.height * 0.3 + textHeighOffset,
+                  width: rozmiar.width * 0.8,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
                     color: Colors.black38,
@@ -140,96 +144,137 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                   child: Container(
                     alignment: Alignment.center,
                     height: textHeighOffset,
-                    child: Text("Kliknij, by wpisać kod ręcznie",
+                    child: const Text("Kliknij, by wpisać kod ręcznie",
                         style: TextStyle(fontSize: 16)),
                   ),
                 ),
-                Container(
-                  child: CameraPage(),
-                ),
+                const CameraPage(),
               ],
             ),
-            const SizedBox(height: elementsOffset,),
+
+
+            SizedBox(
+              height: elementsOffset,
+            ),
+
+            /// Podgląd ostatniego kodu + komentarz
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  height: elementsOffset*3,
-                  width: rozmiar.width*0.5,
+                  height: elementsOffset * 3,
+                  width: rozmiar.width * 0.5,
                   alignment: Alignment.centerLeft,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: Color.fromRGBO(88, 178, 122, 1),
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        bottomLeft: Radius.circular(20))
-                  ),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          bottomLeft: Radius.circular(20))),
                   child: Container(
-                    width: rozmiar.width*0.5,
+                    width: rozmiar.width * 0.5,
                     alignment: Alignment.center,
-                    child: Text("WX-4212" , style: TextStyle(fontSize: 26, color: Colors.white)),
+                    child: const Text("WX-4212",
+                        style: TextStyle(fontSize: 26, color: Colors.white)),
                   ),
                 ),
                 Container(
-                  width: rozmiar.width*0.3,
-                  height: elementsOffset*3,
+                  width: rozmiar.width * 0.3,
+                  height: elementsOffset * 3,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(217, 217, 217, 1),
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(20),
-                      bottomRight: Radius.circular(20)
-                    )
+                  decoration: const BoxDecoration(
+                      color: Color.fromRGBO(217, 217, 217, 1),
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(20),
+                          bottomRight: Radius.circular(20))),
+                  child: const Text(
+                    "Dodaj komentarz",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  child: Text("Dodaj komentarz" , style: TextStyle(fontSize: 18, color: Colors.black,), textAlign: TextAlign.center,),
                 ),
               ],
             ),
-            const SizedBox(height: elementsOffset*1.5,),
+
+            /// Separatro
+            SizedBox(
+              height: elementsOffset * 1.5,
+            ),
+
+            /// Wyświetlanie zeskanowanych przedmiotów
             Column(
               children: [
                 Container(
-                  color: Color.fromRGBO(145, 198, 163, 1),
-                  width: rozmiar.width*0.8,
-                  padding: EdgeInsets.all(10),
-                  height: 2.5*elementsOffset,
+                  color: const Color.fromRGBO(145, 198, 163, 1),
+                  width: rozmiar.width * 0.8,
+                  padding: const EdgeInsets.all(10),
+                  height: 2.5 * elementsOffset,
                 ),
-                const SizedBox(height: 2,),
-                Container(
-                  color: Color.fromRGBO(145, 198, 163, 1),
-                  width: rozmiar.width*0.8,
-                  padding: EdgeInsets.all(10),
-                  height: 2.5*elementsOffset,
+                const SizedBox(
+                  height: 2,
                 ),
-                const SizedBox(height: 2,),
                 Container(
-                  color: Color.fromRGBO(145, 198, 163, 1),
-                  width: rozmiar.width*0.8,
-                  padding: EdgeInsets.all(10),
-                  height: 2.5*elementsOffset,
+                  color: const Color.fromRGBO(145, 198, 163, 1),
+                  width: rozmiar.width * 0.8,
+                  padding: const EdgeInsets.all(10),
+                  height: 2.5 * elementsOffset,
+                ),
+                const SizedBox(
+                  height: 2,
+                ),
+                Container(
+                  color: const Color.fromRGBO(145, 198, 163, 1),
+                  width: rozmiar.width * 0.8,
+                  padding: const EdgeInsets.all(10),
+                  height: 2.5 * elementsOffset,
                 )
               ],
             ),
-            const SizedBox(height: elementsOffset*1.5,),
+
+            /// Separator
+            SizedBox(
+              height: elementsOffset * 1.5,
+            ),
+
+            /// Przyciski dolne na stronie
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                  height: elementsOffset*4,
-                  width: rozmiar.width*0.3,
+                  height: elementsOffset * 4,
+                  width: rozmiar.width * 0.33,
                   alignment: Alignment.centerLeft,
                   decoration: BoxDecoration(
-                      color: Color.fromRGBO(245, 123, 107, 1),
-                      borderRadius: BorderRadius.circular(20),),
-                  child: Text("Zakończ raport" , style: TextStyle(fontSize: 22, color: Colors.black, fontWeight: FontWeight.w500), textAlign: TextAlign.center,),
+                    color: const Color.fromRGBO(245, 123, 107, 1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    "Zakończ raport",
+                    style: TextStyle(
+                        fontSize: elementsOffset * 1.2,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 Container(
-                  height: elementsOffset*4,
-                  width: rozmiar.width*0.5,
+                  height: elementsOffset * 4,
+                  width: rozmiar.width * 0.53,
                   alignment: Alignment.centerLeft,
                   decoration: BoxDecoration(
-                    color: Color.fromRGBO(250, 185, 90, 1),
-                    borderRadius: BorderRadius.circular(20),),
-                  child: Text("Zmień pomieszczenie" , style: TextStyle(fontSize: 22, color: Colors.black, fontWeight: FontWeight.w500), textAlign: TextAlign.center,),
+                    color: const Color.fromRGBO(250, 185, 90, 1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    "Zmień pomieszczenie",
+                    style: TextStyle(
+                        fontSize: elementsOffset * 1.2,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center,
+                  ),
                 )
               ],
             )
