@@ -109,7 +109,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
         toolbarHeight: textHeighOffset*3,
         centerTitle: true,
         title: Text(
-          "Skanuj kody",
+          "Skanowanie",
           style: TextStyle(
               fontSize: elementsOffset*1.2,
               fontWeight: FontWeight.w500
@@ -118,8 +118,8 @@ class _CameraPagePrevState extends State<CameraPagePrev>
         ),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(40),
-            bottomRight: Radius.circular(40),
+            bottomLeft: Radius.circular(34),
+            bottomRight: Radius.circular(34),
           ),
         ),
       ),
@@ -156,7 +156,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
 
             /// Separator
             SizedBox(
-              height: elementsOffset,
+              height: elementsOffset*1.5,
             ),
 
             /// Podgląd ostatniego kodu + komentarz

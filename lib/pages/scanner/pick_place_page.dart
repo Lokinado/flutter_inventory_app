@@ -115,257 +115,252 @@ class _PickPlaceContentState extends State<PickPlaceContent>
 
   @override
   Widget build(BuildContext context) {
-    // Wywołuje "AutomaticKeepAliveClientMixin" -> Alive
+    /// Wywołuje "AutomaticKeepAliveClientMixin" -> Alive
     super.build(context);
 
-    // Zmienne które można zainicjalizować dopiero w konstruktorze
+    /// Zmienne które można zainicjalizować dopiero w konstruktorze
     var roundness = 20.0;
     double space = 20;
     inicjalizujPusteDane();
     var szerokoscPrzycisku = widget.size.width - 120;
 
-    //  "Kontener" wnętrza, ograniczający wysokość całkowitą
-    // i ustawiający kolor tła
+    ///  "Kontener" wnętrza, ograniczający wysokość całkowitą
+    /// i ustawiający kolor tła
     return Container(
       color: Colors.white,
       child: SizedBox(
-          height: widget.size.height * 0.7,
-          width: widget.size.width,
+        height: widget.size.height * 0.7,
+        width: widget.size.width,
 
-          //  Największe pudełko - tutaj jest cała zawartość równo ułożone
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              // Wszystkie elementy są ułożone tutaj
-              // po co Columna w Columne?
-              // Jedna umieszcz an środku "pudełko" (column poniżej)
-              // w którym sa już ręcznie rozmieszczonoe elementy
-              // (przyciski i separatory z Column poniżej)
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
+        ///  Największe pudełko - tutaj jest cała zawartość równo ułożone
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            /// Wszystkie elementy są ułożone tutaj
+            // po co Columna w Columne?
+            // Jedna umieszcz an środku "pudełko" (column poniżej)
+            // w którym sa już ręcznie rozmieszczonoe elementy
+            // (przyciski i separatory z Column poniżej)
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
 
-                // Budynek, piętro, pomieszczenie i przycisk
-                children: [
-                  // Wybor budynku
-                  // Dokładny opis komponentu w place_choose_button.dart
-                  Container(
-                    margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                    child: Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              /// Budynek, piętro, pomieszczenie i przycisk
+              children: [
+                /// Wybor budynku
+                // Dokładny opis komponentu w place_choose_button.dart
+                Container(
+                  margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                  child: Row(
+                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 
-                      children: [
-                        Container(
-                          alignment: Alignment.center,
-                          width: numberBoxSize,
-                          height: numberBoxSize,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(roundness),
-                              color: zielonySGGW),
-                          child: Text(
-                            // Podstawienie wybranego numeru jeśli > 0
-                            "${budynek > 0 ? budynek : ""}",
-                            style: const TextStyle(
-                                fontSize: 22, color: Colors.white),
-                          ),
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        width: numberBoxSize,
+                        height: numberBoxSize,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(roundness),
+                            color: zielonySGGW),
+                        child: Text(
+                          // Podstawienie wybranego numeru jeśli > 0
+                          "${budynek > 0 ? budynek : ""}",
+                          style: const TextStyle(
+                              fontSize: 22, color: Colors.white),
                         ),
-                        // Pusty separator
-                        Container(
-                          margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                        ),
-                        SizedBox(
-                          width: szerokoscPrzycisku,
-                          height: 60.0,
-                          child: ElevatedButton(
-                            style: leftTextActive,
-                            onPressed: () async {
-                              String? wyborBudynku = await showPickerDialog(
-                                context: context,
-                                label: "Budynek",
-                                items: listaBudynkow,
-                              );
-                              if (wyborBudynku != null) {
-                                var value = int.parse(wyborBudynku);
-                                setState(() {
-                                  if (budynek != value) {
-                                    budynek = value;
-                                    pietro = 0;
-                                    pomieszczenie = 0;
-                                  }
-                                });
-                              }
-                            },
-                            child: const Text(
-                              "Budynek",
-                              style: TextStyle(
-                                fontSize: 20,
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Separator
-                  separator(space),
-
-                  // Wybor pietra
-                  Container(
-                    margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                    child: Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                      children: [
-                        Container(
-                          alignment: Alignment.center,
-                          width: numberBoxSize,
-                          height: numberBoxSize,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(roundness),
-                              color: budynek != 0
-                                  ? zielonySGGW
-                                  : zielonySlabaSGGW),
-                          child: Text(
-                            "${pietro > 0 ? pietro : ""}",
-                            style: const TextStyle(
-                                fontSize: 22, color: Colors.white),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                        ),
-                        SizedBox(
-                          width: szerokoscPrzycisku,
-                          height: 60.0,
-                          child: ElevatedButton(
-                            style: budynek != 0
-                                ? leftTextActive
-                                : leftTextNotActive,
-                            onPressed: () async {
-                              String? wyborPietra = await showPickerDialog(
-                                context: context,
-                                label: "",
-                                items: pietra[budynek],
-                              );
-                              if (wyborPietra != null) {
-                                var value = int.parse(wyborPietra);
-                                setState(() {
-                                  if (pietro != value) {
-                                    pietro = value;
-                                    pomieszczenie = 0;
-                                  }
-                                });
-                              }
-                            },
-                            child: const Text(
-                              "Piętro",
-                              style: TextStyle(
-                                fontSize: 20,
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Separator
-                  separator(space),
-
-                  // Wybor pomieszczenia
-                  Container(
-                    margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                    child: Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                      children: [
-                        Container(
-                          alignment: Alignment.center,
-                          width: numberBoxSize,
-                          height: numberBoxSize,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(roundness),
-                              color:
-                                  pietro != 0 ? zielonySGGW : zielonySlabaSGGW),
-                          child: Text(
-                            "${pomieszczenie > 0 ? pomieszczenie : ""}",
-                            style: const TextStyle(
-                                fontSize: 22, color: Colors.white),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                        ),
-                        SizedBox(
-                          width: szerokoscPrzycisku,
-                          height: 60.0,
-                          child: ElevatedButton(
-                            style: pietro != 0 && budynek != 0
-                                ? leftTextActive
-                                : leftTextNotActive,
-                            onPressed: () async {
-                              String? wyborPomieszczenia =
-                                  await showPickerDialog(
-                                context: context,
-                                label: "Budynek",
-                                items: pomieszczenia[budynek][pietro],
-                              );
-                              if (wyborPomieszczenia != null) {
-                                setState(() {
-                                  pomieszczenie = int.parse(wyborPomieszczenia);
-                                });
-                              }
-                            },
-                            child: const Text(
-                              "Pomieszczenie",
-                              style: TextStyle(
-                                fontSize: 20,
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Separator
-                  separator(4 * space),
-
-                  // Przycisk rozpoczęcia skanowania
-                  Container(
-                    margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                    width: widget.size.width - 40,
-                    height: 60.0,
-                    child: ElevatedButton(
-                      style: pomieszczenie > 0
-                          ? centerTextActive
-                          : centerTextNotActive,
-                      onPressed: () {
-                        if (pomieszczenie > 0) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const CameraPagePrev()),
-                          );
-                        }
-                      },
-                      child: const Text(
-                        "Rozpocznij Skanowanie",
-                        style: TextStyle(fontSize: 20),
                       ),
+                      // Pusty separator
+                      Container(
+                        margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                      ),
+                      SizedBox(
+                        width: szerokoscPrzycisku,
+                        height: 60.0,
+                        child: ElevatedButton(
+                          style: leftTextActive,
+                          onPressed: () async {
+                            String? wyborBudynku = await showPickerDialog(
+                              context: context,
+                              label: "Budynek",
+                              items: listaBudynkow,
+                            );
+                            if (wyborBudynku != null) {
+                              var value = int.parse(wyborBudynku);
+                              setState(() {
+                                if (budynek != value) {
+                                  budynek = value;
+                                  pietro = 0;
+                                  pomieszczenie = 0;
+                                }
+                              });
+                            }
+                          },
+                          child: const Text(
+                            "Budynek",
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Separator
+                separator(space),
+
+                /// Wybor pietra
+                Container(
+                  margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                  child: Row(
+                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        width: numberBoxSize,
+                        height: numberBoxSize,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(roundness),
+                            color:
+                                budynek != 0 ? zielonySGGW : zielonySlabaSGGW),
+                        child: Text(
+                          "${pietro > 0 ? pietro : ""}",
+                          style: const TextStyle(
+                              fontSize: 22, color: Colors.white),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                      ),
+                      SizedBox(
+                        width: szerokoscPrzycisku,
+                        height: 60.0,
+                        child: ElevatedButton(
+                          style:
+                              budynek != 0 ? leftTextActive : leftTextNotActive,
+                          onPressed: () async {
+                            String? wyborPietra = await showPickerDialog(
+                              context: context,
+                              label: "",
+                              items: pietra[budynek],
+                            );
+                            if (wyborPietra != null) {
+                              var value = int.parse(wyborPietra);
+                              setState(() {
+                                if (pietro != value) {
+                                  pietro = value;
+                                  pomieszczenie = 0;
+                                }
+                              });
+                            }
+                          },
+                          child: const Text(
+                            "Piętro",
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                /// Separator
+                separator(space),
+
+                /// Wybor pomieszczenia
+                Container(
+                  margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                  child: Row(
+                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        width: numberBoxSize,
+                        height: numberBoxSize,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(roundness),
+                            color:
+                                pietro != 0 ? zielonySGGW : zielonySlabaSGGW),
+                        child: Text(
+                          "${pomieszczenie > 0 ? pomieszczenie : ""}",
+                          style: const TextStyle(
+                              fontSize: 22, color: Colors.white),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                      ),
+                      SizedBox(
+                        width: szerokoscPrzycisku,
+                        height: 60.0,
+                        child: ElevatedButton(
+                          style: pietro != 0 && budynek != 0
+                              ? leftTextActive
+                              : leftTextNotActive,
+                          onPressed: () async {
+                            String? wyborPomieszczenia = await showPickerDialog(
+                              context: context,
+                              label: "Budynek",
+                              items: pomieszczenia[budynek][pietro],
+                            );
+                            if (wyborPomieszczenia != null) {
+                              setState(() {
+                                pomieszczenie = int.parse(wyborPomieszczenia);
+                              });
+                            }
+                          },
+                          child: const Text(
+                            "Pomieszczenie",
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                /// Separator
+                separator(4 * space),
+
+                /// Przycisk rozpoczęcia skanowania
+                Container(
+                  margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
+                  width: widget.size.width - 40,
+                  height: 60.0,
+                  child: ElevatedButton(
+                    style: pomieszczenie > 0
+                        ? centerTextActive
+                        : centerTextNotActive,
+                    onPressed: () {
+                      if (pomieszczenie > 0) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CameraPagePrev()),
+                        );
+                      }
+                    },
+                    child: const Text(
+                      "Rozpocznij Skanowanie",
+                      style: TextStyle(fontSize: 20),
                     ),
                   ),
-                ],
-              ),
-
-              // Kontener do trzymania przycisków dolnych
-              //Row( Rozpocznij, zakończ raport children: [],
-            ],
-          )),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
