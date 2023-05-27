@@ -107,10 +107,14 @@ class _CameraPagePrevState extends State<CameraPagePrev>
         toolbarHeight: 100,
         title: Container(
             alignment: Alignment.center,
-            child: const SizedBox(
-              width: 180,
+            child: SizedBox(
+              width: 200,
               child: Text(
                 "Skanuj kody",
+                style: TextStyle(
+                  fontSize: elementsOffset*1.2,
+                  fontWeight: FontWeight.w500
+                ),
                 textAlign: TextAlign.left,
               ),
             )),
@@ -144,15 +148,15 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                   child: Container(
                     alignment: Alignment.center,
                     height: textHeighOffset,
-                    child: const Text("Kliknij, by wpisać kod ręcznie",
-                        style: TextStyle(fontSize: 16)),
+                    child: Text("Kliknij, by wpisać kod ręcznie",
+                        style: TextStyle(fontSize: elementsOffset*0.9)),
                   ),
                 ),
                 const CameraPage(),
               ],
             ),
 
-
+            /// Separator
             SizedBox(
               height: elementsOffset,
             ),
@@ -168,13 +172,13 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                   decoration: const BoxDecoration(
                       color: Color.fromRGBO(88, 178, 122, 1),
                       borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          bottomLeft: Radius.circular(20))),
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10))),
                   child: Container(
                     width: rozmiar.width * 0.5,
                     alignment: Alignment.center,
-                    child: const Text("WX-4212",
-                        style: TextStyle(fontSize: 26, color: Colors.white)),
+                    child: Text("WX-4212",
+                        style: TextStyle(fontSize: elementsOffset*1.6, color: Colors.white)),
                   ),
                 ),
                 Container(
@@ -184,12 +188,12 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                   decoration: const BoxDecoration(
                       color: Color.fromRGBO(217, 217, 217, 1),
                       borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(20),
-                          bottomRight: Radius.circular(20))),
-                  child: const Text(
+                          topRight: Radius.circular(10),
+                          bottomRight: Radius.circular(10))),
+                  child: Text(
                     "Dodaj komentarz",
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: elementsOffset*0.9,
                       color: Colors.black,
                     ),
                     textAlign: TextAlign.center,
@@ -207,29 +211,119 @@ class _CameraPagePrevState extends State<CameraPagePrev>
             Column(
               children: [
                 Container(
-                  color: const Color.fromRGBO(145, 198, 163, 1),
                   width: rozmiar.width * 0.8,
-                  padding: const EdgeInsets.all(10),
                   height: 2.5 * elementsOffset,
+                  decoration: const BoxDecoration(
+                    color: Color.fromRGBO(145, 198, 163, 1),
+                    borderRadius: BorderRadius.all(Radius.circular(10))
+                  ),
+                  child: Container(
+                    margin: EdgeInsets.only(left: elementsOffset),
+                    alignment: Alignment.centerLeft,
+                    child: Wrap(
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: rozmiar.width*0.55,
+                          child: Text(
+                            "Krzesło",
+                            style: TextStyle(
+                                fontSize: elementsOffset,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Text(
+                          "20/20",
+                          style: TextStyle(
+                              fontSize: elementsOffset,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500),
+                          textAlign: TextAlign.center,
+                        )
+                      ],
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   height: 2,
                 ),
                 Container(
-                  color: const Color.fromRGBO(145, 198, 163, 1),
                   width: rozmiar.width * 0.8,
-                  padding: const EdgeInsets.all(10),
                   height: 2.5 * elementsOffset,
+                  decoration: const BoxDecoration(
+                      color: Color.fromRGBO(145, 198, 163, 1),
+                      borderRadius: BorderRadius.all(Radius.circular(10))
+                  ),
+                  child: Container(
+                    margin: EdgeInsets.only(left: elementsOffset),
+                    alignment: Alignment.centerLeft,
+                    child: Wrap(
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: rozmiar.width*0.55,
+                          child: Text(
+                            "Monitory",
+                            style: TextStyle(
+                                fontSize: elementsOffset,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Text(
+                          "20/20",
+                          style: TextStyle(
+                              fontSize: elementsOffset,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500),
+                          textAlign: TextAlign.center,
+                        )
+                      ],
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   height: 2,
                 ),
                 Container(
-                  color: const Color.fromRGBO(145, 198, 163, 1),
                   width: rozmiar.width * 0.8,
-                  padding: const EdgeInsets.all(10),
                   height: 2.5 * elementsOffset,
-                )
+                  decoration: const BoxDecoration(
+                      color: Color.fromRGBO(145, 198, 163, 1),
+                      borderRadius: BorderRadius.all(Radius.circular(10))
+                  ),
+                  child: Container(
+                    margin: EdgeInsets.only(left: elementsOffset),
+                    alignment: Alignment.centerLeft,
+                    child: Wrap(
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: rozmiar.width*0.55,
+                          child: Text(
+                            "Biurka",
+                            style: TextStyle(
+                                fontSize: elementsOffset,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Text(
+                          "20/20",
+                          style: TextStyle(
+                              fontSize: elementsOffset,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500),
+                          textAlign: TextAlign.center,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
 
