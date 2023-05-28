@@ -7,6 +7,8 @@ import 'package:list_picker/list_picker.dart';
 double cameraHeight = 300;
 double cameraWidth = 380;
 
+
+
 late List<CameraDescription> _cameras;
 
 void cameraCheck() async {
@@ -64,10 +66,8 @@ class _CameraAppState extends State<CameraPage> {
       height: rozmiar.height * 0.28,
       width: rozmiar.width * 0.8,
       child: ClipRRect(
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(30),
-          topLeft: Radius.circular(30)
-        ),
+        borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(30), topLeft: Radius.circular(30)),
         child: AspectRatio(
           aspectRatio: 0.1,
           child: CameraPreview(controller),
@@ -84,107 +84,79 @@ class CameraPagePrev extends StatefulWidget {
   State<CameraPagePrev> createState() => _CameraPagePrevState();
 }
 
+
+
+
+
 class _CameraPagePrevState extends State<CameraPagePrev>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  late TextEditingController _textEditingController;
 
-  @override
-  void initState() {
-    super.initState();
-    if (dummmyVar) {
-      losuj();
-    }
-    _controller = AnimationController(vsync: this);
-    dummmyVar = false;
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  var dummmyVar = true;
-
+  /// Zmienne przechowywujące informacje nt. przedmiotów do skanownaia
   List<List<dynamic>> biurka = [];
   List<List<dynamic>> monitory = [];
   List<List<dynamic>> krzesla = [];
 
-  void losuj() {
-    for (int i = 1; i <= 20; i++) {
-      List<dynamic> tmp = [];
-      tmp.add("Biurko ${i}");
-      tmp.add(Random().hashCode.toString());
-      tmp.add(false);
-      biurka.add(tmp);
-    }
-
-    for (int i = 1; i <= 20; i++) {
-      List<dynamic> tmp = [];
-      tmp.add("Monitor ${i}");
-      tmp.add(Random().hashCode.toString());
-      tmp.add(false);
-      monitory.add(tmp);
-    }
-
-    for (int i = 1; i <= 20; i++) {
-      List<dynamic> tmp = [];
-      tmp.add("Krzeslo ${i}");
-      tmp.add(Random().hashCode.toString());
-      tmp.add(false);
-      krzesla.add(tmp);
-    }
-  }
-
-  int liczGotowe(List<List<dynamic>> lista){
-    int licznik = 0;
-    for (int i = 0; i < lista.length; i++){
-      if (lista[i][2]){licznik++;}
-    }
-    return licznik;
-  }
-
-  var iloscBiurek = 19;
-  var iloscMonitorow = 0;
-  var iloscKrzesel = 19;
-
-  var roundness = 10;
+  /// Zmienne do późńiejszego zainicjowania
+  late int liczbaBiurek;
+  late int liczbaMonitorow;
+  late int liczbaKrzesel;
 
   @override
   Widget build(BuildContext context) {
+
+    // Pobranie informacji nt. wymiarów okna
     final Size rozmiar = MediaQuery.of(context).size;
 
-
-
+    // Przygotowanie zmiennenych pomodniczych do rozmiarowania elementów
     double textHeighOffset = rozmiar.height * 0.04;
     double elementsOffset = rozmiar.height * 0.023;
 
-    // Zmienne na późńiej
-    iloscBiurek = liczGotowe(biurka);
-    iloscMonitorow = liczGotowe(monitory);
-    iloscKrzesel = liczGotowe(krzesla);
+    /// Inicjalizacja zmienneych i dynamiczne zmiany ich wartości
+    /// -> przechowują informacje nt. stanu skonowania elementów
+    liczbaBiurek = liczGotowe(biurka);
+    liczbaMonitorow = liczGotowe(monitory);
+    liczbaKrzesel = liczGotowe(krzesla);
 
+    // Przechowuje informacje o ostatnim zeskanowanym elemencie
+    var scannedValue = krzesla[1][1].toString();
+
+
+    /// Pola przechoujące pozostałe do zeskanowania elementy
+    /// W chewili obecnej ma to na celu pokazanie że dynamicznie da się
+    /// modyfikowąc liczbę elementów wyświetlanych na popupowych listatach
+    /// do zmienienia później
     List<String> krzeslaIdentyfikatory = [];
+    List<String> monitoryIdentyfikatory = [];
+    List<String> biurkaIdentyfikatory = [];
 
-    for (int i = 0; i < krzesla.length; i++) {
-      if (!krzesla[i][2]){
-        krzeslaIdentyfikatory.add((i + 1).toString() +
-            ": " +
-            krzesla[i][1].toString() +
-            " " +
-            krzesla[i][2].toString());
-      };
+    for (int lista = 0; lista < 3; lista++) {
+      List<List<dynamic>> wybor = [krzesla, monitory, biurka][lista];
+      List<String> identyfikatory = [
+        krzeslaIdentyfikatory,
+        monitoryIdentyfikatory,
+        biurkaIdentyfikatory
+      ][lista];
+      for (int i = 0; i < wybor.length; i++) {
+        if (!wybor[i][2]) {
+          identyfikatory.add(
+              "${(i + 1).toString()} : ${wybor[i][1].toString()}  ${wybor[i][2].toString()} | ${wybor[i][3].toString()}");
+        }
+      }
     }
 
     return Scaffold(
+
+      /// Nagłówek aplikacji
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: const Color.fromRGBO(0, 50, 39, 1),
         toolbarHeight: textHeighOffset * 3,
         centerTitle: true,
-        title: Text(
+        title: const Text(
           "Skanowanie",
-          style: TextStyle(
-              fontSize: 24, fontWeight: FontWeight.w500),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
           textAlign: TextAlign.center,
         ),
         shape: const RoundedRectangleBorder(
@@ -194,6 +166,8 @@ class _CameraPagePrevState extends State<CameraPagePrev>
           ),
         ),
       ),
+
+      /// Zawartość ciała
       body: Container(
         alignment: Alignment.topCenter,
         child: Column(
@@ -221,7 +195,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                         style: TextStyle(fontSize: elementsOffset * 0.9)),
                   ),
                 ),
-                const CameraPage(),
+                //const CameraPage(),
               ],
             ),
 
@@ -246,28 +220,39 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                   child: Container(
                     width: rozmiar.width * 0.5,
                     alignment: Alignment.center,
-                    child: Text("${biurka[1][1]}",
+                    child: Text(scannedValue,
                         style: TextStyle(
                             fontSize: elementsOffset * 1.2,
                             color: Colors.white)),
                   ),
                 ),
-                Container(
-                  width: rozmiar.width * 0.3,
-                  height: elementsOffset * 3,
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                      color: Color.fromRGBO(217, 217, 217, 1),
-                      borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(10),
-                          bottomRight: Radius.circular(10))),
-                  child: Text(
-                    "Dodaj komentarz",
-                    style: TextStyle(
-                      fontSize: elementsOffset * 0.9,
-                      color: Colors.black,
+                GestureDetector(
+                  onTap: () {
+                    var result = openDialog("Przedmiot: $scannedValue");
+                    if (result.toString().isNotEmpty) {
+                      setState(() {
+                        dodajKomentarz(
+                            scannedValue, _textEditingController.text);
+                      });
+                    }
+                  },
+                  child: Container(
+                    width: rozmiar.width * 0.3,
+                    height: elementsOffset * 3,
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(
+                        color: Color.fromRGBO(217, 217, 217, 1),
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(10),
+                            bottomRight: Radius.circular(10))),
+                    child: Text(
+                      "Dodaj komentarz",
+                      style: TextStyle(
+                        fontSize: elementsOffset * 0.9,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
               ],
@@ -285,7 +270,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                   width: rozmiar.width * 0.8,
                   height: 2.5 * elementsOffset,
                   child: ElevatedButton(
-                    style: iloscKrzesel == krzesla.length
+                    style: liczbaKrzesel == krzesla.length
                         ? spacedGreenButtonActive
                         : spacedGreenButtonNActive,
                     onPressed: () async {
@@ -294,11 +279,12 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                         label: "krzesło",
                         items: krzeslaIdentyfikatory,
                       );
-                      if (wybraneKrzeslo != null){
+                      if (wybraneKrzeslo != null) {
                         setState(() {
-                          krzesla[int.parse(wybraneKrzeslo.split(":")[0])-1][2] = true;
+                          krzesla[int.parse(wybraneKrzeslo.split(":")[0]) - 1]
+                              [2] = true;
                         });
-                      };
+                      }
                     },
                     child: Container(
                       margin: EdgeInsets.only(
@@ -317,7 +303,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                             textAlign: TextAlign.center,
                           ),
                           Text(
-                            "$iloscKrzesel/${krzesla.length}",
+                            "$liczbaKrzesel/${krzesla.length}",
                             style: TextStyle(
                                 fontSize: elementsOffset,
                                 color: Colors.black,
@@ -329,7 +315,6 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                     ),
                   ),
                 ),
-
                 const SizedBox(
                   height: 4,
                 ),
@@ -337,18 +322,21 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                   width: rozmiar.width * 0.8,
                   height: 2.5 * elementsOffset,
                   child: ElevatedButton(
-                    style: iloscMonitorow == monitory.length
+                    style: liczbaMonitorow == monitory.length
                         ? spacedGreenButtonActive
                         : spacedGreenButtonNActive,
                     onPressed: () async {
-                      setState(() {
-                        iloscMonitorow++;
-                      });
-                      String? wyborPomieszczenia = await showPickerDialog(
+                      String? wybranyMonitor = await showPickerDialog(
                         context: context,
-                        label: "monitro",
-                        items: krzeslaIdentyfikatory,
+                        label: "monitor",
+                        items: monitoryIdentyfikatory,
                       );
+                      if (wybranyMonitor != null) {
+                        setState(() {
+                          monitory[int.parse(wybranyMonitor.split(":")[0]) - 1]
+                              [2] = true;
+                        });
+                      }
                     },
                     child: Container(
                       margin: EdgeInsets.only(
@@ -367,7 +355,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                             textAlign: TextAlign.center,
                           ),
                           Text(
-                            "$iloscMonitorow/${monitory.length}",
+                            "$liczbaMonitorow/${monitory.length}",
                             style: TextStyle(
                                 fontSize: elementsOffset,
                                 color: Colors.black,
@@ -386,18 +374,21 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                   width: rozmiar.width * 0.8,
                   height: 2.5 * elementsOffset,
                   child: ElevatedButton(
-                    style: iloscBiurek == biurka.length
+                    style: liczbaBiurek == biurka.length
                         ? spacedGreenButtonActive
                         : spacedGreenButtonNActive,
                     onPressed: () async {
-                      setState(() {
-                        iloscBiurek++;
-                      });
-                      String? wyborPomieszczenia = await showPickerDialog(
+                      String? wybraneBiurko = await showPickerDialog(
                         context: context,
                         label: "biurko",
-                        items: krzeslaIdentyfikatory,
+                        items: biurkaIdentyfikatory,
                       );
+                      if (wybraneBiurko != null) {
+                        setState(() {
+                          biurka[int.parse(wybraneBiurko.split(":")[0]) - 1]
+                              [2] = true;
+                        });
+                      }
                     },
                     child: Container(
                       margin: EdgeInsets.only(
@@ -416,7 +407,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                             textAlign: TextAlign.center,
                           ),
                           Text(
-                            "$iloscBiurek/${biurka.length}",
+                            "$liczbaBiurek/${biurka.length}",
                             style: TextStyle(
                                 fontSize: elementsOffset,
                                 color: Colors.black,
@@ -441,7 +432,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap: (){},
+                  onTap: () {},
                   child: Container(
                     height: elementsOffset * 4,
                     width: rozmiar.width * 0.33,
@@ -461,7 +452,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                   ),
                 ),
                 GestureDetector(
-                  onTap: (){},
+                  onTap: () {},
                   child: Container(
                     height: elementsOffset * 4,
                     width: rozmiar.width * 0.53,
@@ -486,5 +477,98 @@ class _CameraPagePrevState extends State<CameraPagePrev>
         ),
       ),
     );
+  }
+
+  /// Początkowa inicjalizacja ekranu
+  @override
+  void initState() {
+    super.initState();
+    losuj();
+    _textEditingController = TextEditingController();
+    _controller = AnimationController(vsync: this);
+  }
+
+  /// Usuwanie stanu ekranu po wyjściu
+  @override
+  void dispose() {
+    _controller.dispose();
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
+  /// Metoda tymczasowa - generowanie danych do testów
+  void losuj() {
+    for (int i = 1; i <= 20; i++) {
+      List<dynamic> tmp = [];
+      tmp.add("Biurko $i");
+      tmp.add(Random().hashCode.toString());
+      tmp.add(false);
+      tmp.add("");
+      biurka.add(tmp);
+    }
+
+    for (int i = 1; i <= 20; i++) {
+      List<dynamic> tmp = [];
+      tmp.add("Monitor $i");
+      tmp.add(Random().hashCode.toString());
+      tmp.add(false);
+      tmp.add("");
+      monitory.add(tmp);
+    }
+
+    for (int i = 1; i <= 20; i++) {
+      List<dynamic> tmp = [];
+      tmp.add("Krzeslo $i");
+      tmp.add(Random().hashCode.toString());
+      tmp.add(false);
+      tmp.add("");
+      krzesla.add(tmp);
+    }
+  }
+
+  /// Zliczanie gotowych elementów na liście dynamicznej
+  /// do użycia by pokazać ile już zeskanowano elementów
+  int liczGotowe(List<List<dynamic>> lista) {
+    int licznik = 0;
+    for (int i = 0; i < lista.length; i++) {
+      if (lista[i][2]) {
+        licznik++;
+      }
+    }
+    return licznik;
+  }
+
+  /// Okienko do wyświetlania popupu do dodania komentarza
+  Future openDialog(naglowek) => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text(naglowek),
+            content: TextField(
+              autofocus: true,
+              decoration: const InputDecoration(hintText: "Wprowadź komentarz"),
+              controller: _textEditingController,
+            ),
+            actions: [
+              TextButton(
+                child: const Text("Dodaj komentarz"),
+                onPressed: () {
+                  Navigator.of(context).pop(_textEditingController.text);
+                },
+              )
+            ],
+          ));
+
+  /// Metoda nadpisująca listy danych o wpisany komentarz
+  /// znajduje do kórego elementu wpisano komentarz
+  /// i temu elementowi go przypisuje (bez wzgl. na listę)
+  void dodajKomentarz(element, komentarz) {
+    for (List<List<dynamic>> l in [monitory, krzesla, biurka]) {
+      for (List<dynamic> ld in l) {
+        if (ld[1].toString() == element) {
+          ld[3] = komentarz;
+          return;
+        }
+      }
+    }
   }
 }

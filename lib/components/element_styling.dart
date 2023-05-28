@@ -49,7 +49,7 @@ var spacedGreenButtonActive = ElevatedButton.styleFrom(
     foregroundColor: Colors.black,
     alignment: const Alignment(-0.9, 0),
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(roundness),
+      borderRadius: BorderRadius.circular(10),
     ));
 
 var spacedGreenButtonNActive = ElevatedButton.styleFrom(
@@ -57,7 +57,7 @@ var spacedGreenButtonNActive = ElevatedButton.styleFrom(
     foregroundColor: Colors.black,
     alignment: const Alignment(-0.9, 0),
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(roundness),
+      borderRadius: BorderRadius.circular(10),
     ));
 
 
