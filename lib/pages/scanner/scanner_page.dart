@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'dart:math';
 import 'package:inventory_app/components/element_styling.dart';
 import 'package:list_picker/list_picker.dart';
+import 'package:inventory_app/pages/scanner/change_place.dart';
 
 double cameraHeight = 300;
 double cameraWidth = 380;
@@ -452,7 +453,11 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ChangePlacePage())
+                    );
+                  },
                   child: Container(
                     height: elementsOffset * 4,
                     width: rozmiar.width * 0.53,
