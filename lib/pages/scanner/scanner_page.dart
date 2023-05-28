@@ -459,7 +459,11 @@ class _CameraPagePrevState extends State<CameraPagePrev>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => ChangePlacePage())
+                    );
+                  },
                   child: Container(
                     height: elementsOffset * 4,
                     width: rozmiar.width * 0.33,
