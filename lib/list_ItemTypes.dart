@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'materials.dart';
 import 'edit_ItemType.dart';
-// import 'edit_Room.dart';
-// import '../Rooms/add_Room.dart';
 
 class DisplayItemsType extends StatelessWidget {
   final String floorId;

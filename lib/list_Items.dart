@@ -1,17 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'materials.dart';
-// import 'ItemTypes/edit_ItemType.dart';
 import 'edit_Item.dart';
-// import 'edit_Room.dart';
-// import '../Rooms/add_Room.dart';
 
 class DisplayItems extends StatelessWidget {
   final String floorId;
   final String roomId;
   final String itemTypeId;
   final String itemTypeName;
-  // final String itemId;
 
   const DisplayItems({
     Key? key,
@@ -19,7 +15,6 @@ class DisplayItems extends StatelessWidget {
     required this.roomId,
     required this.itemTypeId,
     required this.itemTypeName,
-    // required this.itemId
   }) : super(key: key);
 
   @override
@@ -83,6 +78,8 @@ class DisplayItems extends StatelessWidget {
                 itemTypeName: itemTypeName,
                 itemId: item.id,
                 comment: item.comment,
+
+                barcode: item.barcode, //new
               ),
             ),
           );

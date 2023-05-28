@@ -74,7 +74,8 @@ class EditFloor extends StatelessWidget {
                     .collection('Floor')
                     .doc('$floorId');
                 docUser.update({
-                  'name': controllerName.text,
+                  'name':
+                      (controllerName.text == '' ? name : controllerName.text),
                 });
                 Navigator.pop(context);
               },

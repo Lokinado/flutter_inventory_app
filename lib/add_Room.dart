@@ -35,8 +35,6 @@ class AddRoom extends StatelessWidget {
               onPressed: () async {
                 final room = Room(
                   name: controllerName.text,
-                  // age: int.tryParse(controllerAge.text) ?? 0,
-                  // birthday: Timestamp.now(),
                 );
 
                 createRoom(room);

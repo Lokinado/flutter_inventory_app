@@ -60,7 +60,7 @@ class AddItem extends StatelessWidget {
       );
 
   Future createItem(Item item) async {
-    final docItemType = FirebaseFirestore.instance
+    final docItem = FirebaseFirestore.instance
         .collection('Floor')
         .doc(floorId)
         .collection('Rooms')
@@ -69,13 +69,15 @@ class AddItem extends StatelessWidget {
         .doc(itemTypeId)
         .collection('Item')
         .doc();
-    item.id = docItemType.id;
+    item.id = docItem.id;
 
-    docItemType.update({
-      'barcode': floorId + '-' + roomId + '-' + item.id,
-    });
+    print(item.id);
 
     final json = item.toJson();
-    await docItemType.set(json);
+    await docItem.set(json);
+
+    await docItem.update({
+      'barcode': floorId + '-' + roomId + '-' + item.id,
+    });
   }
 }

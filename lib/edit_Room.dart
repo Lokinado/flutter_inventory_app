@@ -15,7 +15,6 @@ class EditRoom extends StatelessWidget {
     required this.floorId,
   }) : super(key: key);
 
-  // const EditUser({super.key});
   final controllerName = TextEditingController();
 
   @override
@@ -81,7 +80,8 @@ class EditRoom extends StatelessWidget {
                     .doc('$roomId');
                 // Update user
                 docUser.update({
-                  'name': controllerName.text,
+                  'name':
+                      (controllerName.text == '' ? name : controllerName.text),
                 });
                 Navigator.pop(context);
               },

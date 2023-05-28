@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Floor {
   String id;
   final String name;
@@ -61,7 +59,7 @@ class Item {
   String id;
   final String name;
   final String comment;
-  final String barcode; // id.floor + id.room + iditemtype i tyle
+  final String barcode; // id.floor + id.room + id.item i tyle
 
   Item({
     this.id = '',

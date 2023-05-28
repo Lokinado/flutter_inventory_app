@@ -10,6 +10,8 @@ class EditItem extends StatelessWidget {
   final String itemId;
   final String comment;
 
+  final String barcode;
+
   EditItem({
     Key? key,
     required this.name,
@@ -19,10 +21,11 @@ class EditItem extends StatelessWidget {
     required this.itemTypeName,
     required this.itemId,
     required this.comment,
+    required this.barcode,
   }) : super(key: key);
 
+  final controllerComment = TextEditingController();
   final controllerName = TextEditingController();
-
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
@@ -34,7 +37,7 @@ class EditItem extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(bottom: 16),
               child: SizedBox(
-                height: 100,
+                height: 190,
                 width: 240,
                 child: Container(
                   decoration: BoxDecoration(
@@ -48,7 +51,7 @@ class EditItem extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.all(10),
                     child: Text(
-                      'Name: $name \nID: $itemId \nComment: $comment',
+                      'Name: $name \nID: $itemId \nComment: $comment\nBarcode: \n$barcode',
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
@@ -60,6 +63,13 @@ class EditItem extends StatelessWidget {
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Name',
+              ),
+            ),
+            TextField(
+              controller: controllerComment,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Comment',
               ),
             ),
             const SizedBox(height: 24),
@@ -77,7 +87,11 @@ class EditItem extends StatelessWidget {
                     .doc(itemId);
                 // Update user
                 docUser.update({
-                  'name': controllerName.text,
+                  'name':
+                      (controllerName.text == '' ? name : controllerName.text),
+                  'comment': (controllerComment.text == ''
+                      ? comment
+                      : controllerComment.text),
                 });
                 Navigator.pop(context);
               },

@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'add_Item.dart';
 import 'list_Items.dart';
-// import './list_ItemTypes.dart';
-// import 'add_ItemType.dart';
 
 class EditItemType extends StatelessWidget {
   final String name;
@@ -88,7 +86,8 @@ class EditItemType extends StatelessWidget {
                     .doc(itemTypeId);
                 // Update user
                 docUser.update({
-                  'name': controllerName.text,
+                  'name':
+                      (controllerName.text == '' ? name : controllerName.text),
                 });
                 Navigator.pop(context);
               },
