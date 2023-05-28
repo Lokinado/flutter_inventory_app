@@ -3,7 +3,7 @@ import 'package:inventory_app/components/element_styling.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/pages/scanner/scanner_page.dart';
 import 'dart:math';
-
+import 'package:inventory_app/components/color_palette.dart';
 import 'package:list_picker/list_picker.dart';
 
 //  ###########################################################################
@@ -72,9 +72,6 @@ class _PickPlaceContentState extends State<PickPlaceContent>
   var pomieszczenie = 0;
   double numberBoxSize = 60;
   var rozpoczeteSkanowanie = false;
-
-  var zielonySGGW = const Color.fromRGBO(0, 50, 39, 1);
-  var zielonySlabaSGGW = const Color.fromRGBO(0, 50, 39, 0.5);
 
   separator(value) => SizedBox(
         height: value,
