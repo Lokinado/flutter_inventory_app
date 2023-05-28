@@ -24,8 +24,10 @@ var leftTextNotActive = ElevatedButton.styleFrom(
       borderRadius: BorderRadius.circular(roundness),
     ));
 
+
+
 var centerTextActive = ElevatedButton.styleFrom(
-    backgroundColor: Colors.white60,
+    backgroundColor: Colors.green,
     foregroundColor: Colors.black,
     //shadowColor: Colors.black,
     shape: RoundedRectangleBorder(
@@ -39,3 +41,39 @@ var centerTextNotActive = ElevatedButton.styleFrom(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(roundness),
     ));
+
+
+
+var spacedGreenButtonActive = ElevatedButton.styleFrom(
+    backgroundColor: Color.fromRGBO(145, 198, 163, 1),
+    foregroundColor: Colors.black,
+    alignment: const Alignment(-0.9, 0),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(roundness),
+    ));
+
+var spacedGreenButtonNActive = ElevatedButton.styleFrom(
+    backgroundColor: Color.fromRGBO(248, 204, 146, 1),
+    foregroundColor: Colors.black,
+    alignment: const Alignment(-0.9, 0),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(roundness),
+    ));
+
+
+var bottomButtonRedActive = ElevatedButton.styleFrom(
+    backgroundColor: Color.fromRGBO(245, 123, 107, 1),
+    foregroundColor: Colors.black,
+    alignment: const Alignment(0, 0),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+    ));
+/*
+var spacedGreenButtonNActive = ElevatedButton.styleFrom(
+    backgroundColor: Color.fromRGBO(248, 204, 146, 1),
+    foregroundColor: Colors.black,
+    alignment: const Alignment(-0.9, 0),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(roundness),
+    ));
+ */

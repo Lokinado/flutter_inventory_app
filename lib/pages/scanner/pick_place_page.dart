@@ -242,19 +242,21 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                           style:
                               budynek != 0 ? leftTextActive : leftTextNotActive,
                           onPressed: () async {
-                            String? wyborPietra = await showPickerDialog(
-                              context: context,
-                              label: "",
-                              items: pietra[budynek],
-                            );
-                            if (wyborPietra != null) {
-                              var value = int.parse(wyborPietra);
-                              setState(() {
-                                if (pietro != value) {
-                                  pietro = value;
-                                  pomieszczenie = 0;
-                                }
-                              });
+                            if (budynek != 0){
+                              String? wyborPietra = await showPickerDialog(
+                                context: context,
+                                label: "",
+                                items: pietra[budynek],
+                              );
+                              if (wyborPietra != null) {
+                                var value = int.parse(wyborPietra);
+                                setState(() {
+                                  if (pietro != value) {
+                                    pietro = value;
+                                    pomieszczenie = 0;
+                                  }
+                                });
+                              }
                             }
                           },
                           child: const Text(
@@ -305,15 +307,17 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                               ? leftTextActive
                               : leftTextNotActive,
                           onPressed: () async {
-                            String? wyborPomieszczenia = await showPickerDialog(
-                              context: context,
-                              label: "Budynek",
-                              items: pomieszczenia[budynek][pietro],
-                            );
-                            if (wyborPomieszczenia != null) {
-                              setState(() {
-                                pomieszczenie = int.parse(wyborPomieszczenia);
-                              });
+                            if (pietro != 0){
+                              String? wyborPomieszczenia = await showPickerDialog(
+                                context: context,
+                                label: "Budynek",
+                                items: pomieszczenia[budynek][pietro],
+                              );
+                              if (wyborPomieszczenia != null) {
+                                setState(() {
+                                  pomieszczenie = int.parse(wyborPomieszczenia);
+                                });
+                              }
                             }
                           },
                           child: const Text(
@@ -334,7 +338,6 @@ class _PickPlaceContentState extends State<PickPlaceContent>
 
                 /// Przycisk rozpoczęcia skanowania
                 Container(
-                  margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
                   width: widget.size.width - 40,
                   height: 60.0,
                   child: ElevatedButton(
