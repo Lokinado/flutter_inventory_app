@@ -471,7 +471,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                     child: Text(
                       "Zakończ raport",
                       style: TextStyle(
-                          fontSize: elementsOffset * 1.2,
+                          fontSize: elementsOffset,
                           color: Colors.black,
                           fontWeight: FontWeight.w500),
                       textAlign: TextAlign.center,
@@ -506,7 +506,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                     child: Text(
                       "Zmień pomieszczenie",
                       style: TextStyle(
-                          fontSize: elementsOffset * 1.2,
+                          fontSize: elementsOffset,
                           color: Colors.black,
                           fontWeight: FontWeight.w500),
                       textAlign: TextAlign.center,
