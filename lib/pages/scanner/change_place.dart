@@ -5,7 +5,16 @@ import 'package:inventory_app/components/color_palette.dart';
 import 'package:list_picker/list_picker.dart';
 
 class ChangePlacePage extends StatefulWidget {
-  const ChangePlacePage({Key? key}) : super(key: key);
+  const ChangePlacePage({
+    Key? key,
+    required this.budynek,
+    required this.pietro,
+    required this.pomieszczenie,
+  }) : super(key: key);
+
+  final budynek;
+  final pietro;
+  final pomieszczenie;
 
   @override
   State<ChangePlacePage> createState() => _ChangePlacePageState();
@@ -20,18 +29,20 @@ class _ChangePlacePageState extends State<ChangePlacePage>
   var pietro = 0;
   var pomieszczenie = 0;
   double numberBoxSize = 60;
-  var rozpoczeteSkanowanie = false;
 
-
+  var powrot = false;
 
   separator(value) => SizedBox(
-    height: value,
-  );
+        height: value,
+      );
+
   final controller = TextEditingController();
 
   List<String> listaBudynkow = [];
   List<List<String>> pietra = [];
   List<List<List<String>>> pomieszczenia = [];
+
+  var dummyVariable = true;
 
   void inicjalizujPusteDane() {
     for (int i = 1; i <= 40; i++) {
@@ -59,19 +70,21 @@ class _ChangePlacePageState extends State<ChangePlacePage>
     }
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
-
     // Pobranie informacji nt. wymiarów okna
     final Size rozmiar = MediaQuery.of(context).size;
+
+    if (dummyVariable){
+      budynek = widget.budynek;
+      pietro = widget.pietro;
+      pomieszczenie = widget.pomieszczenie;
+      dummyVariable = false;
+    }
 
     // Przygotowanie zmiennenych pomodniczych do rozmiarowania elementów
     double textHeighOffset = rozmiar.height * 0.04;
     double elementsOffset = rozmiar.height * 0.023;
-
 
     /// Zmienne które można zainicjalizować dopiero w konstruktorze
     var roundness = 20.0;
@@ -79,9 +92,7 @@ class _ChangePlacePageState extends State<ChangePlacePage>
     inicjalizujPusteDane();
     var szerokoscPrzycisku = rozmiar.width - 120;
 
-
     return Scaffold(
-
       /// Nagłówek aplikacji
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -113,27 +124,20 @@ class _ChangePlacePageState extends State<ChangePlacePage>
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               /// Wszystkie elementy są ułożone tutaj
-              // po co Columna w Columne?
-              // Jedna umieszcz an środku "pudełko" (column poniżej)
-              // w którym sa już ręcznie rozmieszczonoe elementy
-              // (przyciski i separatory z Column poniżej)
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
 
-                /// Budynek, piętro, pomieszczenie i przycisk
+              /// Budynek, piętro, pomieszczenie i przycisk
+              Column(
                 children: [
                   /// Wybor budynku
-                  // Dokładny opis komponentu w place_choose_button.dart
                   Container(
                     margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
                     child: Row(
                       //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
                       children: [
+                        /// Wybrany budynek
                         Container(
                           alignment: Alignment.center,
                           width: numberBoxSize,
@@ -149,10 +153,10 @@ class _ChangePlacePageState extends State<ChangePlacePage>
                           ),
                         ),
                         // Pusty separator
+
+                        /// Przycisk wyboru budynku
                         Container(
                           margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                        ),
-                        SizedBox(
                           width: szerokoscPrzycisku,
                           height: 60.0,
                           child: ElevatedButton(
@@ -160,7 +164,7 @@ class _ChangePlacePageState extends State<ChangePlacePage>
                             onPressed: () async {
                               String? wyborBudynku = await showPickerDialog(
                                 context: context,
-                                label: "Budynek",
+                                label: "budynek",
                                 items: listaBudynkow,
                               );
                               if (wyborBudynku != null) {
@@ -187,44 +191,45 @@ class _ChangePlacePageState extends State<ChangePlacePage>
                     ),
                   ),
 
-                  // Separator
+                  /// Separator
                   separator(space),
 
                   /// Wybor pietra
                   Container(
                     margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
                     child: Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
                       children: [
+                        /// Wybrane Piętro
                         Container(
                           alignment: Alignment.center,
                           width: numberBoxSize,
                           height: numberBoxSize,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(roundness),
-                              color:
-                              budynek != 0 ? zielonySGGW : zielonySlabaSGGW),
+                              color: budynek != 0
+                                  ? zielonySGGW
+                                  : zielonySlabaSGGW),
                           child: Text(
                             "${pietro > 0 ? pietro : ""}",
                             style: const TextStyle(
                                 fontSize: 22, color: Colors.white),
                           ),
                         ),
+
+                        /// Przycisk wyboru piętra
                         Container(
                           margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                        ),
-                        SizedBox(
                           width: szerokoscPrzycisku,
                           height: 60.0,
                           child: ElevatedButton(
-                            style:
-                            budynek != 0 ? leftTextActive : leftTextNotActive,
+                            style: budynek != 0
+                                ? leftTextActive
+                                : leftTextNotActive,
                             onPressed: () async {
-                              if (budynek != 0){
+                              if (budynek != 0) {
                                 String? wyborPietra = await showPickerDialog(
                                   context: context,
-                                  label: "",
+                                  label: "piętro",
                                   items: pietra[budynek],
                                 );
                                 if (wyborPietra != null) {
@@ -258,9 +263,8 @@ class _ChangePlacePageState extends State<ChangePlacePage>
                   Container(
                     margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
                     child: Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
                       children: [
+                        /// Wybrane pomieszczenie
                         Container(
                           alignment: Alignment.center,
                           width: numberBoxSize,
@@ -268,17 +272,17 @@ class _ChangePlacePageState extends State<ChangePlacePage>
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(roundness),
                               color:
-                              pietro != 0 ? zielonySGGW : zielonySlabaSGGW),
+                                  pietro != 0 ? zielonySGGW : zielonySlabaSGGW),
                           child: Text(
                             "${pomieszczenie > 0 ? pomieszczenie : ""}",
                             style: const TextStyle(
                                 fontSize: 22, color: Colors.white),
                           ),
                         ),
+
+                        /// Przycisk wyboru pomieszczenia
                         Container(
                           margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
-                        ),
-                        SizedBox(
                           width: szerokoscPrzycisku,
                           height: 60.0,
                           child: ElevatedButton(
@@ -286,15 +290,17 @@ class _ChangePlacePageState extends State<ChangePlacePage>
                                 ? leftTextActive
                                 : leftTextNotActive,
                             onPressed: () async {
-                              if (pietro != 0){
-                                String? wyborPomieszczenia = await showPickerDialog(
+                              if (pietro != 0) {
+                                String? wyborPomieszczenia =
+                                    await showPickerDialog(
                                   context: context,
-                                  label: "Budynek",
+                                  label: "pomieszczenie",
                                   items: pomieszczenia[budynek][pietro],
                                 );
                                 if (wyborPomieszczenia != null) {
                                   setState(() {
-                                    pomieszczenie = int.parse(wyborPomieszczenia);
+                                    pomieszczenie =
+                                        int.parse(wyborPomieszczenia);
                                   });
                                 }
                               }
@@ -314,17 +320,16 @@ class _ChangePlacePageState extends State<ChangePlacePage>
 
                   /// Separator
                   separator(4 * space),
-
-
-
                 ],
               ),
+
+              /// Dolne przyciski do sterowania
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pop();
+                      openDialog();
                     },
                     child: Container(
                       height: elementsOffset * 4,
@@ -346,8 +351,9 @@ class _ChangePlacePageState extends State<ChangePlacePage>
                   ),
                   GestureDetector(
                     onTap: () {
-                      if (pomieszczenie > 0){
-                        Navigator.of(context).pop();
+                      if (pomieszczenie > 0) {
+                        Navigator.of(context)
+                            .pop([budynek, pietro, pomieszczenie]);
                       }
                     },
                     child: Container(
@@ -355,14 +361,18 @@ class _ChangePlacePageState extends State<ChangePlacePage>
                       width: rozmiar.width * 0.53,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: pomieszczenie > 0 ? Colors.green : Colors.green.shade200,
+                        color: pomieszczenie > 0
+                            ? Colors.green
+                            : Colors.green.shade200,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         "Zmiana",
                         style: TextStyle(
                             fontSize: elementsOffset * 1.2,
-                            color: pomieszczenie > 0 ? Colors.black : Colors.black.withOpacity(0.4),
+                            color: pomieszczenie > 0
+                                ? Colors.black
+                                : Colors.black.withOpacity(0.4),
                             fontWeight: FontWeight.w500),
                         textAlign: TextAlign.center,
                       ),
@@ -372,7 +382,7 @@ class _ChangePlacePageState extends State<ChangePlacePage>
               )
             ],
           ),
-        )
+        ),
       ),
     );
   }
@@ -393,25 +403,33 @@ class _ChangePlacePageState extends State<ChangePlacePage>
     super.dispose();
   }
 
-
   /// Okienko do wyświetlania popupu do dodania komentarza
-  Future openDialog(naglowek) => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(naglowek),
-        content: TextField(
-          autofocus: true,
-          decoration: const InputDecoration(hintText: "Wprowadź komentarz"),
-          controller: _textEditingController,
+  Future openDialog() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Ostrzeżenie"),
+          content: const Text("Czy chcesz wyjść bez zmiany pomieszczenia?"),
+          actions: [
+            TextButton(
+              child: const Text(
+                "Tak",
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text("Nie"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            child: const Text("Dodaj komentarz"),
-            onPressed: () {
-              Navigator.of(context).pop(_textEditingController.text);
-            },
-          )
-        ],
-      ));
-
+      );
 }

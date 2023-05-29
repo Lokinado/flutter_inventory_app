@@ -239,7 +239,7 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                           style:
                               budynek != 0 ? leftTextActive : leftTextNotActive,
                           onPressed: () async {
-                            if (budynek != 0){
+                            if (budynek != 0) {
                               String? wyborPietra = await showPickerDialog(
                                 context: context,
                                 label: "",
@@ -304,8 +304,9 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                               ? leftTextActive
                               : leftTextNotActive,
                           onPressed: () async {
-                            if (pietro != 0){
-                              String? wyborPomieszczenia = await showPickerDialog(
+                            if (pietro != 0) {
+                              String? wyborPomieszczenia =
+                                  await showPickerDialog(
                                 context: context,
                                 label: "Budynek",
                                 items: pomieszczenia[budynek][pietro],
@@ -346,7 +347,11 @@ class _PickPlaceContentState extends State<PickPlaceContent>
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const CameraPagePrev()),
+                              builder: (context) => CameraPagePrev(
+                                    budynek: budynek,
+                                    pietro: pietro,
+                                    pomieszczenie: pomieszczenie,
+                                  )),
                         );
                       }
                     },
