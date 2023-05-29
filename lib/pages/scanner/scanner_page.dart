@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'dart:math';
 import 'package:inventory_app/components/element_styling.dart';
 import 'package:list_picker/list_picker.dart';
+import 'package:inventory_app/pages/scanner/finish_report.dart';
 import 'package:inventory_app/pages/scanner/change_place.dart';
 
 double cameraHeight = 300;
@@ -459,7 +460,11 @@ class _CameraPagePrevState extends State<CameraPagePrev>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => FinishReportPage())
+                    );
+                  },
                   child: Container(
                     height: elementsOffset * 4,
                     width: rozmiar.width * 0.33,
@@ -471,7 +476,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                     child: Text(
                       "Zakończ raport",
                       style: TextStyle(
-                          fontSize: elementsOffset,
+                          fontSize: elementsOffset*1.1,
                           color: Colors.black,
                           fontWeight: FontWeight.w500),
                       textAlign: TextAlign.center,
@@ -506,7 +511,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                     child: Text(
                       "Zmień pomieszczenie",
                       style: TextStyle(
-                          fontSize: elementsOffset,
+                          fontSize: elementsOffset*1.1,
                           color: Colors.black,
                           fontWeight: FontWeight.w500),
                       textAlign: TextAlign.center,
