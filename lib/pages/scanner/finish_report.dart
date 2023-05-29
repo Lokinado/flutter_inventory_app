@@ -28,7 +28,7 @@ class _FinishReportPageState extends State<FinishReportPage>
 
       /// Nagłówek aplikacji
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        //automaticallyImplyLeading: false,
         backgroundColor: const Color.fromRGBO(0, 50, 39, 1),
         toolbarHeight: textHeighOffset * 3,
         centerTitle: true,
@@ -89,18 +89,20 @@ class _FinishReportPageState extends State<FinishReportPage>
               children: [
                 GestureDetector(
                   onTap: () {
+                    //Navigator.of(context).popUntil((route) => route.isFirst);
                     Navigator.of(context).pop();
+                    Navigator.of(context).pop("reset");
                   },
                   child: Container(
                     height: elementsOffset * 4,
                     width: rozmiar.width * 0.33,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: const Color.fromRGBO(245, 123, 107, 1),
+                      color: const Color.fromRGBO(255, 0, 0, 0.8),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      "Anuluj",
+                      "Porzuć zmiany",
                       style: TextStyle(
                           fontSize: elementsOffset,
                           color: Colors.black,
@@ -116,7 +118,7 @@ class _FinishReportPageState extends State<FinishReportPage>
                     width: rozmiar.width * 0.53,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: Colors.green,
+                      color: Color.fromRGBO(16, 142, 15, 1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(

@@ -570,7 +570,6 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                   onTap: () async {
                     var wynik = await doZmianyPomieszczenia(context);
                     if (wynik != null) {
-                      print("object");
                       setState(() {
                         if (!((budynek == wynik[0]) &&
                             (pietro == wynik[1]) &&

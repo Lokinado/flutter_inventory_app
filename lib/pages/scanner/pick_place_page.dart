@@ -36,6 +36,7 @@ class _PickPlaceState extends State<PickPlace>
   separator(value) => SizedBox(
     height: value,
   );
+
   final controller = TextEditingController();
 
   List<String> listaBudynkow = [];
@@ -43,30 +44,41 @@ class _PickPlaceState extends State<PickPlace>
   List<List<List<String>>> pomieszczenia = [];
 
   void inicjalizujPusteDane() {
+
+    List<String> b = [];
+    List<List<String>> pi = [];
+    List<List<List<String>>> po = [];
+
     for (int i = 1; i <= 40; i++) {
-      listaBudynkow.add(i.toString());
+      b.add(i.toString());
     }
 
-    for (int i = 0; i < listaBudynkow.length; i++) {
+    for (int i = 0; i < b.length; i++) {
       List<String> tmp = [];
       for (int j = 1; j <= 1 + Random().nextInt(2); j++) {
         tmp.add(j.toString());
       }
-      pietra.add(tmp);
+      pi.add(tmp);
     }
 
-    for (int i = 0; i < listaBudynkow.length; i++) {
+    for (int i = 0; i < b.length; i++) {
       List<List<String>> bud = [];
-      for (int j = 0; j < pietra[i].length + 1; j++) {
+      for (int j = 0; j < pi[i].length + 1; j++) {
         List<String> piet = [];
         for (int p = 1; p <= 10 + Random().nextInt(50); p++) {
           piet.add(p.toString());
         }
         bud.add(piet);
       }
-      pomieszczenia.add(bud);
+      po.add(bud);
     }
+
+    listaBudynkow = b;
+    pietra = pi;
+    pomieszczenia = po;
   }
+
+  var dummmyVar = true;
 
   @override
   Widget build(BuildContext context) {
@@ -74,8 +86,12 @@ class _PickPlaceState extends State<PickPlace>
 
     var roundness = 20.0;
     double space = 20;
-    inicjalizujPusteDane();
     var szerokoscPrzycisku = rozmiar.width - 120;
+
+    if (dummmyVar){
+      inicjalizujPusteDane();
+      dummmyVar = false;
+    }
 
     return Scaffold(
         body: Wrap(
@@ -305,17 +321,19 @@ class _PickPlaceState extends State<PickPlace>
                         style: pomieszczenie > 0
                             ? centerTextActive
                             : centerTextNotActive,
-                        onPressed: () {
+                        onPressed: () async {
                           if (pomieszczenie > 0) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CameraPagePrev(
-                                    budynek: budynek,
-                                    pietro: pietro,
-                                    pomieszczenie: pomieszczenie,
-                                  )),
-                            );
+                            var wynik = await doZmianyPomieszczenia(context);
+                            if (wynik != null){
+                              if (wynik == "reset"){
+                                setState(() {
+                                  //inicjalizujPusteDane();
+                                  budynek = 0;
+                                  pietro = 0;
+                                  pomieszczenie = 0;
+                                });
+                              }
+                            }
                           }
                         },
                         child: const Text(
@@ -333,4 +351,17 @@ class _PickPlaceState extends State<PickPlace>
       ],
     ));
   }
+
+  Future<String?> doZmianyPomieszczenia(BuildContext context) async {
+    final result = await Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) => CameraPagePrev(
+            budynek: budynek,
+            pietro: pietro,
+            pomieszczenie: pomieszczenie,
+          )),
+    );
+    return result;
+  }
+
 }
