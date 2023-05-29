@@ -28,7 +28,7 @@ class _FinishReportPageState extends State<FinishReportPage>
 
       /// Nagłówek aplikacji
       appBar: AppBar(
-        //automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false,
         backgroundColor: const Color.fromRGBO(0, 50, 39, 1),
         toolbarHeight: textHeighOffset * 3,
         centerTitle: true,
@@ -42,6 +42,61 @@ class _FinishReportPageState extends State<FinishReportPage>
             bottomLeft: Radius.circular(34),
             bottomRight: Radius.circular(34),
           ),
+        ),
+      ),
+      body: Container(
+        alignment: Alignment.topCenter,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    height: elementsOffset * 4,
+                    width: rozmiar.width * 0.33,
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(245, 123, 107, 1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      "Zakończ raport",
+                      style: TextStyle(
+                          fontSize: elementsOffset,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    height: elementsOffset * 4,
+                    width: rozmiar.width * 0.53,
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(250, 185, 90, 1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      "Zmień pomieszczenie",
+                      style: TextStyle(
+                          fontSize: elementsOffset,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],
         ),
       ),
 
