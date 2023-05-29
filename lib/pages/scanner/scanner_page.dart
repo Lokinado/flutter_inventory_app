@@ -3,11 +3,10 @@ import 'package:camera/camera.dart';
 import 'dart:math';
 import 'package:inventory_app/components/element_styling.dart';
 import 'package:list_picker/list_picker.dart';
+import 'package:inventory_app/pages/scanner/change_place.dart';
 
 double cameraHeight = 300;
 double cameraWidth = 380;
-
-
 
 late List<CameraDescription> _cameras;
 
@@ -78,15 +77,20 @@ class _CameraAppState extends State<CameraPage> {
 }
 
 class CameraPagePrev extends StatefulWidget {
-  const CameraPagePrev({Key? key}) : super(key: key);
+  const CameraPagePrev({
+    Key? key,
+    required this.budynek,
+    required this.pietro,
+    required this.pomieszczenie,
+  }) : super(key: key);
+
+  final budynek;
+  final pietro;
+  final pomieszczenie;
 
   @override
   State<CameraPagePrev> createState() => _CameraPagePrevState();
 }
-
-
-
-
 
 class _CameraPagePrevState extends State<CameraPagePrev>
     with SingleTickerProviderStateMixin {
@@ -94,18 +98,25 @@ class _CameraPagePrevState extends State<CameraPagePrev>
   late TextEditingController _textEditingController;
 
   /// Zmienne przechowywujące informacje nt. przedmiotów do skanownaia
-  List<List<dynamic>> biurka = [];
-  List<List<dynamic>> monitory = [];
   List<List<dynamic>> krzesla = [];
+  List<List<dynamic>> monitory = [];
+  List<List<dynamic>> biurka = [];
 
   /// Zmienne do późńiejszego zainicjowania
-  late int liczbaBiurek;
-  late int liczbaMonitorow;
   late int liczbaKrzesel;
+  late int liczbaMonitorow;
+  late int liczbaBiurek;
+
+  var budynek;
+  var pietro;
+  var pomieszczenie;
+
+  var dummyVar = true;
+
+  late String scannedValue;
 
   @override
   Widget build(BuildContext context) {
-
     // Pobranie informacji nt. wymiarów okna
     final Size rozmiar = MediaQuery.of(context).size;
 
@@ -120,8 +131,21 @@ class _CameraPagePrevState extends State<CameraPagePrev>
     liczbaKrzesel = liczGotowe(krzesla);
 
     // Przechowuje informacje o ostatnim zeskanowanym elemencie
-    var scannedValue = krzesla[1][1].toString();
+    if (dummyVar) {
+      List<List<List<dynamic>>> zwrot = losuj();
 
+      krzesla = zwrot[0];
+      monitory = zwrot[1];
+      biurka = zwrot[2];
+
+      scannedValue = krzesla[1][1].toString();
+
+      budynek = widget.budynek;
+      pietro = widget.pietro;
+      pomieszczenie = widget.pomieszczenie;
+
+      dummyVar = false;
+    }
 
     /// Pola przechoujące pozostałe do zeskanowania elementy
     /// W chewili obecnej ma to na celu pokazanie że dynamicznie da się
@@ -141,13 +165,12 @@ class _CameraPagePrevState extends State<CameraPagePrev>
       for (int i = 0; i < wybor.length; i++) {
         if (!wybor[i][2]) {
           identyfikatory.add(
-              "${(i + 1).toString()} : ${wybor[i][1].toString()}  ${wybor[i][2].toString()} | ${wybor[i][3].toString()}");
+              "${(i + 1).toString()}:  ${wybor[i][1].toString()}  ${wybor[i][2].toString()} ${wybor[i][3].toString()}");
         }
       }
     }
 
     return Scaffold(
-
       /// Nagłówek aplikacji
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -228,12 +251,14 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                 ),
                 GestureDetector(
                   onTap: () {
-                    var result = openDialog("Przedmiot: $scannedValue");
-                    if (result.toString().isNotEmpty) {
-                      setState(() {
-                        dodajKomentarz(
-                            scannedValue, _textEditingController.text);
-                      });
+                    if (scannedValue.isNotEmpty) {
+                      var result = openDialog("Przedmiot: $scannedValue");
+                      if (result.toString().isNotEmpty) {
+                        setState(() {
+                          dodajKomentarz(
+                              scannedValue, _textEditingController.text);
+                        });
+                      }
                     }
                   },
                   child: Container(
@@ -249,7 +274,9 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                       "Dodaj komentarz",
                       style: TextStyle(
                         fontSize: elementsOffset * 0.9,
-                        color: Colors.black,
+                        color: scannedValue.isNotEmpty
+                            ? Colors.black
+                            : Colors.black38,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -452,7 +479,22 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () async {
+                    var wynik = await doZmianyPomieszczenia(context);
+                    if (wynik != null) {
+                      print("object");
+                      setState(() {
+                        if (!((budynek == wynik[0]) &&
+                            (pietro == wynik[1]) &&
+                            (pomieszczenie == wynik[2]))) {
+                          budynek = wynik[0];
+                          pietro = wynik[1];
+                          pomieszczenie = wynik[2];
+                          dummyVar = true;
+                        }
+                      });
+                    }
+                  },
                   child: Container(
                     height: elementsOffset * 4,
                     width: rozmiar.width * 0.53,
@@ -483,7 +525,6 @@ class _CameraPagePrevState extends State<CameraPagePrev>
   @override
   void initState() {
     super.initState();
-    losuj();
     _textEditingController = TextEditingController();
     _controller = AnimationController(vsync: this);
   }
@@ -497,7 +538,11 @@ class _CameraPagePrevState extends State<CameraPagePrev>
   }
 
   /// Metoda tymczasowa - generowanie danych do testów
-  void losuj() {
+  List<List<List<dynamic>>> losuj() {
+    biurka = [];
+    monitory = [];
+    krzesla = [];
+
     for (int i = 1; i <= 20; i++) {
       List<dynamic> tmp = [];
       tmp.add("Biurko $i");
@@ -524,6 +569,8 @@ class _CameraPagePrevState extends State<CameraPagePrev>
       tmp.add("");
       krzesla.add(tmp);
     }
+
+    return [krzesla, monitory, biurka];
   }
 
   /// Zliczanie gotowych elementów na liście dynamicznej
@@ -557,6 +604,15 @@ class _CameraPagePrevState extends State<CameraPagePrev>
               )
             ],
           ));
+
+  Future<List<int>?> doZmianyPomieszczenia(BuildContext context) async {
+    final result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => ChangePlacePage(
+            budynek: widget.budynek,
+            pietro: widget.pietro,
+            pomieszczenie: widget.pomieszczenie)));
+    return result;
+  }
 
   /// Metoda nadpisująca listy danych o wpisany komentarz
   /// znajduje do kórego elementu wpisano komentarz
