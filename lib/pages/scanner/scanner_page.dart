@@ -5,6 +5,10 @@ import 'package:inventory_app/components/element_styling.dart';
 import 'package:list_picker/list_picker.dart';
 import 'package:inventory_app/pages/scanner/finish_report.dart';
 import 'package:inventory_app/pages/scanner/change_place.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/safe_area_values.dart';
+import 'package:top_snackbar_flutter/tap_bounce_container.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 double cameraHeight = 300;
 double cameraWidth = 380;
@@ -63,13 +67,13 @@ class _CameraAppState extends State<CameraPage> {
     final Size rozmiar = MediaQuery.of(context).size;
 
     return SizedBox(
-      height: rozmiar.height * 0.28,
+      height: rozmiar.height * 0.295,
       width: rozmiar.width * 0.8,
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
             topRight: Radius.circular(30), topLeft: Radius.circular(30)),
         child: AspectRatio(
-          aspectRatio: 0.1,
+          aspectRatio: 1,
           child: CameraPreview(controller),
         ),
       ),
@@ -85,9 +89,9 @@ class CameraPagePrev extends StatefulWidget {
     required this.pomieszczenie,
   }) : super(key: key);
 
-  final budynek;
-  final pietro;
-  final pomieszczenie;
+  final int budynek;
+  final int pietro;
+  final int pomieszczenie;
 
   @override
   State<CameraPagePrev> createState() => _CameraPagePrevState();
@@ -95,7 +99,7 @@ class CameraPagePrev extends StatefulWidget {
 
 class _CameraPagePrevState extends State<CameraPagePrev>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+  late AnimationController localAnimationController;
   late TextEditingController _textEditingController;
 
   /// Zmienne przechowywujące informacje nt. przedmiotów do skanownaia
@@ -108,13 +112,16 @@ class _CameraPagePrevState extends State<CameraPagePrev>
   late int liczbaMonitorow;
   late int liczbaBiurek;
 
-  var budynek;
-  var pietro;
-  var pomieszczenie;
+  late int budynek;
+  late int pietro;
+  late int pomieszczenie;
 
   var dummyVar = true;
 
   late String scannedValue;
+
+  var refresh = false;
+  var runMessage = false;
 
   @override
   Widget build(BuildContext context) {
@@ -147,6 +154,14 @@ class _CameraPagePrevState extends State<CameraPagePrev>
 
       dummyVar = false;
     }
+
+    if (refresh){
+
+      kom(context);
+
+      refresh = false;
+    }
+
 
     /// Pola przechoujące pozostałe do zeskanowania elementy
     /// W chewili obecnej ma to na celu pokazanie że dynamicznie da się
@@ -200,7 +215,60 @@ class _CameraPagePrevState extends State<CameraPagePrev>
             SizedBox(
               height: elementsOffset,
             ),
+/*
+            TapBounceContainer(
+              onTap: () {
+                showTopSnackBar(
+                  Overlay.of(context),
+                  const CustomSnackBar.info(
+                    message:
+                    'There is some information. You need to do something with that',
+                  ),
+                );
+              },
+              child: buildButton(context, 'Show info'),
+            ),
+            const SizedBox(height: 24),
 
+
+            TapBounceContainer(
+              onTap: () {
+                showTopSnackBar(
+                  Overlay.of(context),
+                  const CustomSnackBar.info(
+                    message: 'Persistent SnackBar',
+                  ),
+                  persistent: true,
+                  onAnimationControllerInit: (controller) {
+                    localAnimationController = controller;
+                  },
+                );
+              },
+              child: buildButton(context, 'Show persistent SnackBar'),
+            ),
+            const SizedBox(height: 24),
+            TapBounceContainer(
+              onTap: () => localAnimationController.reverse(),
+              child: buildButton(context, 'Dismiss persistent SnackBar'),
+            ),
+            const SizedBox(height: 24),
+            TapBounceContainer(
+              onTap: () {
+                showTopSnackBar(
+                  Overlay.of(context),
+                  const CustomSnackBar.info(
+                    message: 'Try to swipe me left',
+                  ),
+                  dismissType: DismissType.onSwipe,
+                  dismissDirection: [DismissDirection.endToStart],
+                );
+              },
+              child: buildButton(
+                context,
+                'Show swiped dismissible SnackBar',
+              ),
+            ),
+*/
             /// Kamera razem z polem komentarz
             Stack(
               children: [
@@ -212,11 +280,27 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                     borderRadius: BorderRadius.circular(30),
                     color: const Color.fromRGBO(190, 186, 185, 1),
                   ),
-                  child: Container(
-                    alignment: Alignment.topCenter,
-                    height: textHeighOffset,
-                    child: Text("Kliknij, by wpisać kod ręcznie",
-                        style: TextStyle(fontSize: elementsOffset * 0.9)),
+                  child: GestureDetector(
+                    onTap: () async {
+                      var wynik = await codeDialog();
+
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 3),
+                      //color: Colors.red,
+                      alignment: Alignment.center,
+                      height: textHeighOffset * 1,
+                      width: rozmiar.width * 0.7,
+                      child: const Text(
+                        "Dodaj kod ręcznie",
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          //fontStyle: FontStyle.italic
+                        ),
+                      ),
+                    ),
                   ),
                 ),
                 //const CameraPage(),
@@ -253,7 +337,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                 GestureDetector(
                   onTap: () {
                     if (scannedValue.isNotEmpty) {
-                      var result = openDialog("Przedmiot: $scannedValue");
+                      var result = commentDialog("Przedmiot: $scannedValue");
                       if (result.toString().isNotEmpty) {
                         setState(() {
                           dodajKomentarz(
@@ -461,9 +545,8 @@ class _CameraPagePrevState extends State<CameraPagePrev>
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => FinishReportPage())
-                    );
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const FinishReportPage()));
                   },
                   child: Container(
                     height: elementsOffset * 4,
@@ -476,7 +559,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                     child: Text(
                       "Zakończ raport",
                       style: TextStyle(
-                          fontSize: elementsOffset*1.1,
+                          fontSize: elementsOffset * 1.1,
                           color: Colors.black,
                           fontWeight: FontWeight.w500),
                       textAlign: TextAlign.center,
@@ -511,7 +594,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                     child: Text(
                       "Zmień pomieszczenie",
                       style: TextStyle(
-                          fontSize: elementsOffset*1.1,
+                          fontSize: elementsOffset * 1.1,
                           color: Colors.black,
                           fontWeight: FontWeight.w500),
                       textAlign: TextAlign.center,
@@ -526,20 +609,64 @@ class _CameraPagePrevState extends State<CameraPagePrev>
     );
   }
 
+  Container buildButton(BuildContext context, String text) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.4),
+            spreadRadius: 6,
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        child: Center(
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future kom(context) async{
+    showTopSnackBar(
+        Overlay.of(context),
+        const CustomSnackBar.error(
+          message:
+          'Something went wrong. Please check your credentials and try again',
+        ), animationDuration: const Duration(seconds: 1)
+    );
+  }
+
   /// Początkowa inicjalizacja ekranu
   @override
   void initState() {
     super.initState();
     _textEditingController = TextEditingController();
-    _controller = AnimationController(vsync: this);
+    //_controller = AnimationController(vsync: this);
   }
 
   /// Usuwanie stanu ekranu po wyjściu
   @override
   void dispose() {
-    _controller.dispose();
+    //_controller.dispose();
     _textEditingController.dispose();
     super.dispose();
+  }
+
+  Future<bool> sprawdzenie(BuildContext sprawdzenie) async{
+    return true;
   }
 
   /// Metoda tymczasowa - generowanie danych do testów
@@ -590,8 +717,31 @@ class _CameraPagePrevState extends State<CameraPagePrev>
     return licznik;
   }
 
+  Future komunikat(context,value, tekst) async{
+    Future.delayed(const Duration(seconds: 2));
+    if (value){
+      showTopSnackBar(
+        context,
+        CustomSnackBar.success(
+          message:
+          tekst,
+        ),
+      );
+    }
+    else{
+      showTopSnackBar(
+        context,
+        CustomSnackBar.error(
+          message:
+          tekst,
+        ),
+      );
+    }
+
+  }
+
   /// Okienko do wyświetlania popupu do dodania komentarza
-  Future openDialog(naglowek) => showDialog(
+  Future commentDialog(naglowek) => showDialog(
       context: context,
       builder: (context) => AlertDialog(
             title: Text(naglowek),
@@ -609,6 +759,81 @@ class _CameraPagePrevState extends State<CameraPagePrev>
               )
             ],
           ));
+
+  Future codeDialog() async{
+    final result = await showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text("Wpisz kod ręcznie"),
+      content: TextField(
+        keyboardType: TextInputType.number,
+        autofocus: true,
+        decoration: const InputDecoration(hintText: "Wprowadź kod"),
+        controller: _textEditingController,
+      ),
+      actions: [
+        TextButton(
+          child: const Text(
+            "Anuluj",
+            style: TextStyle(
+              color: Colors.red,
+            ),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        TextButton(
+          child: const Text(
+            "Zatwierdź kod",
+            style: TextStyle(
+              color: Colors.green,
+            ),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop(_textEditingController.text);
+          },
+        ),
+      ],
+    ),
+  );
+
+    //await Future.delayed(Duration(seconds: 2));
+    if (_textEditingController.text != null) {
+      var czyWBazie = await szukajAzZnajdziesz(_textEditingController.text.toString());
+      if (czyWBazie){
+        showTopSnackBar(
+            Overlay.of(context),
+            const CustomSnackBar.success(
+            message:
+            'Dodano element do zeskanowanych przedmiotów',
+        ), animationDuration: Duration(microseconds: 500));
+      }
+      else{
+        showTopSnackBar(
+            Overlay.of(context),
+            const CustomSnackBar.error(
+              message:
+              'Elementu nie ma w bazie',
+            ), animationDuration: Duration(microseconds: 500));
+      }
+    }
+
+  }
+
+  Future<bool> szukajAzZnajdziesz(wartosc) async{
+
+    for (List<List<dynamic>> l in [krzesla, monitory, biurka]){
+      for (int i = 0; i < l.length; i++){
+        if (l[i][1] == wartosc){
+          l[i][2] = true;
+          return true;
+        }
+      }
+    }
+    return false;
+
+  }
 
   Future<List<int>?> doZmianyPomieszczenia(BuildContext context) async {
     final result = await Navigator.of(context).push(MaterialPageRoute(
