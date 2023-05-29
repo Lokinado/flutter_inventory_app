@@ -780,6 +780,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
             ),
           ),
           onPressed: () {
+            _textEditingController.text = "";
             Navigator.of(context).pop();
           },
         ),
@@ -799,7 +800,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
   );
 
     //await Future.delayed(Duration(seconds: 2));
-    if (_textEditingController.text != null) {
+    if (_textEditingController.text != "") {
       var czyWBazie = await szukajAzZnajdziesz(_textEditingController.text.toString());
       if (czyWBazie){
         showTopSnackBar(
