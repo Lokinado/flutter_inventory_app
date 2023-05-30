@@ -14,9 +14,9 @@ class ChangePlacePage extends StatefulWidget {
     required this.listaPomieszczen,
   }) : super(key: key);
 
-  final budynek;
-  final pietro;
-  final pomieszczenie;
+  final int budynek;
+  final int pietro;
+  final int pomieszczenie;
   final List<String> listaBudynkow;
   final List<List<String>> listaPieter;
   final List<List<List<String>>> listaPomieszczen;
@@ -25,37 +25,29 @@ class ChangePlacePage extends StatefulWidget {
   State<ChangePlacePage> createState() => _ChangePlacePageState();
 }
 
-class _ChangePlacePageState extends State<ChangePlacePage>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class _ChangePlacePageState extends State<ChangePlacePage> {
+
+  double numberBoxSize = 60; /// Zmienna stylistyczna - wysokość pól wyboru
+
+  /// Przechowuje rezultat wyskakujacych popupowych okienek
   late TextEditingController _textEditingController;
 
-  var budynek = 0;
-  var pietro = 0;
-  var pomieszczenie = 0;
+  late int budynek; /// Wybrany przez użytkownika budynek
+  late int pietro; /// Wybrane przez użytkownika pietro
+  late int pomieszczenie; /// Wybrane przez użytkownika pomieszczenie
 
-  double numberBoxSize = 60;
-
-  var powrot = false;
-
-  separator(value) => SizedBox(
-        height: value,
-      );
-
-  final controller = TextEditingController();
-
-  var dummyVariable = true;
+  var inicjalizujDane = true; /// Utworzeni / pobranie danych do / z bazy
 
   @override
   Widget build(BuildContext context) {
     // Pobranie informacji nt. wymiarów okna
     final Size rozmiar = MediaQuery.of(context).size;
 
-    if (dummyVariable){
+    if (inicjalizujDane){
       budynek = widget.budynek;
       pietro = widget.pietro;
       pomieszczenie = widget.pomieszczenie;
-      dummyVariable = false;
+      inicjalizujDane = false;
     }
 
     // Przygotowanie zmiennenych pomodniczych do rozmiarowania elementów
@@ -366,22 +358,22 @@ class _ChangePlacePageState extends State<ChangePlacePage>
   void initState() {
     super.initState();
     _textEditingController = TextEditingController();
-    _controller = AnimationController(vsync: this);
   }
 
   /// Usuwanie stanu ekranu po wyjściu
   @override
   void dispose() {
-    _controller.dispose();
     _textEditingController.dispose();
     super.dispose();
   }
+
+  separator(value) => SizedBox( height: value, );
 
   /// Popup, który upewnia się, że użytkownik chce porzucić wprowadzone zmiany
   Future confirmExit() => showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text("Ostrzeżenie"),
+          title: const Text("Ostrzeżenie"),
           content: const Text("Czy chcesz wyjść bez zmiany pomieszczenia?"),
           actions: [
             TextButton(
