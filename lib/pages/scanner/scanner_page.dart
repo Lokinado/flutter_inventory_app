@@ -6,8 +6,6 @@ import 'package:list_picker/list_picker.dart';
 import 'package:inventory_app/pages/scanner/finish_report.dart';
 import 'package:inventory_app/pages/scanner/change_place.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/safe_area_values.dart';
-import 'package:top_snackbar_flutter/tap_bounce_container.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 double cameraHeight = 300;
@@ -155,13 +153,11 @@ class _CameraPagePrevState extends State<CameraPagePrev>
       dummyVar = false;
     }
 
-    if (refresh){
-
+    if (refresh) {
       kom(context);
 
       refresh = false;
     }
-
 
     /// Pola przechoujące pozostałe do zeskanowania elementy
     /// W chewili obecnej ma to na celu pokazanie że dynamicznie da się
@@ -283,11 +279,9 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                   child: GestureDetector(
                     onTap: () async {
                       var wynik = await codeDialog();
-
                     },
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 3),
-                      //color: Colors.red,
                       alignment: Alignment.center,
                       height: textHeighOffset * 1,
                       width: rozmiar.width * 0.7,
@@ -303,7 +297,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                     ),
                   ),
                 ),
-                //const CameraPage(),
+                const CameraPage(),
               ],
             ),
 
@@ -638,14 +632,14 @@ class _CameraPagePrevState extends State<CameraPagePrev>
     );
   }
 
-  Future kom(context) async{
+  Future kom(context) async {
     showTopSnackBar(
         Overlay.of(context),
         const CustomSnackBar.error(
           message:
-          'Something went wrong. Please check your credentials and try again',
-        ), animationDuration: const Duration(seconds: 1)
-    );
+              'Something went wrong. Please check your credentials and try again',
+        ),
+        animationDuration: const Duration(seconds: 1));
   }
 
   /// Początkowa inicjalizacja ekranu
@@ -664,7 +658,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
     super.dispose();
   }
 
-  Future<bool> sprawdzenie(BuildContext sprawdzenie) async{
+  Future<bool> sprawdzenie(BuildContext sprawdzenie) async {
     return true;
   }
 
@@ -716,27 +710,23 @@ class _CameraPagePrevState extends State<CameraPagePrev>
     return licznik;
   }
 
-  Future komunikat(context,value, tekst) async{
+  Future komunikat(context, value, tekst) async {
     Future.delayed(const Duration(seconds: 2));
-    if (value){
+    if (value) {
       showTopSnackBar(
         context,
         CustomSnackBar.success(
-          message:
-          tekst,
+          message: tekst,
         ),
       );
-    }
-    else{
+    } else {
       showTopSnackBar(
         context,
         CustomSnackBar.error(
-          message:
-          tekst,
+          message: tekst,
         ),
       );
     }
-
   }
 
   /// Okienko do wyświetlania popupu do dodania komentarza
@@ -759,80 +749,77 @@ class _CameraPagePrevState extends State<CameraPagePrev>
             ],
           ));
 
-  Future codeDialog() async{
+  Future codeDialog() async {
     final result = await showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text("Wpisz kod ręcznie"),
-      content: TextField(
-        keyboardType: TextInputType.number,
-        autofocus: true,
-        decoration: const InputDecoration(hintText: "Wprowadź kod"),
-        controller: _textEditingController,
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Wpisz kod ręcznie"),
+        content: TextField(
+          keyboardType: TextInputType.number,
+          autofocus: true,
+          decoration: const InputDecoration(hintText: "Wprowadź kod"),
+          controller: _textEditingController,
+        ),
+        actions: [
+          TextButton(
+            child: const Text(
+              "Anuluj",
+              style: TextStyle(
+                color: Colors.red,
+              ),
+            ),
+            onPressed: () {
+              _textEditingController.text = "";
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text(
+              "Zatwierdź kod",
+              style: TextStyle(
+                color: Colors.green,
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(_textEditingController.text);
+            },
+          ),
+        ],
       ),
-      actions: [
-        TextButton(
-          child: const Text(
-            "Anuluj",
-            style: TextStyle(
-              color: Colors.red,
-            ),
-          ),
-          onPressed: () {
-            _textEditingController.text = "";
-            Navigator.of(context).pop();
-          },
-        ),
-        TextButton(
-          child: const Text(
-            "Zatwierdź kod",
-            style: TextStyle(
-              color: Colors.green,
-            ),
-          ),
-          onPressed: () {
-            Navigator.of(context).pop(_textEditingController.text);
-          },
-        ),
-      ],
-    ),
-  );
+    );
 
     //await Future.delayed(Duration(seconds: 2));
     if (_textEditingController.text != "") {
-      var czyWBazie = await szukajAzZnajdziesz(_textEditingController.text.toString());
-      if (czyWBazie){
+      var czyWBazie =
+          await szukajAzZnajdziesz(_textEditingController.text.toString());
+      if (czyWBazie) {
         showTopSnackBar(
             Overlay.of(context),
             const CustomSnackBar.success(
-            message:
-            'Dodano element do zeskanowanych przedmiotów',
-        ), animationDuration: Duration(microseconds: 500));
-      }
-      else{
+              message: 'Dodano element do zeskanowanych przedmiotów',
+            ),
+            animationDuration: Duration(microseconds: 500));
+      } else {
         showTopSnackBar(
             Overlay.of(context),
             const CustomSnackBar.error(
-              message:
-              'Elementu nie ma w bazie',
-            ), animationDuration: Duration(microseconds: 500));
+              message: 'Elementu nie ma w bazie',
+            ),
+            animationDuration: Duration(microseconds: 500));
       }
     }
-
   }
 
-  Future<bool> szukajAzZnajdziesz(wartosc) async{
-
-    for (List<List<dynamic>> l in [krzesla, monitory, biurka]){
-      for (int i = 0; i < l.length; i++){
-        if (l[i][1] == wartosc){
+  Future<bool> szukajAzZnajdziesz(wartosc) async {
+    for (List<List<dynamic>> l in [krzesla, monitory, biurka]) {
+      for (int i = 0; i < l.length; i++) {
+        if (l[i][1] == wartosc) {
           l[i][2] = true;
           return true;
         }
       }
     }
     return false;
-
   }
 
   Future<List<int>?> doZmianyPomieszczenia(BuildContext context) async {
