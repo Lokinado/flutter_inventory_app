@@ -40,8 +40,8 @@ class _PickPlaceState extends State<PickPlace>
   final controller = TextEditingController();
 
   List<String> listaBudynkow = [];
-  List<List<String>> pietra = [];
-  List<List<List<String>>> pomieszczenia = [];
+  List<List<String>> listaPieter = [];
+  List<List<List<String>>> listaPomieszczen = [];
 
   void inicjalizujPusteDane() {
 
@@ -74,8 +74,8 @@ class _PickPlaceState extends State<PickPlace>
     }
 
     listaBudynkow = b;
-    pietra = pi;
-    pomieszczenia = po;
+    listaPieter = pi;
+    listaPomieszczen = po;
   }
 
   var dummmyVar = true;
@@ -222,7 +222,7 @@ class _PickPlaceState extends State<PickPlace>
                                   String? wyborPietra = await showPickerDialog(
                                     context: context,
                                     label: "",
-                                    items: pietra[budynek],
+                                    items: listaPieter[budynek],
                                   );
                                   if (wyborPietra != null) {
                                     var value = int.parse(wyborPietra);
@@ -288,7 +288,7 @@ class _PickPlaceState extends State<PickPlace>
                                   await showPickerDialog(
                                     context: context,
                                     label: "Budynek",
-                                    items: pomieszczenia[budynek][pietro],
+                                    items: listaPomieszczen[budynek][pietro],
                                   );
                                   if (wyborPomieszczenia != null) {
                                     setState(() {
@@ -359,6 +359,9 @@ class _PickPlaceState extends State<PickPlace>
             budynek: budynek,
             pietro: pietro,
             pomieszczenie: pomieszczenie,
+            listaBudynkow: listaBudynkow,
+            listaPieter: listaPieter,
+            listaPomieszczen: listaPomieszczen,
           )),
     );
     return result;

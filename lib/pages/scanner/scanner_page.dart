@@ -87,11 +87,17 @@ class CameraPagePrev extends StatefulWidget {
     required this.budynek,
     required this.pietro,
     required this.pomieszczenie,
+    required this.listaBudynkow,
+    required this.listaPieter,
+    required this.listaPomieszczen,
   }) : super(key: key);
 
   final int budynek;
   final int pietro;
   final int pomieszczenie;
+  final List<String> listaBudynkow;
+  final List<List<String>> listaPieter;
+  final List<List<List<String>>> listaPomieszczen;
 
   @override
   State<CameraPagePrev> createState() => _CameraPagePrevState();
@@ -280,7 +286,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                   ),
                   child: GestureDetector(
                     onTap: () async {
-                      var wynik = await codeDialog();
+                     await inputCodeManually();
                     },
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 3),
@@ -740,24 +746,6 @@ class _CameraPagePrevState extends State<CameraPagePrev>
     return licznik;
   }
 
-  Future komunikat(context, value, tekst) async {
-    Future.delayed(const Duration(seconds: 2));
-    if (value) {
-      showTopSnackBar(
-        context,
-        CustomSnackBar.success(
-          message: tekst,
-        ),
-      );
-    } else {
-      showTopSnackBar(
-        context,
-        CustomSnackBar.error(
-          message: tekst,
-        ),
-      );
-    }
-  }
 
   /// Okienko do wyświetlania popupu do dodania komentarza
   Future commentDialog(naglowek) => showDialog(
@@ -779,13 +767,13 @@ class _CameraPagePrevState extends State<CameraPagePrev>
             ],
           ));
 
-  Future codeDialog() async {
+  /// Popup do wpisania kodu ręcznie przy próbie skanowania
+  Future inputCodeManually() async {
     final result = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text("Wpisz kod ręcznie"),
         content: TextField(
-          keyboardType: TextInputType.number,
           autofocus: true,
           decoration: const InputDecoration(hintText: "Wprowadź kod"),
           controller: _textEditingController,
@@ -812,6 +800,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
             ),
             onPressed: () {
               Navigator.of(context).pop(_textEditingController.text);
+
             },
           ),
         ],
@@ -837,6 +826,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
             ),
             animationDuration: Duration(microseconds: 500));
       }
+      _textEditingController.text = "";
     }
   }
 
@@ -863,7 +853,11 @@ class _CameraPagePrevState extends State<CameraPagePrev>
         builder: (context) => ChangePlacePage(
             budynek: widget.budynek,
             pietro: widget.pietro,
-            pomieszczenie: widget.pomieszczenie)));
+            pomieszczenie: widget.pomieszczenie,
+          listaBudynkow: widget.listaBudynkow,
+          listaPieter: widget.listaPieter,
+          listaPomieszczen: widget.listaPomieszczen,
+        )));
     return result;
   }
 

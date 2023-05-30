@@ -10,11 +10,17 @@ class ChangePlacePage extends StatefulWidget {
     required this.budynek,
     required this.pietro,
     required this.pomieszczenie,
+    required this.listaBudynkow,
+    required this.listaPieter,
+    required this.listaPomieszczen,
   }) : super(key: key);
 
   final budynek;
   final pietro;
   final pomieszczenie;
+  final List<String> listaBudynkow;
+  final List<List<String>> listaPieter;
+  final List<List<List<String>>> listaPomieszczen;
 
   @override
   State<ChangePlacePage> createState() => _ChangePlacePageState();
@@ -28,6 +34,7 @@ class _ChangePlacePageState extends State<ChangePlacePage>
   var budynek = 0;
   var pietro = 0;
   var pomieszczenie = 0;
+
   double numberBoxSize = 60;
 
   var powrot = false;
@@ -38,37 +45,7 @@ class _ChangePlacePageState extends State<ChangePlacePage>
 
   final controller = TextEditingController();
 
-  List<String> listaBudynkow = [];
-  List<List<String>> pietra = [];
-  List<List<List<String>>> pomieszczenia = [];
-
   var dummyVariable = true;
-
-  void inicjalizujPusteDane() {
-    for (int i = 1; i <= 40; i++) {
-      listaBudynkow.add(i.toString());
-    }
-
-    for (int i = 0; i < listaBudynkow.length; i++) {
-      List<String> tmp = [];
-      for (int j = 1; j <= 1 + Random().nextInt(2); j++) {
-        tmp.add(j.toString());
-      }
-      pietra.add(tmp);
-    }
-
-    for (int i = 0; i < listaBudynkow.length; i++) {
-      List<List<String>> bud = [];
-      for (int j = 0; j < pietra[i].length + 1; j++) {
-        List<String> piet = [];
-        for (int p = 1; p <= 10 + Random().nextInt(50); p++) {
-          piet.add(p.toString());
-        }
-        bud.add(piet);
-      }
-      pomieszczenia.add(bud);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,9 +64,7 @@ class _ChangePlacePageState extends State<ChangePlacePage>
     double elementsOffset = rozmiar.height * 0.023;
 
     /// Zmienne które można zainicjalizować dopiero w konstruktorze
-    var roundness = 20.0;
     double space = 20;
-    inicjalizujPusteDane();
     var szerokoscPrzycisku = rozmiar.width - 120;
 
     return Scaffold(
@@ -165,7 +140,7 @@ class _ChangePlacePageState extends State<ChangePlacePage>
                               String? wyborBudynku = await showPickerDialog(
                                 context: context,
                                 label: "budynek",
-                                items: listaBudynkow,
+                                items: widget.listaBudynkow,
                               );
                               if (wyborBudynku != null) {
                                 var value = int.parse(wyborBudynku);
@@ -230,7 +205,7 @@ class _ChangePlacePageState extends State<ChangePlacePage>
                                 String? wyborPietra = await showPickerDialog(
                                   context: context,
                                   label: "piętro",
-                                  items: pietra[budynek],
+                                  items: widget.listaPieter[budynek],
                                 );
                                 if (wyborPietra != null) {
                                   var value = int.parse(wyborPietra);
@@ -295,7 +270,7 @@ class _ChangePlacePageState extends State<ChangePlacePage>
                                     await showPickerDialog(
                                   context: context,
                                   label: "pomieszczenie",
-                                  items: pomieszczenia[budynek][pietro],
+                                  items: widget.listaPomieszczen[budynek][pietro],
                                 );
                                 if (wyborPomieszczenia != null) {
                                   setState(() {
@@ -329,7 +304,7 @@ class _ChangePlacePageState extends State<ChangePlacePage>
                 children: [
                   GestureDetector(
                     onTap: () {
-                      openDialog();
+                      confirmExit();
                     },
                     child: Container(
                       height: elementsOffset * 4,
@@ -403,8 +378,8 @@ class _ChangePlacePageState extends State<ChangePlacePage>
     super.dispose();
   }
 
-  /// Okienko do wyświetlania popupu do dodania komentarza
-  Future openDialog() => showDialog(
+  /// Popup, który upewnia się, że użytkownik chce porzucić wprowadzone zmiany
+  Future confirmExit() => showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: Text("Ostrzeżenie"),
@@ -419,7 +394,7 @@ class _ChangePlacePageState extends State<ChangePlacePage>
                 ),
               ),
               onPressed: () {
-                Navigator.of(context).pop(true);
+                Navigator.of(context).pop();
                 Navigator.of(context).pop();
               },
             ),
