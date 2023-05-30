@@ -7,6 +7,7 @@ import 'package:inventory_app/pages/scanner/finish_report.dart';
 import 'package:inventory_app/pages/scanner/change_place.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 double cameraHeight = 300;
 double cameraWidth = 380;
@@ -297,7 +298,19 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                     ),
                   ),
                 ),
-                const CameraPage(),
+                ElevatedButton(
+                  onPressed: () async {
+                    var res = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SimpleBarcodeScannerPage(),
+                        ));
+                    setState(() {
+                      if (res is String) {
+                        scannedValue = res;
+                      }
+                    });},
+                  child: const Text('Open Scanner'),),
               ],
             ),
 

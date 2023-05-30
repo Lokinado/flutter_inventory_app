@@ -40,6 +40,7 @@ dependencies:
   camera: ^0.10.5
   list_picker: ^1.1.0
   top_snackbar_flutter: ^3.0.0+1
+  simple_barcode_scanner: ^0.0.8
 
 dev_dependencies:
   flutter_test:
