@@ -33,8 +33,7 @@ class CameraPagePrev extends StatefulWidget {
   State<CameraPagePrev> createState() => _CameraPagePrevState();
 }
 
-class _CameraPagePrevState extends State<CameraPagePrev>
-    with SingleTickerProviderStateMixin {
+class _CameraPagePrevState extends State<CameraPagePrev> {
 
   //
   // Przypisanie i inicjalizacja zmiennych
