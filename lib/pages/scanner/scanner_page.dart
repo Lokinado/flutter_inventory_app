@@ -552,9 +552,25 @@ class _CameraPagePrevState extends State<CameraPagePrev>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const FinishReportPage()));
+                  onTap: () async {
+                    var wynik = await doZakonczeniaRaportu(context);
+                    if (wynik != null){
+                      if (wynik == "zmienpomieszczenie"){
+                        var wynik = await doZmianyPomieszczenia(context);
+                        if (wynik != null) {
+                          setState(() {
+                            if (!((budynek == wynik[0]) &&
+                                (pietro == wynik[1]) &&
+                                (pomieszczenie == wynik[2]))) {
+                              budynek = wynik[0];
+                              pietro = wynik[1];
+                              pomieszczenie = wynik[2];
+                              dummyVar = true;
+                            }
+                          });
+                        }
+                      }
+                    }
                   },
                   child: Container(
                     height: elementsOffset * 4,
@@ -834,6 +850,12 @@ class _CameraPagePrevState extends State<CameraPagePrev>
       }
     }
     return false;
+  }
+
+  Future<String> doZakonczeniaRaportu(BuildContext context) async {
+    final result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => FinishReportPage()));
+    return result;
   }
 
   Future<List<int>?> doZmianyPomieszczenia(BuildContext context) async {

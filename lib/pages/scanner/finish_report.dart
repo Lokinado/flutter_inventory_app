@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inventory_app/pages/scanner/change_place.dart';
 
 class FinishReportPage extends StatefulWidget {
   const FinishReportPage({Key? key}) : super(key: key);
@@ -62,7 +63,9 @@ class _FinishReportPageState extends State<FinishReportPage>
               ),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop("zmienpomieszczenie");
+              },
               child: Container(
                 height: elementsOffset * 4,
                 width: rozmiar.width*0.9,
