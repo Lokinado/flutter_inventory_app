@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 import 'package:inventory_app/components/element_styling.dart';
 import 'package:inventory_app/components/color_palette.dart';
 import 'package:list_picker/list_picker.dart';
