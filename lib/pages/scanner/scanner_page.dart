@@ -5,6 +5,7 @@ import 'package:inventory_app/components/element_styling.dart';
 import 'package:list_picker/list_picker.dart';
 import 'package:inventory_app/pages/scanner/finish_report.dart';
 import 'package:inventory_app/pages/scanner/change_place.dart';
+import 'package:simple_barcode_scanner/screens/io_device.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
@@ -298,7 +299,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                     ),
                   ),
                 ),
-                ElevatedButton(
+                /*ElevatedButton(
                   onPressed: () async {
                     var res = await Navigator.push(
                         context,
@@ -310,7 +311,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                         scannedValue = res;
                       }
                     });},
-                  child: const Text('Open Scanner'),),
+                  child: const Text('Open Scanner'),),*/
               ],
             ),
 
