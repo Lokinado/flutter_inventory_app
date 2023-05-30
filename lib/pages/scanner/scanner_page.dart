@@ -5,8 +5,10 @@ import 'package:inventory_app/components/element_styling.dart';
 import 'package:list_picker/list_picker.dart';
 import 'package:inventory_app/pages/scanner/finish_report.dart';
 import 'package:inventory_app/pages/scanner/change_place.dart';
+import 'package:simple_barcode_scanner/screens/io_device.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 double cameraHeight = 300;
 double cameraWidth = 380;
@@ -85,11 +87,17 @@ class CameraPagePrev extends StatefulWidget {
     required this.budynek,
     required this.pietro,
     required this.pomieszczenie,
+    required this.listaBudynkow,
+    required this.listaPieter,
+    required this.listaPomieszczen,
   }) : super(key: key);
 
   final int budynek;
   final int pietro;
   final int pomieszczenie;
+  final List<String> listaBudynkow;
+  final List<List<String>> listaPieter;
+  final List<List<List<String>>> listaPomieszczen;
 
   @override
   State<CameraPagePrev> createState() => _CameraPagePrevState();
@@ -278,7 +286,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                   ),
                   child: GestureDetector(
                     onTap: () async {
-                      var wynik = await codeDialog();
+                     await inputCodeManually();
                     },
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 3),
@@ -297,7 +305,19 @@ class _CameraPagePrevState extends State<CameraPagePrev>
                     ),
                   ),
                 ),
-                const CameraPage(),
+                /*ElevatedButton(
+                  onPressed: () async {
+                    var res = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SimpleBarcodeScannerPage(),
+                        ));
+                    setState(() {
+                      if (res is String) {
+                        scannedValue = res;
+                      }
+                    });},
+                  child: const Text('Open Scanner'),),*/
               ],
             ),
 
@@ -538,9 +558,25 @@ class _CameraPagePrevState extends State<CameraPagePrev>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const FinishReportPage()));
+                  onTap: () async {
+                    var wynik = await doZakonczeniaRaportu(context);
+                    if (wynik != null){
+                      if (wynik == "zmienpomieszczenie"){
+                        var wynik = await doZmianyPomieszczenia(context);
+                        if (wynik != null) {
+                          setState(() {
+                            if (!((budynek == wynik[0]) &&
+                                (pietro == wynik[1]) &&
+                                (pomieszczenie == wynik[2]))) {
+                              budynek = wynik[0];
+                              pietro = wynik[1];
+                              pomieszczenie = wynik[2];
+                              dummyVar = true;
+                            }
+                          });
+                        }
+                      }
+                    }
                   },
                   child: Container(
                     height: elementsOffset * 4,
@@ -710,24 +746,6 @@ class _CameraPagePrevState extends State<CameraPagePrev>
     return licznik;
   }
 
-  Future komunikat(context, value, tekst) async {
-    Future.delayed(const Duration(seconds: 2));
-    if (value) {
-      showTopSnackBar(
-        context,
-        CustomSnackBar.success(
-          message: tekst,
-        ),
-      );
-    } else {
-      showTopSnackBar(
-        context,
-        CustomSnackBar.error(
-          message: tekst,
-        ),
-      );
-    }
-  }
 
   /// Okienko do wyświetlania popupu do dodania komentarza
   Future commentDialog(naglowek) => showDialog(
@@ -749,13 +767,13 @@ class _CameraPagePrevState extends State<CameraPagePrev>
             ],
           ));
 
-  Future codeDialog() async {
+  /// Popup do wpisania kodu ręcznie przy próbie skanowania
+  Future inputCodeManually() async {
     final result = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text("Wpisz kod ręcznie"),
         content: TextField(
-          keyboardType: TextInputType.number,
           autofocus: true,
           decoration: const InputDecoration(hintText: "Wprowadź kod"),
           controller: _textEditingController,
@@ -782,6 +800,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
             ),
             onPressed: () {
               Navigator.of(context).pop(_textEditingController.text);
+
             },
           ),
         ],
@@ -807,6 +826,7 @@ class _CameraPagePrevState extends State<CameraPagePrev>
             ),
             animationDuration: Duration(microseconds: 500));
       }
+      _textEditingController.text = "";
     }
   }
 
@@ -822,12 +842,22 @@ class _CameraPagePrevState extends State<CameraPagePrev>
     return false;
   }
 
+  Future<String> doZakonczeniaRaportu(BuildContext context) async {
+    final result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => FinishReportPage()));
+    return result;
+  }
+
   Future<List<int>?> doZmianyPomieszczenia(BuildContext context) async {
     final result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ChangePlacePage(
             budynek: widget.budynek,
             pietro: widget.pietro,
-            pomieszczenie: widget.pomieszczenie)));
+            pomieszczenie: widget.pomieszczenie,
+          listaBudynkow: widget.listaBudynkow,
+          listaPieter: widget.listaPieter,
+          listaPomieszczen: widget.listaPomieszczen,
+        )));
     return result;
   }
 

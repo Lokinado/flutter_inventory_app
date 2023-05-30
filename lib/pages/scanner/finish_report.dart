@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:inventory_app/pages/scanner/ready_report.dart';
+import 'package:inventory_app/components/popups.dart';
 
 class FinishReportPage extends StatefulWidget {
   const FinishReportPage({Key? key}) : super(key: key);
@@ -12,10 +14,8 @@ class _FinishReportPageState extends State<FinishReportPage>
   late AnimationController _controller;
   late TextEditingController _textEditingController;
 
-
   @override
   Widget build(BuildContext context) {
-
     // Pobranie informacji nt. wymiarów okna
     final Size rozmiar = MediaQuery.of(context).size;
 
@@ -23,9 +23,7 @@ class _FinishReportPageState extends State<FinishReportPage>
     double textHeighOffset = rozmiar.height * 0.04;
     double elementsOffset = rozmiar.height * 0.023;
 
-
     return Scaffold(
-
       /// Nagłówek aplikacji
       appBar: AppBar(
         //automaticallyImplyLeading: false,
@@ -33,7 +31,7 @@ class _FinishReportPageState extends State<FinishReportPage>
         toolbarHeight: textHeighOffset * 3,
         centerTitle: true,
         title: const Text(
-          "Zakończ skanowanie",
+          "Podsumowanie",
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
           textAlign: TextAlign.center,
         ),
@@ -50,22 +48,24 @@ class _FinishReportPageState extends State<FinishReportPage>
           //mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Container(
-              height: rozmiar.height*0.6,
+              height: rozmiar.height * 0.6,
               width: rozmiar.width,
               alignment: Alignment.center,
               child: Container(
-                height: rozmiar.height*0.53,
-                width: rozmiar.width*0.9,
+                height: rozmiar.height * 0.53,
+                width: rozmiar.width * 0.9,
                 color: Colors.yellow,
                 alignment: Alignment.center,
                 child: Text("Tutaj będzie raport"),
               ),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop("zmienpomieszczenie");
+              },
               child: Container(
                 height: elementsOffset * 4,
-                width: rozmiar.width*0.9,
+                width: rozmiar.width * 0.9,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: const Color.fromRGBO(250, 185, 90, 1),
@@ -88,10 +88,13 @@ class _FinishReportPageState extends State<FinishReportPage>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    //Navigator.of(context).popUntil((route) => route.isFirst);
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop("reset");
+                  onTap: () async {
+                    var wynik = await confirmExit(context, "Ostrzeżenie",
+                        "Czy chcesz porzucić tworzenie raportu?");
+                    if (wynik) {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop("reset");
+                    }
                   },
                   child: Container(
                     height: elementsOffset * 4,
@@ -112,7 +115,15 @@ class _FinishReportPageState extends State<FinishReportPage>
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () async {
+                    var wynik = await confirmExit(context, "Informacja",
+                        "Zakończyć tworzenie raportu");
+                    if (wynik) {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ReadyReportPage(numerRaportu: 10, data: '${DateTime.now().day}.${DateTime.now().month}.${DateTime.now().year}')));
+                    }
+                  },
                   child: Container(
                     height: elementsOffset * 4,
                     width: rozmiar.width * 0.53,
@@ -138,7 +149,6 @@ class _FinishReportPageState extends State<FinishReportPage>
       ),
 
       /// Zawartość ciała
-
     );
   }
 
@@ -157,25 +167,5 @@ class _FinishReportPageState extends State<FinishReportPage>
     _textEditingController.dispose();
     super.dispose();
   }
-
-  /// Okienko do wyświetlania popupu do dodania komentarza
-  Future openDialog(naglowek) => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(naglowek),
-        content: TextField(
-          autofocus: true,
-          decoration: const InputDecoration(hintText: "Wprowadź komentarz"),
-          controller: _textEditingController,
-        ),
-        actions: [
-          TextButton(
-            child: const Text("Dodaj komentarz"),
-            onPressed: () {
-              Navigator.of(context).pop(_textEditingController.text);
-            },
-          )
-        ],
-      ));
 
 }
