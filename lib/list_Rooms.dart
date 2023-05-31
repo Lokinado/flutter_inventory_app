@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'materials.dart';
+import 'globalsClasses.dart';
 import 'edit_Room.dart';
 
 class DisplayRooms extends StatelessWidget {
+  final String buildingId;
   final String floorId;
 
-  const DisplayRooms({Key? key, required this.floorId}) : super(key: key);
+  const DisplayRooms(
+      {Key? key, required this.buildingId, required this.floorId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +48,8 @@ class DisplayRooms extends StatelessWidget {
   }
 
   Stream<List<Room>> readRooms() => FirebaseFirestore.instance
+      .collection('Building')
+      .doc(buildingId)
       .collection('Floor')
       .doc(floorId)
       .collection('Rooms')
@@ -58,6 +63,7 @@ class DisplayRooms extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => EditRoom(
+                buildingId: buildingId,
                 name: room.name,
                 roomId: room.id,
                 floorId: floorId,

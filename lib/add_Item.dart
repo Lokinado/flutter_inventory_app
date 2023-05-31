@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'materials.dart';
+import 'globalsClasses.dart';
 
 class AddItem extends StatelessWidget {
+  final String buildingId;
   final String floorId;
   final String roomId;
   final String itemTypeId;
@@ -10,6 +11,7 @@ class AddItem extends StatelessWidget {
 
   AddItem({
     Key? key,
+    required this.buildingId,
     required this.floorId,
     required this.roomId,
     required this.itemTypeId,
@@ -61,6 +63,8 @@ class AddItem extends StatelessWidget {
 
   Future createItem(Item item) async {
     final docItem = FirebaseFirestore.instance
+        .collection('Building')
+        .doc(buildingId)
         .collection('Floor')
         .doc(floorId)
         .collection('Rooms')

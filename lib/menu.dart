@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'add_Building.dart';
+import 'list_Buildings.dart';
 import 'list_Floors.dart';
 import 'add_Floor.dart';
 
@@ -19,14 +21,14 @@ class Menu extends StatelessWidget {
                 child: const Text('Add Floor'),
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AddFloor()));
+                      MaterialPageRoute(builder: (context) => AddBuilding()));
                 },
               ),
               ElevatedButton(
                 child: const Text('List Floors'),
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ListFloors()));
+                      MaterialPageRoute(builder: (context) => ListBuildings()));
                 },
               ),
             ],

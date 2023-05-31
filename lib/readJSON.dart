@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'materials.dart';
+import 'globalsClasses.dart';
 
-Stream<List<Floor>> readFloors() =>
-    FirebaseFirestore.instance.collection('Floor').snapshots().map((snapshot) =>
-        snapshot.docs.map((doc) => Floor.fromJson(doc.data())).toList());
+
+
+Stream<List<Building>> readBuilding() => FirebaseFirestore.instance
+    .collection('Building')
+    .snapshots()
+    .map((snapshot) =>
+        snapshot.docs.map((doc) => Building.fromJson(doc.data())).toList());

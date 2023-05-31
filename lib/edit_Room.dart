@@ -5,12 +5,14 @@ import 'add_ItemType.dart';
 
 class EditRoom extends StatelessWidget {
   final String name;
+  final String buildingId;
   final String roomId;
   final String floorId;
 
   EditRoom({
     Key? key,
     required this.name,
+    required this.buildingId,
     required this.roomId,
     required this.floorId,
   }) : super(key: key);
@@ -28,6 +30,7 @@ class EditRoom extends StatelessWidget {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => AddItemType(
+                  buildingId: buildingId,
                   floorId: floorId,
                   roomId: roomId,
                 ),
@@ -74,6 +77,8 @@ class EditRoom extends StatelessWidget {
               child: Text('Update'),
               onPressed: () async {
                 final docUser = FirebaseFirestore.instance
+                    .collection('Building')
+                    .doc(buildingId)
                     .collection('Floor')
                     .doc(floorId)
                     .collection('Rooms')
@@ -87,7 +92,8 @@ class EditRoom extends StatelessWidget {
               },
             ),
             const SizedBox(height: 24),
-            DisplayItemsType(floorId: floorId, roomId: roomId),
+            DisplayItemsType(
+                buildingId: buildingId, floorId: floorId, roomId: roomId),
           ],
         ),
       );

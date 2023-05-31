@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'materials.dart';
+import 'globalsClasses.dart';
 
 class AddRoom extends StatelessWidget {
+  final String buildingId;
   final String floorId;
 
   AddRoom({
     Key? key,
+    required this.buildingId,
     required this.floorId,
   }) : super(key: key);
 
@@ -47,6 +49,8 @@ class AddRoom extends StatelessWidget {
 
   Future createRoom(Room room) async {
     final docRoom = FirebaseFirestore.instance
+        .collection('Building')
+        .doc(buildingId)
         .collection('Floor')
         .doc(floorId)
         .collection('Rooms')

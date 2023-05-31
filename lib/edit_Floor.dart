@@ -5,11 +5,13 @@ import 'list_Rooms.dart';
 
 class EditFloor extends StatelessWidget {
   final String name;
+  final String buildingId;
   final String floorId;
 
   EditFloor({
     Key? key,
     required this.name,
+    required this.buildingId,
     required this.floorId,
   }) : super(key: key);
 
@@ -26,6 +28,7 @@ class EditFloor extends StatelessWidget {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => AddRoom(
+                  buildingId: buildingId,
                   floorId: floorId,
                 ),
               ),
@@ -71,6 +74,8 @@ class EditFloor extends StatelessWidget {
               child: Text('Update'),
               onPressed: () async {
                 final docUser = FirebaseFirestore.instance
+                    .collection('Building')
+                    .doc(buildingId)
                     .collection('Floor')
                     .doc('$floorId');
                 docUser.update({
@@ -81,7 +86,7 @@ class EditFloor extends StatelessWidget {
               },
             ),
             const SizedBox(height: 24),
-            DisplayRooms(floorId: floorId),
+            DisplayRooms(buildingId: buildingId, floorId: floorId),
           ],
         ),
       );

@@ -1,14 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'materials.dart';
+import 'globalsClasses.dart';
 import 'edit_ItemType.dart';
 
 class DisplayItemsType extends StatelessWidget {
+  final String buildingId;
   final String floorId;
   final String roomId;
 
   const DisplayItemsType(
-      {Key? key, required this.floorId, required this.roomId})
+      {Key? key,
+      required this.buildingId,
+      required this.floorId,
+      required this.roomId})
       : super(key: key);
 
   @override
@@ -48,6 +52,8 @@ class DisplayItemsType extends StatelessWidget {
   }
 
   Stream<List<ItemType>> readItemTypes() => FirebaseFirestore.instance
+      .collection('Building')
+      .doc(buildingId)
       .collection('Floor')
       .doc(floorId)
       .collection('Rooms')
@@ -65,8 +71,9 @@ class DisplayItemsType extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => EditItemType(
                 name: itemType.name,
-                roomId: roomId,
+                buildingId: buildingId,
                 floorId: floorId,
+                roomId: roomId,
                 itemTypeId: itemType.id,
               ),
             ),

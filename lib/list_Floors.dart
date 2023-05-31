@@ -1,64 +1,58 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'add_Floor.dart';
 import 'edit_Floor.dart';
 import 'readJSON.dart';
-import 'materials.dart';
+import 'globalsClasses.dart';
 
-class ListFloors extends StatelessWidget{
+class DisplayFloors extends StatelessWidget {
+  final String buildingId;
 
-  final controller = TextEditingController();
+  const DisplayFloors({Key? key, required this.buildingId}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text('List floors'),
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => AddFloor()));
-          },
-        ),
-        body: Center(
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            margin: const EdgeInsets.all(10.0),
-            child: StreamBuilder<List<Floor>>(
-              stream: readFloors(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Text('Something went wrong');
-                } else if (snapshot.hasData) {
-                  final floors = snapshot.data;
+  Widget build(BuildContext context) {
+    return Container(
+      height: 400,
+      child: StreamBuilder<List<Floor>>(
+        stream: readFloors(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('Something went wrong');
+          } else if (snapshot.hasData) {
+            final floors = snapshot.data;
 
-                  return ListView(
-                    children: floors!
-                        .map((floor) => Container(
-                              margin: const EdgeInsets.all(5.0),
-                              padding: const EdgeInsets.all(5.0),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 5,
-                                  color: Colors.amber,
-                                ),
+            return ListView(
+              children: floors!
+                  .map((floor) => Container(
+                        margin: const EdgeInsets.all(5.0),
+                        padding: const EdgeInsets.all(5.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 5,
+                            color: Colors.amber,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                        ),
+                        child: buildFloor(floor, context),
+                      ))
+                  .toList(),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+    );
+  }
 
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50)),
-                                // border: Border.all(),
-                              ),
-                              child: buildFloor(floor, context),
-                            ))
-                        .toList(),
-                  );
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
-          ),
-        ),
-      );
+  Stream<List<Floor>> readFloors() => FirebaseFirestore.instance
+      .collection('Building')
+      .doc(buildingId)
+      .collection('Floor')
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => Floor.fromJson(doc.data())).toList());
 
   Widget buildFloor(Floor floor, BuildContext context) => GestureDetector(
         onTap: () {
@@ -67,6 +61,7 @@ class ListFloors extends StatelessWidget{
             MaterialPageRoute(
               builder: (context) => EditFloor(
                 name: floor.name,
+                buildingId: buildingId,
                 floorId: floor.id,
               ),
             ),

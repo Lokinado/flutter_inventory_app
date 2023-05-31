@@ -2,20 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'globalsClasses.dart';
 
-class AddFloor extends StatelessWidget {
-  final String buildingId;
-
+class AddBuilding extends StatelessWidget {
   final controllerName = TextEditingController();
 
-  AddFloor({
-    Key? key,
-    required this.buildingId,
-  }) : super(key: key);
+  AddBuilding({super.key});
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text('Add floor'),
+          title: const Text('Add building'),
         ),
         body: ListView(
           padding: const EdgeInsets.all(16),
@@ -29,13 +24,13 @@ class AddFloor extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             ElevatedButton(
-              child: const Text('Create floor'),
+              child: const Text('Create building'),
               onPressed: () async {
-                final floor = Floor(
+                final building = Building(
                   name: controllerName.text,
                 );
 
-                createFloor(floor);
+                createFloor(building);
                 Navigator.pop(context);
               },
             )
@@ -43,15 +38,11 @@ class AddFloor extends StatelessWidget {
         ),
       );
 
-  Future createFloor(Floor floor) async {
-    final docFloor = FirebaseFirestore.instance
-        .collection('Building')
-        .doc(buildingId)
-        .collection('Floor')
-        .doc();
+  Future createFloor(Building building) async {
+    final docBuilding = FirebaseFirestore.instance.collection('Building').doc();
+    building.id = docBuilding.id;
 
-    floor.id = docFloor.id;
-    final json = floor.toJson();
-    await docFloor.set(json);
+    final json = building.toJson();
+    await docBuilding.set(json);
   }
 }

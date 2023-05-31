@@ -1,3 +1,22 @@
+class Building {
+  String id;
+  final String name;
+  Building({
+    this.id = '',
+    required this.name,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+      };
+
+  static Building fromJson(Map<String, dynamic> json) => Building(
+        id: json['id'],
+        name: json['name'],
+      );
+}
+
 class Floor {
   String id;
   final String name;
