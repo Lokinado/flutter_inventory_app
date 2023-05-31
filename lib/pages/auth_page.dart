@@ -21,7 +21,7 @@ class _AuthPageState extends State<AuthPage> {
         builder: (context, snapshot){
           // is the user logged in?
           if(snapshot.hasData){
-            return  loggedMainPage(size: rozmiar);
+            return  LoggedMainPage(size: rozmiar);
           }
 
           // user is NOT logged in

@@ -1,16 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/topbodysection.dart';
-import 'package:inventory_app/components/place_choose_button.dart';
-
-class CenterScanHomePage extends StatefulWidget {
-  CenterScanHomePage({Key? key, required this.size, required this.location})
-      : super(key: key);
-
-  final Size size;
-  final Location location;
-  @override
-  State<CenterScanHomePage> createState() => _CenterScanHomePageState();
-}
+import 'package:inventory_app/prefab/place_choose_button.dart';
 
 class _CenterScanHomePageState extends State<CenterScanHomePage>
     with AutomaticKeepAliveClientMixin<CenterScanHomePage>{
@@ -41,6 +31,7 @@ class _CenterScanHomePageState extends State<CenterScanHomePage>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              /*
               PlaceButton(
                 onTap: () {},
                 locationHorizontally: 0.0,
@@ -55,9 +46,19 @@ class _CenterScanHomePageState extends State<CenterScanHomePage>
                 onTap: () {},
                 locationHorizontally: 0.0,
                 locationVertically: 0.0,
-              )
+              )*/
             ],
           ),
         ));
   }
+}
+
+class CenterScanHomePage extends StatefulWidget {
+  CenterScanHomePage({Key? key, required this.size, required this.location})
+      : super(key: key);
+
+  final Size size;
+  final Location location;
+  @override
+  State<CenterScanHomePage> createState() => _CenterScanHomePageState();
 }
