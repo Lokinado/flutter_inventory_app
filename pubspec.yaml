@@ -41,6 +41,9 @@ dependencies:
   list_picker: ^1.1.0
   top_snackbar_flutter: ^3.0.0+1
   simple_barcode_scanner: ^0.0.8
+  scan: ^1.6.0
+  image_picker: ^0.8.7+5
+  images_picker: ^1.2.11
 
 dev_dependencies:
   flutter_test:

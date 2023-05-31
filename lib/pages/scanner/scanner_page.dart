@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:list_picker/list_picker.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:scan/scan.dart';
 
 // Linki do innych plików projekcie
 import 'package:inventory_app/components/element_styling.dart';
@@ -11,8 +12,8 @@ import 'package:inventory_app/pages/scanner/finish_report.dart';
 import 'package:inventory_app/pages/scanner/change_place.dart';
 
 
-class CameraPagePrev extends StatefulWidget {
-  const CameraPagePrev({
+class DemoCamPage extends StatefulWidget {
+  const DemoCamPage({
     Key? key,
     required this.budynek,
     required this.pietro,
@@ -30,10 +31,10 @@ class CameraPagePrev extends StatefulWidget {
   final List<List<List<String>>> listaPomieszczen;
 
   @override
-  State<CameraPagePrev> createState() => _CameraPagePrevState();
+  State<DemoCamPage> createState() => _DemoCamPageState();
 }
 
-class _CameraPagePrevState extends State<CameraPagePrev> {
+class _DemoCamPageState extends State<DemoCamPage> {
 
   //
   // Przypisanie i inicjalizacja zmiennych
@@ -55,6 +56,9 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
 
   /// Przechowuje rezultat wyskakujacych popupowych okienek
   late TextEditingController _textEditingController;
+  
+  /// Kontroluje działanie kamery
+  ScanController controller = ScanController();
 
   late int liczbaKrzesel; /// Liczba zeskanowanych krzeseł
   late int liczbaMonitorow; /// Liczba zeskanownanych monitorow
@@ -72,6 +76,7 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
 
   late double textHeighOffset; /// Grubość offsetu na jakiś element - stylistyczna zmienna pomocnicza
   late double elementsOffset; /// Grubość offsetu na jakiś element - stylistyczna zmienna pomocnicza
+  late Size rozmiar;
 
   //
   // Najważniejszy element budujący wszystko w tym pliku
@@ -80,7 +85,7 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
   @override
   Widget build(BuildContext context) {
     /// Pobranie informacji nt. wymiarów okna
-    final Size rozmiar = MediaQuery.of(context).size;
+    rozmiar = MediaQuery.of(context).size;
 
     // Przygotowanie zmiennenych pomodniczych do rozmiarowania elementów
     textHeighOffset = rozmiar.height * 0.04;
@@ -109,306 +114,351 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
     /// Odświeżenie elementów dynamicznych, jako komentarze, czy liczniki
     /// zeskanownaych elementów
     odswierzZeskanowane();
+    
+    // Ten kod jest niezbędny by się aparat odświeżył i działał po otwarciu
+    // jakiegoś popupu
+    controller.pause(); /// Kod wstrzymujcy dziaanie kamery
+    controller.resume();
 
     return Scaffold(
       /// Nagłówek aplikacji
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: const Color.fromRGBO(0, 50, 39, 1),
-        toolbarHeight: textHeighOffset * 3,
-        centerTitle: true,
-        title: const Text(
-          "Skanowanie",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-          textAlign: TextAlign.center,
-        ),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(34),
-            bottomRight: Radius.circular(34),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: const Color.fromRGBO(0, 50, 39, 1),
+          toolbarHeight: textHeighOffset * 3,
+          centerTitle: true,
+          title: const Text(
+            "Skanowanie",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+            textAlign: TextAlign.center,
+          ),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(34),
+              bottomRight: Radius.circular(34),
+            ),
           ),
         ),
-      ),
 
-      /// Zawartość ciała
-      body: Column(
-        children: [
-          /// Separator oddzielający szare pole z kamerą od nagłówka
-          SizedBox(
-            height: elementsOffset,
-          ),
+        /// Zawartość ciała
+        body: Column(
+          children: [
+            /// Separator oddzielający szare pole z kamerą od nagłówka
+            SizedBox(
+              height: elementsOffset,
+            ),
 
-          /// Kamera razem z polem komentarz
-          Stack(
-            children: [
-              Container(
-                alignment: Alignment.bottomCenter,
-                height: rozmiar.height * 0.3 + textHeighOffset,
-                width: rozmiar.width * 0.8,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: const Color.fromRGBO(190, 186, 185, 1),
-                ),
-                child: GestureDetector(
-                  onTap: () async {
-                    await inputCodeManually();
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 3),
-                    alignment: Alignment.center,
-                    height: textHeighOffset * 1,
-                    width: rozmiar.width * 0.7,
-                    child: const Text(
-                      "Dodaj kod ręcznie",
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        //fontStyle: FontStyle.italic
+            /// Kamera razem z polem komentarz
+            Stack(
+              children: [
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  height: rozmiar.height * 0.3 + textHeighOffset,
+                  width: rozmiar.width * 0.8,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    color: const Color.fromRGBO(190, 186, 185, 1),
+                  ),
+                  child: GestureDetector(
+                    onTap: () async {
+                      await inputCodeManually();
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 3),
+                      alignment: Alignment.center,
+                      height: textHeighOffset * 1,
+                      width: rozmiar.width * 0.7,
+                      child: const Text(
+                        "Dodaj kod ręcznie",
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          //fontStyle: FontStyle.italic
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
 
-          /// Separator oddzielające pole z kamerą od zeskanowanej wartości
-          SizedBox(
-            height: elementsOffset * 1.5,
-          ),
+                camera(),
 
-          /// Podgląd ostatniego kodu + komentarz
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: elementsOffset * 3,
-                width: rozmiar.width * 0.5,
-                alignment: Alignment.centerLeft,
-                decoration: const BoxDecoration(
-                    color: Color.fromRGBO(88, 178, 122, 1),
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        bottomLeft: Radius.circular(10))),
-                child: Container(
-                  width: rozmiar.width * 0.5,
-                  alignment: Alignment.center,
-                  child: Text(scannedValue,
-                      style: TextStyle(
-                          fontSize: elementsOffset * 1.2,
-                          color: Colors.white)),
-                ),
-              ),
-              GestureDetector(
-                onTap: () async {
-                  if (scannedValue.isNotEmpty) {
-                    await commentDialog("Przedmiot: $scannedValue");
-                    }
-                },
-                child: Container(
-                  width: rozmiar.width * 0.3,
+              ],
+            ),
+
+            /// Separator oddzielające pole z kamerą od zeskanowanej wartości
+            SizedBox(
+              height: elementsOffset * 1.5,
+            ),
+
+            /// Podgląd ostatniego kodu + komentarz
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
                   height: elementsOffset * 3,
-                  alignment: Alignment.center,
+                  width: rozmiar.width * 0.5,
+                  alignment: Alignment.centerLeft,
                   decoration: const BoxDecoration(
-                      color: Color.fromRGBO(217, 217, 217, 1),
+                      color: Color.fromRGBO(88, 178, 122, 1),
                       borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(10),
-                          bottomRight: Radius.circular(10))),
-                  child: Text(
-                    "Dodaj komentarz",
-                    style: TextStyle(
-                      fontSize: elementsOffset * 0.9,
-                      color: scannedValue.isNotEmpty
-                          ? Colors.black
-                          : Colors.black38,
-                    ),
-                    textAlign: TextAlign.center,
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10))),
+                  child: Container(
+                    width: rozmiar.width * 0.5,
+                    alignment: Alignment.center,
+                    child: Text(scannedValue,
+                        style: TextStyle(
+                            fontSize: elementsOffset * 1.2,
+                            color: Colors.white)),
                   ),
                 ),
-              ),
-            ],
-          ),
-
-          /// Separator oddzielający zeskanowany kod od podsumowania
-          SizedBox(
-            height: elementsOffset * 1.5,
-          ),
-
-          /// Wyświetlanie zeskanowanych przedmiotów
-          Column(
-            children: [
-              SizedBox(
-                width: rozmiar.width * 0.8,
-                height: 2.5 * elementsOffset,
-                child: ElevatedButton(
-                  style: liczbaKrzesel == krzesla.length
-                      ? spacedGreenButtonActive
-                      : spacedGreenButtonNActive,
-                  onPressed: () async {
-                    String? wybraneKrzeslo = await showPickerDialog(
-                      context: context,
-                      label: "krzesło",
-                      items: krzeslaIdentyfikatory,
-                    );
-                    if (wybraneKrzeslo != null) {
-                      setState(() {
-                        krzesla[int.parse(wybraneKrzeslo.split(":")[0]) - 1]
-                        [2] = true;
-                      });
+                GestureDetector(
+                  onTap: () async {
+                    if (scannedValue.isNotEmpty) {
+                      await commentDialog("Przedmiot: $scannedValue");
                     }
                   },
                   child: Container(
-                    margin: EdgeInsets.only(
-                        left: elementsOffset * 0.2,
-                        right: elementsOffset * 0.2),
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Krzesło",
-                          style: TextStyle(
-                              fontSize: elementsOffset,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          "$liczbaKrzesel/${krzesla.length}",
-                          style: TextStyle(
-                              fontSize: elementsOffset,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.right,
-                        ),
-                      ],
+                    width: rozmiar.width * 0.3,
+                    height: elementsOffset * 3,
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(
+                        color: Color.fromRGBO(217, 217, 217, 1),
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(10),
+                            bottomRight: Radius.circular(10))),
+                    child: Text(
+                      "Dodaj komentarz",
+                      style: TextStyle(
+                        fontSize: elementsOffset * 0.9,
+                        color: scannedValue.isNotEmpty
+                            ? Colors.black
+                            : Colors.black38,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              SizedBox(
-                width: rozmiar.width * 0.8,
-                height: 2.5 * elementsOffset,
-                child: ElevatedButton(
-                  style: liczbaMonitorow == monitory.length
-                      ? spacedGreenButtonActive
-                      : spacedGreenButtonNActive,
-                  onPressed: () async {
-                    String? wybranyMonitor = await showPickerDialog(
-                      context: context,
-                      label: "monitor",
-                      items: monitoryIdentyfikatory,
-                    );
-                    if (wybranyMonitor != null) {
-                      setState(() {
-                        monitory[int.parse(wybranyMonitor.split(":")[0]) - 1]
-                        [2] = true;
-                      });
+              ],
+            ),
+
+            /// Separator oddzielający zeskanowany kod od podsumowania
+            SizedBox(
+              height: elementsOffset * 1.5,
+            ),
+
+            /// Wyświetlanie zeskanowanych przedmiotów
+            Column(
+              children: [
+                SizedBox(
+                  width: rozmiar.width * 0.8,
+                  height: 2.5 * elementsOffset,
+                  child: ElevatedButton(
+                    style: liczbaKrzesel == krzesla.length
+                        ? spacedGreenButtonActive
+                        : spacedGreenButtonNActive,
+                    onPressed: () async {
+                      String? wybraneKrzeslo = await showPickerDialog(
+                        context: context,
+                        label: "krzesło",
+                        items: krzeslaIdentyfikatory,
+                      );
+                      if (wybraneKrzeslo != null) {
+                        setState(() {
+                          krzesla[int.parse(wybraneKrzeslo.split(":")[0]) - 1]
+                          [2] = true;
+                        });
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          left: elementsOffset * 0.2,
+                          right: elementsOffset * 0.2),
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Krzesło",
+                            style: TextStyle(
+                                fontSize: elementsOffset,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            "$liczbaKrzesel/${krzesla.length}",
+                            style: TextStyle(
+                                fontSize: elementsOffset,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.right,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                SizedBox(
+                  width: rozmiar.width * 0.8,
+                  height: 2.5 * elementsOffset,
+                  child: ElevatedButton(
+                    style: liczbaMonitorow == monitory.length
+                        ? spacedGreenButtonActive
+                        : spacedGreenButtonNActive,
+                    onPressed: () async {
+                      String? wybranyMonitor = await showPickerDialog(
+                        context: context,
+                        label: "monitor",
+                        items: monitoryIdentyfikatory,
+                      );
+                      if (wybranyMonitor != null) {
+                        setState(() {
+                          monitory[int.parse(wybranyMonitor.split(":")[0]) - 1]
+                          [2] = true;
+                        });
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          left: elementsOffset * 0.2,
+                          right: elementsOffset * 0.2),
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Monitory",
+                            style: TextStyle(
+                                fontSize: elementsOffset,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            "$liczbaMonitorow/${monitory.length}",
+                            style: TextStyle(
+                                fontSize: elementsOffset,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.right,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                SizedBox(
+                  width: rozmiar.width * 0.8,
+                  height: 2.5 * elementsOffset,
+                  child: ElevatedButton(
+                    style: liczbaBiurek == biurka.length
+                        ? spacedGreenButtonActive
+                        : spacedGreenButtonNActive,
+                    onPressed: () async {
+                      String? wybraneBiurko = await showPickerDialog(
+                        context: context,
+                        label: "biurko",
+                        items: biurkaIdentyfikatory,
+                      );
+                      if (wybraneBiurko != null) {
+                        setState(() {
+                          biurka[int.parse(wybraneBiurko.split(":")[0]) - 1]
+                          [2] = true;
+                        });
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          left: elementsOffset * 0.2,
+                          right: elementsOffset * 0.2),
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Biurko",
+                            style: TextStyle(
+                                fontSize: elementsOffset,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            "$liczbaBiurek/${biurka.length}",
+                            style: TextStyle(
+                                fontSize: elementsOffset,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.right,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            /// Separator oddzielający przyciski dolne
+            SizedBox(
+              height: elementsOffset * 1.5,
+            ),
+
+            /// Przyciski dolne na stronie
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+
+                /// Przycisk zakończenia raportu
+                GestureDetector(
+                  onTap: () async {
+                    var wynik = await doZakonczeniaRaportu(context);
+                    if (wynik == "zmienpomieszczenie"){
+                      var wynik = await doZmianyPomieszczenia(context);
+                      if (wynik != null) {
+                        setState(() {
+                          if (!((budynek == wynik[0]) &&
+                              (pietro == wynik[1]) &&
+                              (pomieszczenie == wynik[2]))) {
+                            budynek = wynik[0];
+                            pietro = wynik[1];
+                            pomieszczenie = wynik[2];
+                            inicjalizujDane = true;
+                          }
+                        });
+                      }
                     }
                   },
                   child: Container(
-                    margin: EdgeInsets.only(
-                        left: elementsOffset * 0.2,
-                        right: elementsOffset * 0.2),
+                    height: elementsOffset * 4,
+                    width: rozmiar.width * 0.33,
                     alignment: Alignment.centerLeft,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Monitory",
-                          style: TextStyle(
-                              fontSize: elementsOffset,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          "$liczbaMonitorow/${monitory.length}",
-                          style: TextStyle(
-                              fontSize: elementsOffset,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.right,
-                        ),
-                      ],
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(245, 123, 107, 1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      "Zakończ raport",
+                      style: TextStyle(
+                          fontSize: elementsOffset * 1.1,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              SizedBox(
-                width: rozmiar.width * 0.8,
-                height: 2.5 * elementsOffset,
-                child: ElevatedButton(
-                  style: liczbaBiurek == biurka.length
-                      ? spacedGreenButtonActive
-                      : spacedGreenButtonNActive,
-                  onPressed: () async {
-                    String? wybraneBiurko = await showPickerDialog(
-                      context: context,
-                      label: "biurko",
-                      items: biurkaIdentyfikatory,
-                    );
-                    if (wybraneBiurko != null) {
-                      setState(() {
-                        biurka[int.parse(wybraneBiurko.split(":")[0]) - 1]
-                        [2] = true;
-                      });
-                    }
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(
-                        left: elementsOffset * 0.2,
-                        right: elementsOffset * 0.2),
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Biurko",
-                          style: TextStyle(
-                              fontSize: elementsOffset,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          "$liczbaBiurek/${biurka.length}",
-                          style: TextStyle(
-                              fontSize: elementsOffset,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.right,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
 
-          /// Separator oddzielający przyciski dolne
-          SizedBox(
-            height: elementsOffset * 1.5,
-          ),
-
-          /// Przyciski dolne na stronie
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-
-              /// Przycisk zakończenia raportu
-              GestureDetector(
-                onTap: () async {
-                  var wynik = await doZakonczeniaRaportu(context);
-                  if (wynik == "zmienpomieszczenie"){
+                /// Przycisk zmiany pomieszczenia
+                GestureDetector(
+                  onTap: () async {
                     var wynik = await doZmianyPomieszczenia(context);
                     if (wynik != null) {
                       setState(() {
@@ -422,72 +472,83 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
                         }
                       });
                     }
-                  }
-                },
-                child: Container(
-                  height: elementsOffset * 4,
-                  width: rozmiar.width * 0.33,
-                  alignment: Alignment.centerLeft,
-                  decoration: BoxDecoration(
-                    color: const Color.fromRGBO(245, 123, 107, 1),
-                    borderRadius: BorderRadius.circular(20),
+                  },
+                  child: Container(
+                    height: elementsOffset * 4,
+                    width: rozmiar.width * 0.53,
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(250, 185, 90, 1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      "Zmień pomieszczenie",
+                      style: TextStyle(
+                          fontSize: elementsOffset * 1.1,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                  child: Text(
-                    "Zakończ raport",
-                    style: TextStyle(
-                        fontSize: elementsOffset * 1.1,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-
-              /// Przycisk zmiany pomieszczenia
-              GestureDetector(
-                onTap: () async {
-                  var wynik = await doZmianyPomieszczenia(context);
-                  if (wynik != null) {
-                    setState(() {
-                      if (!((budynek == wynik[0]) &&
-                          (pietro == wynik[1]) &&
-                          (pomieszczenie == wynik[2]))) {
-                        budynek = wynik[0];
-                        pietro = wynik[1];
-                        pomieszczenie = wynik[2];
-                        inicjalizujDane = true;
-                      }
-                    });
-                  }
-                },
-                child: Container(
-                  height: elementsOffset * 4,
-                  width: rozmiar.width * 0.53,
-                  alignment: Alignment.centerLeft,
-                  decoration: BoxDecoration(
-                    color: const Color.fromRGBO(250, 185, 90, 1),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    "Zmień pomieszczenie",
-                    style: TextStyle(
-                        fontSize: elementsOffset * 1.1,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              )
-            ],
-          )
-        ],
-      )
+                )
+              ],
+            )
+          ],
+        )
     );
   }
 
   //
   //  Funkcje używane w tym pliku
   //
+  
+  /// Widget wyświetlający działąjący skanner
+  Widget camera() => Container(
+    height: rozmiar.height * 0.3 - 6,
+    width: rozmiar.width * 0.8,
+    child: ClipRRect(
+      borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20)
+      ),
+      child: ScanView(
+
+        controller: controller,
+        scanAreaScale: .8,
+        scanLineColor: Colors.green.shade400,
+        onCapture: (data) async {
+          setState(() {
+            scannedValue = data;
+          });
+          controller.pause(); /// Kod wstrzymujcy dziaanie kamery
+
+          /// ... sprawdź czy element jest w bazie i ...
+          var czyWBazie =
+          await szukajAzZnajdziesz(_textEditingController.text.toString());
+
+          /// ... w zależności od odopowiedzi odznacz i pokaż odpowiedni komunikat
+          if (czyWBazie)
+          {
+            showTopSnackBar(
+                Overlay.of(context),
+                const CustomSnackBar.success(
+                  message: 'Dodano element do zeskanowanych przedmiotów',
+                ),
+                animationDuration: const Duration(microseconds: 500));
+          } else {
+            showTopSnackBar(
+                Overlay.of(context),
+                const CustomSnackBar.error(
+                  message: 'Elementu nie ma w bazie',
+                ),
+                animationDuration: const Duration(microseconds: 500));
+          }
+          await Future.delayed(const Duration(seconds: 1));
+          controller.resume();
+        },
+      ),
+    ),
+  );
 
   /// Początkowa inicjalizacja ekranu
   @override
@@ -595,6 +656,7 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
 
   /// Okienko do wyświetlania popupu do dodania komentarza
   Future commentDialog(naglowek) async {
+    controller.pause(); /// Kod wstrzymujcy dziaanie kamery
     final wynik = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -614,13 +676,14 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
         ],
       ),
     );
-
+    controller.resume();
     await dodajKomentarz(scannedValue, wynik); /// dodaj komentarz do przedmiotu
     _textEditingController.text = ""; /// zresetuj wpisaną wartość
   }
 
   /// Popup do wpisania kodu ręcznie przy próbie skanowania
   Future inputCodeManually() async {
+    controller.pause(); /// Kod wstrzymujcy dziaanie kamery /// Kod wstrzymuj
     final result = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -663,7 +726,7 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
 
       /// ... sprawdź czy element jest w bazie i ...
       var czyWBazie =
-          await szukajAzZnajdziesz(_textEditingController.text.toString());
+      await szukajAzZnajdziesz(_textEditingController.text.toString());
 
       /// ... w zależności od odopowiedzi odznacz i pokaż odpowiedni komunikat
       if (czyWBazie) {
@@ -685,6 +748,7 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
       /// A na koniec zresetuj zmmienną do przechwytywania teksut
       /// (bez tego po ponownym otwarciu popupu mamy wpisany poprzedni kod)
       _textEditingController.text = "";
+      controller.resume();
     }
   }
 
@@ -731,9 +795,9 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
   Future<List<int>?> doZmianyPomieszczenia(BuildContext context) async {
     final result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ChangePlacePage(
-            budynek: widget.budynek,
-            pietro: widget.pietro,
-            pomieszczenie: widget.pomieszczenie,
+          budynek: widget.budynek,
+          pietro: widget.pietro,
+          pomieszczenie: widget.pomieszczenie,
           listaBudynkow: widget.listaBudynkow,
           listaPieter: widget.listaPieter,
           listaPomieszczen: widget.listaPomieszczen,

@@ -7,8 +7,8 @@ import 'package:list_picker/list_picker.dart';
 import 'package:inventory_app/components/element_styling.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/components/color_palette.dart';
-import 'package:inventory_app/pages/scanner/scanner_page.dart';
 
+import 'package:inventory_app/pages/scanner/scanner_page.dart';
 
 class PickPlace extends StatefulWidget {
   @override
@@ -375,7 +375,7 @@ class _PickPlaceState extends State<PickPlace>
   Future<String?> doSkanowaniaPomieszczenia(BuildContext context) async {
     final result = await Navigator.of(context).push(
       MaterialPageRoute(
-          builder: (context) => CameraPagePrev(
+          builder: (context) => DemoCamPage(
                 budynek: budynek,
                 pietro: pietro,
                 pomieszczenie: pomieszczenie,
