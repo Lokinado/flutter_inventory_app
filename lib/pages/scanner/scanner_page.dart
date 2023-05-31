@@ -101,6 +101,8 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
       pietro = widget.pietro;
       pomieszczenie = widget.pomieszczenie;
 
+      przygotujZeskanowane();
+
       inicjalizujDane = false;
     }
 
@@ -168,19 +170,6 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
                   ),
                 ),
               ),
-              /*ElevatedButton(
-                  onPressed: () async {
-                    var res = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SimpleBarcodeScannerPage(),
-                        ));
-                    setState(() {
-                      if (res is String) {
-                        scannedValue = res;
-                      }
-                    });},
-                  child: const Text('Open Scanner'),),*/
             ],
           ),
 
@@ -212,16 +201,10 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
                 ),
               ),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   if (scannedValue.isNotEmpty) {
-                    var result = commentDialog("Przedmiot: $scannedValue");
-                    if (result.toString().isNotEmpty) {
-                      setState(() {
-                        dodajKomentarz(
-                            scannedValue, _textEditingController.text);
-                      });
+                    await commentDialog("Przedmiot: $scannedValue");
                     }
-                  }
                 },
                 child: Container(
                   width: rozmiar.width * 0.3,
@@ -420,6 +403,8 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+
+              /// Przycisk zakończenia raportu
               GestureDetector(
                 onTap: () async {
                   var wynik = await doZakonczeniaRaportu(context);
@@ -457,6 +442,8 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
                   ),
                 ),
               ),
+
+              /// Przycisk zmiany pomieszczenia
               GestureDetector(
                 onTap: () async {
                   var wynik = await doZmianyPomieszczenia(context);
@@ -516,11 +503,13 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
     super.dispose();
   }
 
+  /// Po zeksnaowaniu należy odświerżyć wyświetlane dane w popupach, między
+  /// innymi komentarze, i zeskanowane przedmoty
   void odswierzZeskanowane(){
 
-    liczbaBiurek = liczGotowe(biurka);
-    liczbaMonitorow = liczGotowe(monitory);
     liczbaKrzesel = liczGotowe(krzesla);
+    liczbaMonitorow = liczGotowe(monitory);
+    liczbaBiurek = liczGotowe(biurka);
 
     for (int lista = 0; lista < 3; lista++) {
       List<List<dynamic>> wybor = [krzesla, monitory, biurka][lista];
@@ -530,16 +519,30 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
         biurkaIdentyfikatory
       ][lista];
       for (int i = 0; i < wybor.length; i++) {
-        if (!wybor[i][2]) {
-          identyfikatory.add(
-              "${(i + 1).toString()}:  ${wybor[i][1].toString()}  ${wybor[i][2].toString()} ${wybor[i][3].toString()}");
-        }
+        identyfikatory[i] = "${(i + 1).toString()}:  ${wybor[i][1].toString()}  ${wybor[i][2].toString()} ${wybor[i][3].toString()}";
       }
     }
   }
 
-  Future<bool> sprawdzenie(BuildContext sprawdzenie) async {
-    return true;
+  /// Początkowe wpisanie danych - działa prawie tak jak 'odswierzZeksnowane'
+  /// ale inicjalizuje dane, a nie je nadpisuje
+  void przygotujZeskanowane(){
+
+    liczbaKrzesel = liczGotowe(krzesla);
+    liczbaMonitorow = liczGotowe(monitory);
+    liczbaBiurek = liczGotowe(biurka);
+
+    for (int lista = 0; lista < 3; lista++) {
+      List<List<dynamic>> wybor = [krzesla, monitory, biurka][lista];
+      List<String> identyfikatory = [
+        krzeslaIdentyfikatory,
+        monitoryIdentyfikatory,
+        biurkaIdentyfikatory
+      ][lista];
+      for (int i = 0; i < wybor.length; i++) {
+        identyfikatory.add("${(i + 1).toString()}:  ${wybor[i][1].toString()}  ${wybor[i][2].toString()} ${wybor[i][3].toString()}");
+      }
+    }
   }
 
   /// Metoda tymczasowa - generowanie danych do testów
@@ -591,24 +594,30 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
   }
 
   /// Okienko do wyświetlania popupu do dodania komentarza
-  Future commentDialog(naglowek) => showDialog(
+  Future commentDialog(naglowek) async {
+    final wynik = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-            title: Text(naglowek),
-            content: TextField(
-              autofocus: true,
-              decoration: const InputDecoration(hintText: "Wprowadź komentarz"),
-              controller: _textEditingController,
-            ),
-            actions: [
-              TextButton(
-                child: const Text("Dodaj komentarz"),
-                onPressed: () {
-                  Navigator.of(context).pop(_textEditingController.text);
-                },
-              )
-            ],
-          ));
+        title: Text(naglowek),
+        content: TextField(
+          autofocus: true,
+          decoration: const InputDecoration(hintText: "Wprowadź komentarz"),
+          controller: _textEditingController,
+        ),
+        actions: [
+          TextButton(
+            child: const Text("Dodaj komentarz"),
+            onPressed: () {
+              Navigator.of(context).pop(_textEditingController.text);
+            },
+          )
+        ],
+      ),
+    );
+
+    await dodajKomentarz(scannedValue, wynik); /// dodaj komentarz do przedmiotu
+    _textEditingController.text = ""; /// zresetuj wpisaną wartość
+  }
 
   /// Popup do wpisania kodu ręcznie przy próbie skanowania
   Future inputCodeManually() async {
@@ -649,10 +658,14 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
       ),
     );
 
-    //await Future.delayed(Duration(seconds: 2));
+    /// O ile wpisano jakiś kod to:
     if (_textEditingController.text != "") {
+
+      /// ... sprawdź czy element jest w bazie i ...
       var czyWBazie =
           await szukajAzZnajdziesz(_textEditingController.text.toString());
+
+      /// ... w zależności od odopowiedzi odznacz i pokaż odpowiedni komunikat
       if (czyWBazie) {
         showTopSnackBar(
             Overlay.of(context),
@@ -668,10 +681,14 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
             ),
             animationDuration: const Duration(microseconds: 500));
       }
+
+      /// A na koniec zresetuj zmmienną do przechwytywania teksut
+      /// (bez tego po ponownym otwarciu popupu mamy wpisany poprzedni kod)
       _textEditingController.text = "";
     }
   }
 
+  /// Rekurancyjne przeszukanie danych w celu odnalezienia i odznaczenia kodu
   Future<bool> szukajAzZnajdziesz(wartosc) async {
     for (List<List<dynamic>> l in [krzesla, monitory, biurka]) {
       for (int i = 0; i < l.length; i++) {
@@ -684,12 +701,33 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
     return false;
   }
 
+  /// Metoda która rekurencyjnie przeszukuje dane, i dla odpowiedniego elementu
+  /// dodaje do niego przekazany komentarz
+  /// zwraca true / false, w zależności od tego czy element jest w tym pomiedzczeniu
+  Future<bool> dodajKomentarz(wartosc, komentarz) async {
+    for (List<List<dynamic>> l in [krzesla, monitory, biurka]) {
+      for (int i = 0; i < l.length; i++) {
+        if (l[i][1] == wartosc) {
+          l[i][3] = komentarz;
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /// Wywołanie asynchroniczne przechodzące do zakończenia raportu
+  /// i ewentualnie zwracające informację o tym czy należy przejść do strony
+  /// zmiany pomieszczenia
   Future<String> doZakonczeniaRaportu(BuildContext context) async {
     final result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => const FinishReportPage()));
     return result;
   }
 
+  /// Wywołanie asynchroniczne przechodząde to zmiany pomieszczenia
+  /// i zwrtacające informacje listę oznaczajacaą pomieszczenia, lub null
+  /// jeśli operacja została anulowana
   Future<List<int>?> doZmianyPomieszczenia(BuildContext context) async {
     final result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ChangePlacePage(
@@ -702,20 +740,5 @@ class _CameraPagePrevState extends State<CameraPagePrev> {
         )));
     return result;
   }
-
-  /// Metoda nadpisująca listy danych o wpisany komentarz
-  /// znajduje do kórego elementu wpisano komentarz
-  /// i temu elementowi go przypisuje (bez wzgl. na listę)
-  void dodajKomentarz(element, komentarz) {
-    for (List<List<dynamic>> l in [monitory, krzesla, biurka]) {
-      for (List<dynamic> ld in l) {
-        if (ld[1].toString() == element) {
-          ld[3] = komentarz;
-          return;
-        }
-      }
-    }
-  }
-
 
 }

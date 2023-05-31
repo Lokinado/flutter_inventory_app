@@ -101,7 +101,6 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                   Container(
                     margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
                     child: Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         /// Wybrany budynek
                         Container(
@@ -124,7 +123,7 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                         Container(
                           margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
                           width: szerokoscPrzycisku,
-                          height: 60.0,
+                          height: numberBoxSize,
                           child: ElevatedButton(
                             style: leftTextActive,
                             onPressed: () async {
@@ -186,7 +185,7 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                         Container(
                           margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
                           width: szerokoscPrzycisku,
-                          height: 60.0,
+                          height: numberBoxSize,
                           child: ElevatedButton(
                             style: budynek != 0
                                 ? leftTextActive
@@ -250,7 +249,7 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                         Container(
                           margin: EdgeInsets.fromLTRB(space, 0, 0, 0),
                           width: szerokoscPrzycisku,
-                          height: 60.0,
+                          height: numberBoxSize,
                           child: ElevatedButton(
                             style: pietro != 0 && budynek != 0
                                 ? leftTextActive
@@ -293,6 +292,8 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+
+                  /// Podłączony przycisk odrzucenia zmian
                   GestureDetector(
                     onTap: () {
                       confirmExit();
@@ -315,6 +316,8 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                       ),
                     ),
                   ),
+
+                  /// Podłączony przycisk zatwierdzenia zmiany pomieszczenia
                   GestureDetector(
                     onTap: () {
                       if (pomieszczenie > 0) {
