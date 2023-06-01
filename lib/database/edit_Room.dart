@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'list_ItemTypes.dart';
-import 'add_ItemType.dart';
+import '../database/list_ItemTypes.dart';
+import 'package:inventory_app/database/add_ItemType.dart';
 
 class EditRoom extends StatelessWidget {
   final String name;

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'globalsClasses.dart';
-import 'edit_Room.dart';
-import 'list_ItemTypes.dart';
+import 'package:inventory_app/database/globalsClasses.dart';
+import 'package:inventory_app/database/edit_Room.dart';
+import 'package:inventory_app/database/list_ItemTypes.dart';
 
 class DisplayRooms extends StatefulWidget {
   final String buildingId;

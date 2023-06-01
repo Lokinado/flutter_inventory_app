@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'globalsClasses.dart';
+import 'package:inventory_app/database/globalsClasses.dart';
 
 class AddItem extends StatelessWidget {
   final String buildingId;

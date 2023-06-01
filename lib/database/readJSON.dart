@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'globalsClasses.dart';
+import 'package:inventory_app/database/globalsClasses.dart';
 
 
 

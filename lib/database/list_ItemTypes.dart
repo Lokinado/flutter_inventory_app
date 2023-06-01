@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'globalsClasses.dart';
-import 'edit_ItemType.dart';
-import 'list_Items.dart';
+import 'package:inventory_app/database/globalsClasses.dart';
+import 'package:inventory_app/database/edit_ItemType.dart';
+import 'package:inventory_app/database/list_Items.dart';
 
 class DisplayItemsType extends StatelessWidget {
   final String buildingId;

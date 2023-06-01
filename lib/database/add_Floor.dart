@@ -1,25 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'globalsClasses.dart';
+import 'package:inventory_app/database/globalsClasses.dart';
 
-class AddItemType extends StatelessWidget {
+class AddFloor extends StatelessWidget {
   final String buildingId;
-  final String floorId;
-  final String roomId;
-
-  AddItemType({
-    Key? key,
-    required this.buildingId,
-    required this.floorId,
-    required this.roomId,
-  }) : super(key: key);
 
   final controllerName = TextEditingController();
+
+  AddFloor({
+    Key? key,
+    required this.buildingId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text('Add item type'),
+          title: const Text('Add floor'),
         ),
         body: ListView(
           padding: const EdgeInsets.all(16),
@@ -31,16 +27,15 @@ class AddItemType extends StatelessWidget {
                 hintText: 'Name',
               ),
             ),
-            const SizedBox(height: 24),
             const SizedBox(height: 32),
             ElevatedButton(
-              child: const Text('Create new item type'),
+              child: const Text('Create floor'),
               onPressed: () async {
-                final itemType = ItemType(
+                final floor = Floor(
                   name: controllerName.text,
                 );
 
-                createItemType(itemType);
+                createFloor(floor);
                 Navigator.pop(context);
               },
             )
@@ -48,19 +43,15 @@ class AddItemType extends StatelessWidget {
         ),
       );
 
-  Future createItemType(ItemType itemType) async {
-    final docItemType = FirebaseFirestore.instance
+  Future createFloor(Floor floor) async {
+    final docFloor = FirebaseFirestore.instance
         .collection('Building')
         .doc(buildingId)
         .collection('Floor')
-        .doc(floorId)
-        .collection('Rooms')
-        .doc(roomId)
-        .collection('ItemTypes')
         .doc();
-    itemType.id = docItemType.id;
 
-    final json = itemType.toJson();
-    await docItemType.set(json);
+    floor.id = docFloor.id;
+    final json = floor.toJson();
+    await docFloor.set(json);
   }
 }

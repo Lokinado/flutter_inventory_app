@@ -1,22 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'add_Item.dart';
-import 'list_Items.dart';
+import 'package:inventory_app/database/add_Floor.dart';
+import 'package:inventory_app/database/list_Floors.dart';
 
-class EditItemType extends StatelessWidget {
+class EditBuilding extends StatelessWidget {
   final String name;
   final String buildingId;
-  final String floorId;
-  final String roomId;
-  final String itemTypeId;
 
-  EditItemType({
+  EditBuilding({
     Key? key,
     required this.name,
     required this.buildingId,
-    required this.floorId,
-    required this.roomId,
-    required this.itemTypeId,
   }) : super(key: key);
 
   final controllerName = TextEditingController();
@@ -24,19 +18,15 @@ class EditItemType extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('Edit item type: $name'),
+          title: Text('Edit building: $name'),
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => AddItem(
+                builder: (context) => AddFloor(
                   buildingId: buildingId,
-                  floorId: floorId,
-                  roomId: roomId,
-                  itemTypeId: itemTypeId,
-                  nameItemType: name,
                 ),
               ),
             );
@@ -48,7 +38,7 @@ class EditItemType extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(bottom: 16),
               child: SizedBox(
-                height: 100,
+                height: 80,
                 width: 240,
                 child: Container(
                   decoration: BoxDecoration(
@@ -62,7 +52,7 @@ class EditItemType extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.all(10),
                     child: Text(
-                      'Name: $name \nID: $itemTypeId',
+                      'Name: $name \nID: $buildingId',
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
@@ -78,19 +68,12 @@ class EditItemType extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             ElevatedButton(
-              child: Text('Update Item Type'),
+              child: Text('Update'),
               onPressed: () async {
-                final docUser = FirebaseFirestore.instance
+                final docBuilding = FirebaseFirestore.instance
                     .collection('Building')
-                    .doc(buildingId)
-                    .collection('Floor')
-                    .doc(floorId)
-                    .collection('Rooms')
-                    .doc(roomId)
-                    .collection('ItemTypes')
-                    .doc(itemTypeId);
-                // Update user
-                docUser.update({
+                    .doc('$buildingId');
+                docBuilding.update({
                   'name':
                       (controllerName.text == '' ? name : controllerName.text),
                 });
@@ -98,13 +81,7 @@ class EditItemType extends StatelessWidget {
               },
             ),
             const SizedBox(height: 24),
-            DisplayItems(
-              buildingId: buildingId,
-              floorId: floorId,
-              roomId: roomId,
-              itemTypeId: itemTypeId,
-              itemTypeName: name,
-            ),
+            ListFloors(buildingId: buildingId),
           ],
         ),
       );

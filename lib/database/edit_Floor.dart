@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'add_Room.dart';
-import 'list_Rooms.dart';
+import 'package:inventory_app/database/add_Room.dart';
+import 'package:inventory_app/database/list_Rooms.dart';
 
 class EditFloor extends StatelessWidget {
   final String name;
