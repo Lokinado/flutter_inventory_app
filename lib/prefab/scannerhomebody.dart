@@ -15,14 +15,12 @@ class ScannerHomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          TopBodySection(key: UniqueKey(),
-            tekst: title,size: size, location: location,),
-          CenterScanHomePage(key: UniqueKey(), size: size, location: location,)
-        ],
-      ),
+    return Wrap(
+      children: <Widget>[
+        TopBodySection(key: UniqueKey(),
+          tekst: title,size: size, location: location,),
+        CenterScanHomePage(key: UniqueKey(), size: size, location: location,)
+      ],
     );
   }
 }
