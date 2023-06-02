@@ -25,8 +25,10 @@ class AddItemType extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           children: <Widget>[
             TextField(
+              maxLength: 20,
               controller: controllerName,
               decoration: const InputDecoration(
+                counterText: '',
                 border: OutlineInputBorder(),
                 hintText: 'Name',
               ),

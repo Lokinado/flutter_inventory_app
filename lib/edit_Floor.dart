@@ -63,8 +63,10 @@ class EditFloor extends StatelessWidget {
               ),
             ),
             TextField(
+              maxLength: 20,
               controller: controllerName,
               decoration: const InputDecoration(
+                counterText: '',
                 border: OutlineInputBorder(),
                 hintText: 'Name',
               ),

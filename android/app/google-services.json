@@ -1,39 +1,119 @@
 {
-  "project_info": {
-    "project_number": "620555340392",
-    "project_id": "invapptest-2f8bf",
-    "storage_bucket": "invapptest-2f8bf.appspot.com"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:620555340392:android:b3743c9488ca3857c749dd",
-        "android_client_info": {
-          "package_name": "com.example.testdb"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "620555340392-bhq2rnpli51vouompmhb69um3g4fj28v.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDbbCXo0Rzf45FMsicGwPDNel8h958VRD4"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "620555340392-bhq2rnpli51vouompmhb69um3g4fj28v.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    }
-  ],
-  "configuration_version": "1"
+	"project_info": {
+		"project_number": "139209525842",
+		"firebase_url": "https://inventoryapp-21163-default-rtdb.europe-west1.firebasedatabase.app",
+		"project_id": "inventoryapp-21163",
+		"storage_bucket": "inventoryapp-21163.appspot.com"
+	},
+	"client": [
+		{
+			"client_info": {
+				"mobilesdk_app_id": "1:139209525842:android:04f58e60a43eb8a7042d8b",
+				"android_client_info": {
+					"package_name": "com.example.inventory_app"
+				}
+			},
+			"oauth_client": [
+				{
+					"client_id": "139209525842-fmas7ava237it9rhaovgfgboidpcnq61.apps.googleusercontent.com",
+					"client_type": 3
+				}
+			],
+			"api_key": [
+				{
+					"current_key": "AIzaSyCfpHoK1nMQAiHq3f9IBT_jSJVbN93CjmY"
+				}
+			],
+			"services": {
+				"appinvite_service": {
+					"other_platform_oauth_client": [
+						{
+							"client_id": "139209525842-fmas7ava237it9rhaovgfgboidpcnq61.apps.googleusercontent.com",
+							"client_type": 3
+						},
+						{
+							"client_id": "139209525842-p7jetluctdv7u6gelor58pchhlrtfu46.apps.googleusercontent.com",
+							"client_type": 2,
+							"ios_info": {
+								"bundle_id": "com.example.test"
+							}
+						}
+					]
+				}
+			}
+		},
+		{
+			"client_info": {
+				"mobilesdk_app_id": "1:139209525842:android:4f134ac1d505de05042d8b",
+				"android_client_info": {
+					"package_name": "com.example.test"
+				}
+			},
+			"oauth_client": [
+				{
+					"client_id": "139209525842-fmas7ava237it9rhaovgfgboidpcnq61.apps.googleusercontent.com",
+					"client_type": 3
+				}
+			],
+			"api_key": [
+				{
+					"current_key": "AIzaSyCfpHoK1nMQAiHq3f9IBT_jSJVbN93CjmY"
+				}
+			],
+			"services": {
+				"appinvite_service": {
+					"other_platform_oauth_client": [
+						{
+							"client_id": "139209525842-fmas7ava237it9rhaovgfgboidpcnq61.apps.googleusercontent.com",
+							"client_type": 3
+						},
+						{
+							"client_id": "139209525842-p7jetluctdv7u6gelor58pchhlrtfu46.apps.googleusercontent.com",
+							"client_type": 2,
+							"ios_info": {
+								"bundle_id": "com.example.test"
+							}
+						}
+					]
+				}
+			}
+		},
+		{
+			"client_info": {
+				"mobilesdk_app_id": "1:139209525842:android:e12851bcffab644c042d8b",
+				"android_client_info": {
+					"package_name": "com.example.testdb"
+				}
+			},
+			"oauth_client": [
+				{
+					"client_id": "139209525842-fmas7ava237it9rhaovgfgboidpcnq61.apps.googleusercontent.com",
+					"client_type": 3
+				}
+			],
+			"api_key": [
+				{
+					"current_key": "AIzaSyCfpHoK1nMQAiHq3f9IBT_jSJVbN93CjmY"
+				}
+			],
+			"services": {
+				"appinvite_service": {
+					"other_platform_oauth_client": [
+						{
+							"client_id": "139209525842-fmas7ava237it9rhaovgfgboidpcnq61.apps.googleusercontent.com",
+							"client_type": 3
+						},
+						{
+							"client_id": "139209525842-p7jetluctdv7u6gelor58pchhlrtfu46.apps.googleusercontent.com",
+							"client_type": 2,
+							"ios_info": {
+								"bundle_id": "com.example.test"
+							}
+						}
+					]
+				}
+			}
+		}
+	],
+	"configuration_version": "1"
 }

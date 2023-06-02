@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'add_Building.dart';
 import 'list_Buildings.dart';
-import 'list_Floors.dart';
-import 'add_Floor.dart';
 
 class Menu extends StatelessWidget {
   const Menu({super.key});
@@ -18,14 +16,14 @@ class Menu extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                child: const Text('Add Floor'),
+                child: const Text('Add Building'),
                 onPressed: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => AddBuilding()));
                 },
               ),
               ElevatedButton(
-                child: const Text('List Floors'),
+                child: const Text('List of buildings'),
                 onPressed: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => ListBuildings()));

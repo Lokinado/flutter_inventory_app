@@ -70,8 +70,10 @@ class EditItemType extends StatelessWidget {
               ),
             ),
             TextField(
+              maxLength: 20,
               controller: controllerName,
               decoration: const InputDecoration(
+                counterText: '',
                 border: OutlineInputBorder(),
                 hintText: 'Name',
               ),
@@ -80,7 +82,7 @@ class EditItemType extends StatelessWidget {
             ElevatedButton(
               child: Text('Update Item Type'),
               onPressed: () async {
-                final docUser = FirebaseFirestore.instance
+                final docItemType = FirebaseFirestore.instance
                     .collection('Building')
                     .doc(buildingId)
                     .collection('Floor')
@@ -89,8 +91,7 @@ class EditItemType extends StatelessWidget {
                     .doc(roomId)
                     .collection('ItemTypes')
                     .doc(itemTypeId);
-                // Update user
-                docUser.update({
+                docItemType.update({
                   'name':
                       (controllerName.text == '' ? name : controllerName.text),
                 });

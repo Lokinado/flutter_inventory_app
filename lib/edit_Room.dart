@@ -66,8 +66,10 @@ class EditRoom extends StatelessWidget {
               ),
             ),
             TextField(
+              maxLength: 20,
               controller: controllerName,
               decoration: const InputDecoration(
+                counterText: '',
                 border: OutlineInputBorder(),
                 hintText: 'Name',
               ),
@@ -76,15 +78,14 @@ class EditRoom extends StatelessWidget {
             ElevatedButton(
               child: Text('Update'),
               onPressed: () async {
-                final docUser = FirebaseFirestore.instance
+                final docRoom = FirebaseFirestore.instance
                     .collection('Building')
                     .doc(buildingId)
                     .collection('Floor')
                     .doc(floorId)
                     .collection('Rooms')
                     .doc('$roomId');
-                // Update user
-                docUser.update({
+                docRoom.update({
                   'name':
                       (controllerName.text == '' ? name : controllerName.text),
                 });

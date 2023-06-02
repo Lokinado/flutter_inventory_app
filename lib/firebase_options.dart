@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -52,11 +49,22 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAnaU-UMb4Pr0cd6yJt_Dtij5PbfTfWsAA',
+    appId: '1:139209525842:web:99e49f3cfe61bddb042d8b',
+    messagingSenderId: '139209525842',
+    projectId: 'inventoryapp-21163',
+    authDomain: 'inventoryapp-21163.firebaseapp.com',
+    databaseURL: 'https://inventoryapp-21163-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'inventoryapp-21163.appspot.com',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDbbCXo0Rzf45FMsicGwPDNel8h958VRD4',
-    appId: '1:620555340392:android:b3743c9488ca3857c749dd',
-    messagingSenderId: '620555340392',
-    projectId: 'invapptest-2f8bf',
-    storageBucket: 'invapptest-2f8bf.appspot.com',
+    apiKey: 'AIzaSyCfpHoK1nMQAiHq3f9IBT_jSJVbN93CjmY',
+    appId: '1:139209525842:android:e12851bcffab644c042d8b',
+    messagingSenderId: '139209525842',
+    projectId: 'inventoryapp-21163',
+    databaseURL: 'https://inventoryapp-21163-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'inventoryapp-21163.appspot.com',
   );
 }
