@@ -27,8 +27,8 @@ class DemoCamPage extends StatefulWidget {
   final int pietro;
   final int pomieszczenie;
   final List<String> listaBudynkow;
-  final List<List<String>> listaPieter;
-  final List<List<List<String>>> listaPomieszczen;
+  final List<String> listaPieter;
+  final List<String> listaPomieszczen;
 
   @override
   State<DemoCamPage> createState() => _DemoCamPageState();
@@ -41,6 +41,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
   //
 
   var inicjalizujDane = true; /// Utworzeni / pobranie danych do / z bazy
+  var odswierzRozmiar = true;
 
   // Zmienne przechowywujące informacje nt. przedmiotów do skanownaia
   late List<List<dynamic>> krzesla = []; /// Lista krzeseł w sali w raz z informacjami
@@ -85,11 +86,13 @@ class _DemoCamPageState extends State<DemoCamPage> {
   @override
   Widget build(BuildContext context) {
     /// Pobranie informacji nt. wymiarów okna
-    rozmiar = MediaQuery.of(context).size;
+    if (odswierzRozmiar){
+      rozmiar = MediaQuery.of(context).size;
 
-    // Przygotowanie zmiennenych pomodniczych do rozmiarowania elementów
-    textHeighOffset = rozmiar.height * 0.04;
-    elementsOffset = rozmiar.height * 0.023;
+      // Przygotowanie zmiennenych pomodniczych do rozmiarowania elementów
+      textHeighOffset = rozmiar.height * 0.04;
+      elementsOffset = rozmiar.height * 0.023;
+    }
 
     /// Inicjalizacja zmienneych i dynamiczne zmiany ich wartości
     /// -> przechowują informacje nt. stanu skonowania elementów
@@ -114,11 +117,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
     /// Odświeżenie elementów dynamicznych, jako komentarze, czy liczniki
     /// zeskanownaych elementów
     odswierzZeskanowane();
-    
-    // Ten kod jest niezbędny by się aparat odświeżył i działał po otwarciu
-    // jakiegoś popupu
-    controller.pause(); /// Kod wstrzymujcy dziaanie kamery
-    controller.resume();
+
 
     return Scaffold(
       /// Nagłówek aplikacji
@@ -656,6 +655,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   /// Okienko do wyświetlania popupu do dodania komentarza
   Future commentDialog(naglowek) async {
+    odswierzRozmiar = false;
     controller.pause(); /// Kod wstrzymujcy dziaanie kamery
     final wynik = await showDialog(
       context: context,
@@ -676,13 +676,16 @@ class _DemoCamPageState extends State<DemoCamPage> {
         ],
       ),
     );
-    controller.resume();
+
     await dodajKomentarz(scannedValue, wynik); /// dodaj komentarz do przedmiotu
     _textEditingController.text = ""; /// zresetuj wpisaną wartość
+    odswierzRozmiar = true;
+    controller.resume();
   }
 
   /// Popup do wpisania kodu ręcznie przy próbie skanowania
   Future inputCodeManually() async {
+    odswierzRozmiar = false;
     controller.pause(); /// Kod wstrzymujcy dziaanie kamery /// Kod wstrzymuj
     final result = await showDialog(
       context: context,
@@ -750,6 +753,8 @@ class _DemoCamPageState extends State<DemoCamPage> {
       _textEditingController.text = "";
       controller.resume();
     }
+    odswierzRozmiar = true;
+    controller.resume();
   }
 
   /// Rekurancyjne przeszukanie danych w celu odnalezienia i odznaczenia kodu
@@ -784,8 +789,12 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// i ewentualnie zwracające informację o tym czy należy przejść do strony
   /// zmiany pomieszczenia
   Future<String> doZakonczeniaRaportu(BuildContext context) async {
+    controller.pause();
     final result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => const FinishReportPage()));
+    if (result == null){
+      controller.resume();
+    }
     return result;
   }
 
