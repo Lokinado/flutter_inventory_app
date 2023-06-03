@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'add_Floor.dart';
-import 'edit_Floor.dart';
 import 'list_Rooms.dart';
-import 'readJSON.dart';
 import 'globalsClasses.dart';
 
 class ListFloors extends StatefulWidget {
@@ -30,8 +27,7 @@ class _ListFloorsState extends State<ListFloors> {
     body: Center(
       child: Container(
         color: Colors.white,
-        padding: const EdgeInsets.all(8),
-        margin: const EdgeInsets.all(10.0),
+        
         child: StreamBuilder<List<Floor>>(
           stream: readFloors(),
           builder: (context, snapshot) {
@@ -66,7 +62,7 @@ class _ListFloorsState extends State<ListFloors> {
                                   floor.name,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 24,
+                                    fontSize: 25,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   ),

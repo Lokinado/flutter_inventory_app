@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/topbodysection.dart';
-import 'package:inventory_app/pages/documents/raporty.dart';
-import 'list_Buildings.dart';
-import 'details_arguments.dart';
-import 'kody.dart';
+
+import 'package:inventory_app/pages/documents/database_components/list_Buildings.dart';
+
 
 class FilePage extends StatefulWidget {
   @override

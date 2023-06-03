@@ -33,7 +33,7 @@ class DisplayItemsType extends StatelessWidget {
         ),
       ),
       body: Container(
-        padding: const EdgeInsets.all(10.0),
+       
         child: StreamBuilder<List<ItemType>>(
           stream: readItemTypes(),
           builder: (context, snapshot) {
@@ -56,7 +56,7 @@ class DisplayItemsType extends StatelessWidget {
                           itemType.name,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 18.0,
+                            fontSize: 25.0,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

@@ -20,7 +20,7 @@ class _AuthPageState extends State<AuthPage> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot){
           // is the user logged in?
-          if(!snapshot.hasData){
+          if(snapshot.hasData){
             return  LoggedMainPage(size: rozmiar);
           }
 

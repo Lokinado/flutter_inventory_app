@@ -47,8 +47,7 @@ class _ListRoomsState extends State<DisplayRooms> {
                 },
                 child: Container(
 
-                  margin: const EdgeInsets.all(5.0),
-                  padding: const EdgeInsets.all(5.0),
+                  
                   decoration: BoxDecoration(
                     color: Colors.green,
                     borderRadius: BorderRadius.circular(50),
@@ -57,7 +56,7 @@ class _ListRoomsState extends State<DisplayRooms> {
                     child: Text(
                       room.name,
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 25,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),

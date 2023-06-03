@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'add_Building.dart';
-// import 'add_Floor.dart';
-// import 'edit_Floor.dart';
 import 'edit_ Building.dart';
 import 'list_Floors.dart';
 import 'readJSON.dart';
@@ -21,8 +18,8 @@ class _ListBuildingsState extends State<ListBuildings> {
         body: Center(
           child: Container(
             color: Colors.white,
-            padding: const EdgeInsets.all(8),
-            margin: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(3),
+            
             child: StreamBuilder<List<Building>>(
               stream: readBuilding(),
               builder: (context, snapshot) {
@@ -57,7 +54,7 @@ class _ListBuildingsState extends State<ListBuildings> {
                                       building.name,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        fontSize: 24,
+                                        fontSize: 25,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
                                       ),

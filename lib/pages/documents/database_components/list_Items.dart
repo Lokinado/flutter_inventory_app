@@ -33,7 +33,7 @@ class DisplayItems extends StatelessWidget {
         ),
       ),
       body: Container(
-        padding: const EdgeInsets.all(10.0),
+       
         child: StreamBuilder<List<Item>>(
           stream: readItems(),
           builder: (context, snapshot) {
@@ -55,7 +55,7 @@ class DisplayItems extends StatelessWidget {
                         '${item.name} \n ${item.barcode}',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18.0,
+                          fontSize: 25.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

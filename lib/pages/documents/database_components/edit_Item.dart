@@ -31,10 +31,10 @@ class EditItem extends StatelessWidget {
       title: Text('Szczegóły  $name'),
     ),
     body: ListView(
-      padding: const EdgeInsets.all(20),
+      
       children: [
         Padding(
-          padding: EdgeInsets.only(bottom: 16),
+          padding: EdgeInsets.only(bottom: 4),
           child: SizedBox(
             height: 100,
             width: 240,
