@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/topbodysection.dart';
+import 'package:inventory_app/pages/documents/raporty.dart';
 import 'list_Buildings.dart';
-
-
+import 'details_arguments.dart';
+import 'kody.dart';
 
 class FilePage extends StatefulWidget {
   @override
@@ -13,8 +14,9 @@ class _FilePageState extends State<FilePage> {
   @override
   Widget build(BuildContext context) {
     final Size rozmiar = MediaQuery.of(context).size;
-    return Scaffold(
-      body: Column(
+    return Container(
+      //color: const Color.fromRGBO(0, 50, 39, 1),
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           TopBodySection(
@@ -24,7 +26,7 @@ class _FilePageState extends State<FilePage> {
             location: Location.right,
           ),
           Expanded(
-            child: MainPage(),
+            child: const MainPage(),
           ),
         ],
       ),
@@ -56,26 +58,18 @@ class _MainPageState extends State<MainPage>
   Widget build(BuildContext context) {
     super.build(context);
     return Container(
-      color: Colors.white,
+      color: const Color.fromRGBO(0, 50, 39, 1),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(75), // Zmiana topLeft na topRight
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: Offset(0, 3),
-            ),
-          ],
-        ),
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(75),
+            )),
         child: Container(
-          margin: const EdgeInsets.fromLTRB(0, 20, 00, 0),
+          margin: const EdgeInsets.fromLTRB(0, 30, 00, 0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -133,6 +127,32 @@ class _MainPageState extends State<MainPage>
                       // Wyświetlanie listy budynków
                     ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DetailsPage extends StatelessWidget {
+  final String title;
+
+  DetailsPage({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromRGBO(0, 50, 39, 1),
+        toolbarHeight: 80,
+        title: Text('Szczegóły: $title'),
+      ),
+      body: Center(
+        child: Text(
+          'Tytuł: $title',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
