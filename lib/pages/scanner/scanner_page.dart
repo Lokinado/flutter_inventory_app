@@ -457,6 +457,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
                 /// Przycisk zmiany pomieszczenia
                 GestureDetector(
+
                   onTap: () async {
                     var wynik = await doZmianyPomieszczenia(context);
                     if (wynik != null) {

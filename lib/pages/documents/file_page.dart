@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/pages/documents/raporty.dart';
-
-import 'details_arguments.dart';
 import 'kody.dart';
 
 class FilePage extends StatefulWidget {

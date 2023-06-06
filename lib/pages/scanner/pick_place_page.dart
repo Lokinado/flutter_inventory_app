@@ -75,6 +75,8 @@ class _PickPlaceState extends State<PickPlace>
     if (!zaiZmienPocz) {
       space = 20;
       inicjalizujBudynki();
+      print(listaBudynkow);
+      print(numeryBudynkow);
       zaiZmienPocz = true;
     }
 
@@ -143,7 +145,7 @@ class _PickPlaceState extends State<PickPlace>
                                   items: numeryBudynkow,
                                 );
                                 if (wyborBudynku != null) {
-                                  var value = int.parse(wyborBudynku.split(" ")[1]);
+                                  var value = int.parse(wyborBudynku);
                                   int index = znajdzNaLiscie(listaBudynkow, wyborBudynku);
                                   budynekId = listaBudynkow[index][1];
                                   setState(() {
@@ -213,7 +215,7 @@ class _PickPlaceState extends State<PickPlace>
                                     items: numeryPietra,
                                   );
                                   if (wyborPietra != null) {
-                                    var value = int.parse(wyborPietra.split(" ")[1]);
+                                    var value = int.parse(wyborPietra);
                                     int index = znajdzNaLiscie(listaPieter, wyborPietra);
                                     pietroId = listaPieter[index][1];
                                     setState(() {
@@ -314,7 +316,7 @@ class _PickPlaceState extends State<PickPlace>
                             ? centerTextActive
                             : centerTextNotActive,
                         onPressed: () async {
-                          if (pietro > 0) {
+                          if (pietro >= 0) {
                             var wynik =
                                 await doSkanowaniaPomieszczenia(context);
                             if (wynik != null) {
