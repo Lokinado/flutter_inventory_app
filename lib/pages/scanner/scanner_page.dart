@@ -12,7 +12,6 @@ import 'package:inventory_app/pages/scanner/finish_report.dart';
 import 'package:inventory_app/pages/scanner/change_place.dart';
 import 'package:inventory_app/database/place_to_list.dart';
 
-
 class DemoCamPage extends StatefulWidget {
   const DemoCamPage({
     Key? key,
@@ -36,48 +35,81 @@ class DemoCamPage extends StatefulWidget {
 }
 
 class _DemoCamPageState extends State<DemoCamPage> {
-
   //
   // Przypisanie i inicjalizacja zmiennych
   //
 
-  var inicjalizujDane = true; /// Utworzeni / pobranie danych do / z bazy
+  var inicjalizujDane = true;
+
+  /// Utworzeni / pobranie danych do / z bazy
   var odswierzRozmiar = true;
 
+  late Map<String, Map<String, dynamic>> przedmiotyDoSkanowania;
+
   // Zmienne przechowywujące informacje nt. przedmiotów do skanownaia
-  late List<List<dynamic>> krzesla = []; /// Lista krzeseł w sali w raz z informacjami
-  late List<List<dynamic>> monitory = []; /// Lista monitorow w sali w raz z informacjami
-  late List<List<dynamic>> biurka = []; /// Lista biurek w sali w raz z informacjami
+  late List<List<dynamic>> krzesla = [];
+
+  /// Lista krzeseł w sali w raz z informacjami
+  late List<List<dynamic>> monitory = [];
+
+  /// Lista monitorow w sali w raz z informacjami
+  late List<List<dynamic>> biurka = [];
+
+  /// Lista biurek w sali w raz z informacjami
 
   // Przy wyświetlaniu okienek potrzebna jest lista tekstowa więc dla każdego
   // zbioru eementów tworzę taką listę
 
-  late List<String> krzeslaIdentyfikatory = []; /// Dynamicznie utworznona lista krzesel
-  late List<String> monitoryIdentyfikatory = []; /// Dynamicznie utworznona lista monitorów
-  late List<String> biurkaIdentyfikatory = []; /// Dynamicznie utworznona lista biurek
+  late List<String> krzeslaIdentyfikatory = [];
+
+  /// Dynamicznie utworznona lista krzesel
+  late List<String> monitoryIdentyfikatory = [];
+
+  /// Dynamicznie utworznona lista monitorów
+  late List<String> biurkaIdentyfikatory = [];
+
+  /// Dynamicznie utworznona lista biurek
 
   /// Przechowuje rezultat wyskakujacych popupowych okienek
   late TextEditingController _textEditingController;
-  
+
   /// Kontroluje działanie kamery
   ScanController controller = ScanController();
 
-  late int liczbaKrzesel; /// Liczba zeskanowanych krzeseł
-  late int liczbaMonitorow; /// Liczba zeskanownanych monitorow
-  late int liczbaBiurek; /// Liczba zeskanowanych biurek
+  late int liczbaKrzesel;
+
+  /// Liczba zeskanowanych krzeseł
+  late int liczbaMonitorow;
+
+  /// Liczba zeskanownanych monitorow
+  late int liczbaBiurek;
+
+  /// Liczba zeskanowanych biurek
 
   // TE ZMIENNE MUSZĄ BYĆ, BO TYCH PRZEKAZYWNAYCH PRZY WYWOŁANIU STRONY
   // NIE DA SIĘ MODYFIKOWAĆ, WIĘC TRZEBA MIEĆ ODDZIELNY ZESTAW
   // do tych przekazywanch w parametrach dostajemy się poprzez 'widget. ...'
 
-  late String budynek; /// Wybrany przez użytkownika budynek
-  late String pietro; /// Wybrane przez użytkownika pietro
-  late String pomieszczenie; /// Wybrane przez użytkownika pomieszczenie
+  late String budynek;
 
-  late String scannedValue; /// Zeskanowan wartość
+  /// Wybrany przez użytkownika budynek
+  late String pietro;
 
-  late double textHeighOffset; /// Grubość offsetu na jakiś element - stylistyczna zmienna pomocnicza
-  late double elementsOffset; /// Grubość offsetu na jakiś element - stylistyczna zmienna pomocnicza
+  /// Wybrane przez użytkownika pietro
+  late String pomieszczenie;
+
+  /// Wybrane przez użytkownika pomieszczenie
+
+  late String scannedValue;
+
+  /// Zeskanowan wartość
+
+  late double textHeighOffset;
+
+  /// Grubość offsetu na jakiś element - stylistyczna zmienna pomocnicza
+  late double elementsOffset;
+
+  /// Grubość offsetu na jakiś element - stylistyczna zmienna pomocnicza
   late Size rozmiar;
 
   //
@@ -87,7 +119,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
   @override
   Widget build(BuildContext context) {
     /// Pobranie informacji nt. wymiarów okna
-    if (odswierzRozmiar){
+    if (odswierzRozmiar) {
       rozmiar = MediaQuery.of(context).size;
 
       // Przygotowanie zmiennenych pomodniczych do rozmiarowania elementów
@@ -111,6 +143,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
       pomieszczenie = widget.pomieszczenie;
 
       przygotujZeskanowane();
+      pobierz();
 
       inicjalizujDane = false;
     }
@@ -119,9 +152,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
     /// zeskanownaych elementów
     odswierzZeskanowane();
 
-
     return Scaffold(
-      /// Nagłówek aplikacji
+
+        /// Nagłówek aplikacji
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: const Color.fromRGBO(0, 50, 39, 1),
@@ -180,9 +213,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
                     ),
                   ),
                 ),
-
                 camera(),
-
               ],
             ),
 
@@ -267,7 +298,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
                       if (wybraneKrzeslo != null) {
                         setState(() {
                           krzesla[int.parse(wybraneKrzeslo.split(":")[0]) - 1]
-                          [2] = true;
+                              [2] = true;
                         });
                       }
                     },
@@ -319,7 +350,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
                       if (wybranyMonitor != null) {
                         setState(() {
                           monitory[int.parse(wybranyMonitor.split(":")[0]) - 1]
-                          [2] = true;
+                              [2] = true;
                         });
                       }
                     },
@@ -371,7 +402,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
                       if (wybraneBiurko != null) {
                         setState(() {
                           biurka[int.parse(wybraneBiurko.split(":")[0]) - 1]
-                          [2] = true;
+                              [2] = true;
                         });
                       }
                     },
@@ -416,19 +447,17 @@ class _DemoCamPageState extends State<DemoCamPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-
                 /// Przycisk zakończenia raportu
                 GestureDetector(
                   onTap: () async {
                     var wynik = await doZakonczeniaRaportu(context);
-                    if (wynik == "zmienpomieszczenie"){
+                    if (wynik == "zmienpomieszczenie") {
                       var wynik = await doZmianyPomieszczenia(context);
                       if (wynik != null) {
                         setState(() {
                           if (!((budynek == wynik[0]) &&
                               (pietro == wynik[1]) &&
                               (pomieszczenie == wynik[2]))) {
-
                             budynek = wynik[0].toString();
                             pietro = wynik[1].toString();
                             pomieszczenie = wynik[2].toString();
@@ -460,7 +489,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
                 /// Przycisk zmiany pomieszczenia
                 GestureDetector(
-
                   onTap: () async {
                     var wynik = await doZmianyPomieszczenia(context);
                     if (wynik != null) {
@@ -497,61 +525,58 @@ class _DemoCamPageState extends State<DemoCamPage> {
               ],
             )
           ],
-        )
-    );
+        ));
   }
 
   //
   //  Funkcje używane w tym pliku
   //
-  
+
   /// Widget wyświetlający działąjący skanner
   Widget camera() => Container(
-    height: rozmiar.height * 0.3 - 6,
-    width: rozmiar.width * 0.8,
-    child: ClipRRect(
-      borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20)
-      ),
-      child: ScanView(
+        height: rozmiar.height * 0.3 - 6,
+        width: rozmiar.width * 0.8,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+          child: ScanView(
+            controller: controller,
+            scanAreaScale: .8,
+            scanLineColor: Colors.green.shade400,
+            onCapture: (data) async {
+              setState(() {
+                scannedValue = data;
+              });
+              controller.pause();
 
-        controller: controller,
-        scanAreaScale: .8,
-        scanLineColor: Colors.green.shade400,
-        onCapture: (data) async {
-          setState(() {
-            scannedValue = data;
-          });
-          controller.pause(); /// Kod wstrzymujcy dziaanie kamery
+              /// Kod wstrzymujcy dziaanie kamery
 
-          /// ... sprawdź czy element jest w bazie i ...
-          var czyWBazie =
-          await szukajAzZnajdziesz(_textEditingController.text.toString());
+              /// ... sprawdź czy element jest w bazie i ...
+              var czyWBazie = await szukajAzZnajdziesz(
+                  _textEditingController.text.toString());
 
-          /// ... w zależności od odopowiedzi odznacz i pokaż odpowiedni komunikat
-          if (czyWBazie)
-          {
-            showTopSnackBar(
-                Overlay.of(context),
-                const CustomSnackBar.success(
-                  message: 'Dodano element do zeskanowanych przedmiotów',
-                ),
-                animationDuration: const Duration(microseconds: 500));
-          } else {
-            showTopSnackBar(
-                Overlay.of(context),
-                const CustomSnackBar.error(
-                  message: 'Elementu nie ma w bazie',
-                ),
-                animationDuration: const Duration(microseconds: 500));
-          }
-          await Future.delayed(const Duration(seconds: 1));
-          controller.resume();
-        },
-      ),
-    ),
-  );
+              /// ... w zależności od odopowiedzi odznacz i pokaż odpowiedni komunikat
+              if (czyWBazie) {
+                showTopSnackBar(
+                    Overlay.of(context),
+                    const CustomSnackBar.success(
+                      message: 'Dodano element do zeskanowanych przedmiotów',
+                    ),
+                    animationDuration: const Duration(microseconds: 500));
+              } else {
+                showTopSnackBar(
+                    Overlay.of(context),
+                    const CustomSnackBar.error(
+                      message: 'Elementu nie ma w bazie',
+                    ),
+                    animationDuration: const Duration(microseconds: 500));
+              }
+              await Future.delayed(const Duration(seconds: 1));
+              controller.resume();
+            },
+          ),
+        ),
+      );
 
   /// Początkowa inicjalizacja ekranu
   @override
@@ -569,8 +594,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   /// Po zeksnaowaniu należy odświerżyć wyświetlane dane w popupach, między
   /// innymi komentarze, i zeskanowane przedmoty
-  void odswierzZeskanowane(){
-
+  void odswierzZeskanowane() {
     liczbaKrzesel = liczGotowe(krzesla);
     liczbaMonitorow = liczGotowe(monitory);
     liczbaBiurek = liczGotowe(biurka);
@@ -583,15 +607,20 @@ class _DemoCamPageState extends State<DemoCamPage> {
         biurkaIdentyfikatory
       ][lista];
       for (int i = 0; i < wybor.length; i++) {
-        identyfikatory[i] = "${(i + 1).toString()}:  ${wybor[i][1].toString()}  ${wybor[i][2].toString()} ${wybor[i][3].toString()}";
+        identyfikatory[i] =
+            "${(i + 1).toString()}:  ${wybor[i][1].toString()}  ${wybor[i][2].toString()} ${wybor[i][3].toString()}";
       }
     }
   }
 
+  Future pobierz() async {
+    przedmiotyDoSkanowania = await pobieraniePrzedmiotow(
+        widget.budynek, widget.pietro, widget.pomieszczenie);
+  }
+
   /// Początkowe wpisanie danych - działa prawie tak jak 'odswierzZeksnowane'
   /// ale inicjalizuje dane, a nie je nadpisuje
-  void przygotujZeskanowane(){
-
+  void przygotujZeskanowane() {
     liczbaKrzesel = liczGotowe(krzesla);
     liczbaMonitorow = liczGotowe(monitory);
     liczbaBiurek = liczGotowe(biurka);
@@ -604,7 +633,8 @@ class _DemoCamPageState extends State<DemoCamPage> {
         biurkaIdentyfikatory
       ][lista];
       for (int i = 0; i < wybor.length; i++) {
-        identyfikatory.add("${(i + 1).toString()}:  ${wybor[i][1].toString()}  ${wybor[i][2].toString()} ${wybor[i][3].toString()}");
+        identyfikatory.add(
+            "${(i + 1).toString()}:  ${wybor[i][1].toString()}  ${wybor[i][2].toString()} ${wybor[i][3].toString()}");
       }
     }
   }
@@ -660,7 +690,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Okienko do wyświetlania popupu do dodania komentarza
   Future commentDialog(naglowek) async {
     odswierzRozmiar = false;
-    controller.pause(); /// Kod wstrzymujcy dziaanie kamery
+    controller.pause();
+
+    /// Kod wstrzymujcy dziaanie kamery
     final wynik = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -681,8 +713,12 @@ class _DemoCamPageState extends State<DemoCamPage> {
       ),
     );
 
-    await dodajKomentarz(scannedValue, wynik); /// dodaj komentarz do przedmiotu
-    _textEditingController.text = ""; /// zresetuj wpisaną wartość
+    await dodajKomentarz(scannedValue, wynik);
+
+    /// dodaj komentarz do przedmiotu
+    _textEditingController.text = "";
+
+    /// zresetuj wpisaną wartość
     odswierzRozmiar = true;
     controller.resume();
   }
@@ -690,7 +726,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Popup do wpisania kodu ręcznie przy próbie skanowania
   Future inputCodeManually() async {
     odswierzRozmiar = false;
-    controller.pause(); /// Kod wstrzymujcy dziaanie kamery /// Kod wstrzymuj
+    controller.pause();
+
+    /// Kod wstrzymujcy dziaanie kamery /// Kod wstrzymuj
     final result = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -730,10 +768,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
     /// O ile wpisano jakiś kod to:
     if (_textEditingController.text != "") {
-
       /// ... sprawdź czy element jest w bazie i ...
       var czyWBazie =
-      await szukajAzZnajdziesz(_textEditingController.text.toString());
+          await szukajAzZnajdziesz(_textEditingController.text.toString());
 
       /// ... w zależności od odopowiedzi odznacz i pokaż odpowiedni komunikat
       if (czyWBazie) {
@@ -794,12 +831,11 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// zmiany pomieszczenia
   Future<String> doZakonczeniaRaportu(BuildContext context) async {
     controller.pause();
-    final result = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const FinishReportPage()));
-    if (result == null){
+    final result = await Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const FinishReportPage()));
+    if (result == null) {
       controller.resume();
-    }
-    else{
+    } else {
       dispose();
     }
     return result;
@@ -811,14 +847,13 @@ class _DemoCamPageState extends State<DemoCamPage> {
   Future<List<int>?> doZmianyPomieszczenia(BuildContext context) async {
     final result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ChangePlacePage(
-          budynek: budynek,
-          pietro: pietro,
-          pomieszczenie: pomieszczenie,
-          listaBudynkow: widget.listaBudynkow,
-          listaPieter: widget.listaPieter,
-          listaPomieszczen: widget.listaPomieszczen,
-        )));
+              budynek: budynek,
+              pietro: pietro,
+              pomieszczenie: pomieszczenie,
+              listaBudynkow: widget.listaBudynkow,
+              listaPieter: widget.listaPieter,
+              listaPomieszczen: widget.listaPomieszczen,
+            )));
     return result;
   }
-
 }

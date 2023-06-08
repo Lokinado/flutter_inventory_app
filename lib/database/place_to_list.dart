@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 
 /// Funkcja zwracająca dwie listy, budynków i numerów budynków;
@@ -49,21 +50,19 @@ Future pobierzPomieszczenia(
 
 /// Funkcja pobierająca informacj o lokaliczacji pomieszczenia i zwracająca
 /// tablicę elementów znajdujących się w tym pomieszczeniu
-Future pobieraniePrzedmiotow(
+Future<Map<String, Map<String, dynamic>>> pobieraniePrzedmiotow(
     wybranyBudynekId, wybranePietroId, wybranePomId) async {
   var collection = await FirebaseFirestore.instance.collection(
-      "/Building/$wybranyBudynekId/Floor/$wybranePietroId/Rooms/$wybranePietroId");
+      "/Building/$wybranyBudynekId/Floors/$wybranePietroId/Rooms/$wybranePomId/Items").get();
 
-  var querySnapshot = await collection.get();
+  print("Kolekcja");
+  print(collection);
 
-  List<List<String>> pom = [];
+  Map<String, Map<String, dynamic>> rzeczy = {};
 
-  for (var doc in querySnapshot.docs) {
-    var dane = doc.data();
-    List<String> item = [];
-    item.add(dane["typ"].toString());
-    item.add(dane["typ"].toString());
-    pom.add(item);
+  for (var doc in collection.docs) {
+    rzeczy[doc.id] = doc.data();
   }
-  print(pom);
+
+  return rzeczy;
 }
