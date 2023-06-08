@@ -26,8 +26,8 @@ Future pobierzBudynki() async {
 
   for (var doc in querySnapshot.docs) {
     Map<String, dynamic> data = doc.data();
-    String budynek = data['name'];
-    String id = data['id'];
+    String budynek = data['Nazwa'];
+    String id = data['Nazwa'];
     List<String> lista = [budynek, id];
     bud.add(lista);
     lisbud.add(budynek);
@@ -55,8 +55,8 @@ Future<List<dynamic>> pobierzPietra(wybranyBudynekId) async {
 
   for (var doc in querySnapshot.docs) {
     Map<String, dynamic> data = doc.data();
-    String pietro = data['name'];
-    String id = data['id'];
+    String pietro = data['Nazwa'];
+    String id = data['Nazwa'];
     List<String> lista = [pietro, id];
     pietra.add(lista);
     numpietra.add(pietro);
@@ -82,8 +82,8 @@ Future<List<dynamic>> pobierzPomieszczenia(
 
   for (var doc in querySnapshot.docs) {
     Map<String, dynamic> data = doc.data();
-    String pomieszczenie = data['name'];
-    String id = data['id'];
+    String pomieszczenie = data['Nazwa'];
+    String id = data['Nazwa'];
     List<String> lista = [pomieszczenie, id];
     pom.add(lista);
     numPom.add(pomieszczenie);
