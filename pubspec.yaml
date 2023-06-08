@@ -47,6 +47,14 @@ dependencies:
   cloud_firestore: ^4.7.1
   firebase_database: ^10.2.2
   pdf: ^3.10.1
+  path_provider: ^2.0.5
+  printing: ^5.10.4
+  barcode_widget: ^2.0.4 
+  barcode_flutter: ^1.1.2
+  barcode_image: ^2.0.3
+  flutter_barcode_scanner: ^2.0.0
+  flutter_barcode: ^0.0.2 
+
 
 dev_dependencies:
   flutter_test:
