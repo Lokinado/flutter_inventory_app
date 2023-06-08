@@ -796,6 +796,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
     if (result == null){
       controller.resume();
     }
+    else{
+      dispose();
+    }
     return result;
   }
 

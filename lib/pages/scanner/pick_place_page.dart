@@ -75,8 +75,6 @@ class _PickPlaceState extends State<PickPlace>
     if (!zaiZmienPocz) {
       space = 20;
       inicjalizujBudynki();
-      print(listaBudynkow);
-      print(numeryBudynkow);
       zaiZmienPocz = true;
     }
 
@@ -145,7 +143,7 @@ class _PickPlaceState extends State<PickPlace>
                                   items: numeryBudynkow,
                                 );
                                 if (wyborBudynku != null) {
-                                  var value = int.parse(wyborBudynku);
+                                  var value = int.parse(wyborBudynku); // wybrany budynek
                                   int index = znajdzNaLiscie(listaBudynkow, wyborBudynku);
                                   budynekId = listaBudynkow[index][1];
                                   setState(() {
@@ -155,7 +153,8 @@ class _PickPlaceState extends State<PickPlace>
                                       pomieszczenie = 0;
                                     }
                                   });
-                                  var tmp = await pobierzPietra(budynekId);
+                                  print(listaBudynkow[index][1]);
+                                  var tmp = await pobierzPietra(listaBudynkow[index][1]);
                                   listaPieter = tmp[0];
                                   numeryPietra = tmp[1];
                                 }
@@ -378,5 +377,7 @@ class _PickPlaceState extends State<PickPlace>
     List<dynamic> x = await pobierzBudynki();
     listaBudynkow = x[0];
     numeryBudynkow = x[1];
+    print(listaBudynkow);
+    print(numeryBudynkow);
   }
 }

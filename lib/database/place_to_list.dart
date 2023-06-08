@@ -1,10 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 /// Ten plik jest odpowiedzialny za pobieranie informacji nt budynków, pięter
 /// lub sal - pobrane wyniki są zwracane jako listy danych
 /// zostaje on użyty w pick_place_page.dart i change_place_page.dart
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Funkcja znajduąca
+/// Funkcja znajduąca indeks danego elementu na liście, wiedząc którą listę
+/// trzeba przejrzeć, i jaki numer jest szukany
 int znajdzNaLiscie(List lista, wartosc) {
   for (int i = 0; i < lista.length; i++) {
     if (lista[i][0].contains(wartosc)) {
@@ -37,7 +37,7 @@ Future pobierzBudynki() async {
   // pierwsza lista (bud) przechowuje listy obu produktów
   // [ ["30" , "u092y4tqhasfda9hg4hv"] , ["12", "q7byv3tw97ybvaycbq8"] ... ]
   // druga (lisbud) przechowuje tylko kolejne numery
-  // [ "40" , "41" ...]
+  // [ "30" , "12" ...]
   return [bud, lisbud];
 }
 
