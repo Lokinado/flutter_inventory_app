@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/components/element_styling.dart';
 import 'package:inventory_app/components/color_palette.dart';
 import 'package:list_picker/list_picker.dart';
+import 'package:inventory_app/database/place_to_list.dart';
 
 class ChangePlacePage extends StatefulWidget {
   const ChangePlacePage({

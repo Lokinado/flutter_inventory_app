@@ -284,8 +284,14 @@ class _PickPlaceState extends State<PickPlace>
                                     items: numeryPomieszczen,
                                   );
                                   if (wyborPomieszczenia != null) {
+                                    var value = int.parse(wyborPomieszczenia);
+                                    int index = znajdzNaLiscie(listaPieter, wyborPomieszczenia);
+                                    pomieszczenieId = listaPomieszczen[index][1];
                                     setState(() {
-                                      pomieszczenie = int.parse(wyborPomieszczenia);
+                                      if (pietro != value) {
+                                        pietro = value;
+                                        pomieszczenie = 0;
+                                      }
                                     });
                                   }
                                 }
@@ -364,6 +370,9 @@ class _PickPlaceState extends State<PickPlace>
                 budynek: budynek,
                 pietro: pietro,
                 pomieszczenie: pomieszczenie,
+                BudynekId: "tCcgecxaxzaobA80wSZs",
+                PietroId: "L2PROdsLrmpmtuIrQDre",
+                PomieszczenieId: "ehYMF94v6peKTUxQOTmt",
                 listaBudynkow: numeryBudynkow,
                 listaPieter: numeryPietra,
                 listaPomieszczen: numeryPomieszczen,

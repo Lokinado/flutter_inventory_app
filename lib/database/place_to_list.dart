@@ -86,3 +86,19 @@ Future<List<dynamic>> pobierzPomieszczenia(
   // tak jak przy poprzednich funkcjach
   return [pom, numPom];
 }
+
+Future pobieraniePrzedmiotow(
+    wybranyBudynekId, wybranePietroId, wybranePomId) async {
+  var collection = await FirebaseFirestore.instance.collection(
+      "/Building/$wybranyBudynekId/Floor/$wybranePietroId/Rooms/");
+
+  var querySnapshot = await collection.get();
+
+  List<String> pom = [];
+
+  for (var doc in querySnapshot.docs) {
+    pom.add(doc.id.toString());
+  }
+
+  print(pom);
+}

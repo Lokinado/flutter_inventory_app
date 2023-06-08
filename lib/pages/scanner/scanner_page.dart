@@ -10,6 +10,7 @@ import 'package:scan/scan.dart';
 import 'package:inventory_app/components/element_styling.dart';
 import 'package:inventory_app/pages/scanner/finish_report.dart';
 import 'package:inventory_app/pages/scanner/change_place.dart';
+import 'package:inventory_app/database/place_to_list.dart';
 
 
 class DemoCamPage extends StatefulWidget {
@@ -18,6 +19,9 @@ class DemoCamPage extends StatefulWidget {
     required this.budynek,
     required this.pietro,
     required this.pomieszczenie,
+    required this.BudynekId,
+    required this.PietroId,
+    required this.PomieszczenieId,
     required this.listaBudynkow,
     required this.listaPieter,
     required this.listaPomieszczen,
@@ -26,6 +30,9 @@ class DemoCamPage extends StatefulWidget {
   final int budynek;
   final int pietro;
   final int pomieszczenie;
+  final String BudynekId;
+  final String PietroId;
+  final String PomieszczenieId;
   final List<String> listaBudynkow;
   final List<String> listaPieter;
   final List<String> listaPomieszczen;
@@ -555,6 +562,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
   void initState() {
     super.initState();
     _textEditingController = TextEditingController();
+    pobieraniePrzedmiotow(widget.BudynekId, widget.PietroId, widget.PomieszczenieId);
   }
 
   /// Usuwanie stanu ekranu po wyjściu
