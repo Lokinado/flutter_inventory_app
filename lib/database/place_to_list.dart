@@ -1,27 +1,12 @@
-/// Ten plik jest odpowiedzialny za pobieranie informacji nt budynków, pięter
-/// lub sal - pobrane wyniki są zwracane jako listy danych
-/// zostaje on użyty w pick_place_page.dart i change_place_page.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Funkcja znajduąca indeks danego elementu na liście, wiedząc którą listę
-/// trzeba przejrzeć, i jaki numer jest szukany
-int znajdzNaLiscie(List lista, wartosc) {
-  for (int i = 0; i < lista.length; i++) {
-    if (lista[i][0].contains(wartosc)) {
-      return i;
-    }
-  }
-  return -1;
-}
 
 /// Funkcja zwracająca dwie listy, budynków i numerów budynków;
 /// pierwsza zwraca listę list, gdzie każdy element to lista skłądająca się
 /// z nazwy budynku i jego identyfikatora, a druga zwraca listę samych numerów
 Future pobierzBudynki() async {
-  var collection = FirebaseFirestore.instance.collection('Building');
-  var querySnapshot = await collection.get();
+  var listaBudynkow = await FirebaseFirestore.instance.collection('Building').get();
 
-  List<List<String>> bud = [];
   List<String> lisbud = [];
 
   for (var doc in querySnapshot.docs) {
@@ -33,24 +18,15 @@ Future pobierzBudynki() async {
     lisbud.add(budynek);
   }
 
-  // to ma zwracać listę z dwoma listami
-  // pierwsza lista (bud) przechowuje listy obu produktów
-  // [ ["30" , "u092y4tqhasfda9hg4hv"] , ["12", "q7byv3tw97ybvaycbq8"] ... ]
-  // druga (lisbud) przechowuje tylko kolejne numery
-  // [ "30" , "12" ...]
-  return [bud, lisbud];
+  return lisbud;
 }
 
-/// Funkcja pobierająca informację o wybranym piętrze, i zwracająca dwie
-/// listy z informacjami nt. kolejnych pięter
-Future<List<dynamic>> pobierzPietra(wybranyBudynekId) async {
-  var collection = FirebaseFirestore.instance
-      .collection('Building')
-      .doc(wybranyBudynekId)
-      .collection('Floor');
-  var querySnapshot = await collection.get();
+/// Funkcja pobierająca informację o wybranym budynku, i zwracająca tablicę
+/// napisów reprezentujących numerów pięter (przygotowanie na nr. piętra z lierą)
+Future pobierzPietra(wybranyBudynekId) async {
+  var listaPomie = await FirebaseFirestore.instance
+      .collection("/Building/$wybranyBudynekId/Floors").get();
 
-  List<List<String>> pietra = [];
   List<String> numpietra = [];
 
   for (var doc in querySnapshot.docs) {
@@ -61,24 +37,36 @@ Future<List<dynamic>> pobierzPietra(wybranyBudynekId) async {
     pietra.add(lista);
     numpietra.add(pietro);
   }
-  // podobnie jak w  funkcji o budynkach
-  return [pietra, numpietra];
+
+  return numpietra;
 }
 
-/// Funkcja pobierając informacje nt. pomieszczeń, znajdujących się w danym
-/// budynku, na danym piętrze
-Future<List<dynamic>> pobierzPomieszczenia(
+/// Funkcja pobierająca informację o wybranym budynku i piętrze, a zwracająca
+/// listę pomieszczeń, w tym budynku, na tym piętrze
+Future pobierzPomieszczenia(
     wybranyBudynekId, wybranePietroId) async {
-  var collection = FirebaseFirestore.instance
-      .collection('Building')
-      .doc(wybranyBudynekId)
-      .collection('Floors')
-      .doc(wybranePietroId)
-      .collection('Rooms');
+  var listaPom = await FirebaseFirestore.instance
+      .collection("/Building/$wybranyBudynekId/Floors/$wybranePietroId/Rooms").get();
+
+  List<String> numPom = [];
+
+  for (var doc in listaPom.docs) {
+    numPom.add(doc.id.toString());
+  }
+
+  return numPom;
+}
+
+/// Funkcja pobierająca informacj o lokaliczacji pomieszczenia i zwracająca
+/// tablicę elementów znajdujących się w tym pomieszczeniu
+Future pobieraniePrzedmiotow(
+    wybranyBudynekId, wybranePietroId, wybranePomId) async {
+  var collection = await FirebaseFirestore.instance.collection(
+      "/Building/$wybranyBudynekId/Floor/$wybranePietroId/Rooms/$wybranePietroId");
+
   var querySnapshot = await collection.get();
 
-  List<dynamic> pom = [];
-  List<dynamic> numPom = [];
+  List<List<String>> pom = [];
 
   for (var doc in querySnapshot.docs) {
     Map<String, dynamic> data = doc.data();
@@ -88,6 +76,5 @@ Future<List<dynamic>> pobierzPomieszczenia(
     pom.add(lista);
     numPom.add(pomieszczenie);
   }
-  // tak jak przy poprzednich funkcjach
-  return [pom, numPom];
+  print(pom);
 }

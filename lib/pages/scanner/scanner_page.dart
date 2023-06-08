@@ -10,6 +10,7 @@ import 'package:scan/scan.dart';
 import 'package:inventory_app/components/element_styling.dart';
 import 'package:inventory_app/pages/scanner/finish_report.dart';
 import 'package:inventory_app/pages/scanner/change_place.dart';
+import 'package:inventory_app/database/place_to_list.dart';
 
 
 class DemoCamPage extends StatefulWidget {
@@ -23,9 +24,9 @@ class DemoCamPage extends StatefulWidget {
     required this.listaPomieszczen,
   }) : super(key: key);
 
-  final int budynek;
-  final int pietro;
-  final int pomieszczenie;
+  final String budynek;
+  final String pietro;
+  final String pomieszczenie;
   final List<String> listaBudynkow;
   final List<String> listaPieter;
   final List<String> listaPomieszczen;
@@ -69,9 +70,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
   // NIE DA SIĘ MODYFIKOWAĆ, WIĘC TRZEBA MIEĆ ODDZIELNY ZESTAW
   // do tych przekazywanch w parametrach dostajemy się poprzez 'widget. ...'
 
-  late int budynek; /// Wybrany przez użytkownika budynek
-  late int pietro; /// Wybrane przez użytkownika pietro
-  late int pomieszczenie; /// Wybrane przez użytkownika pomieszczenie
+  late String budynek; /// Wybrany przez użytkownika budynek
+  late String pietro; /// Wybrane przez użytkownika pietro
+  late String pomieszczenie; /// Wybrane przez użytkownika pomieszczenie
 
   late String scannedValue; /// Zeskanowan wartość
 
@@ -427,9 +428,11 @@ class _DemoCamPageState extends State<DemoCamPage> {
                           if (!((budynek == wynik[0]) &&
                               (pietro == wynik[1]) &&
                               (pomieszczenie == wynik[2]))) {
-                            budynek = wynik[0];
-                            pietro = wynik[1];
-                            pomieszczenie = wynik[2];
+
+                            budynek = wynik[0].toString();
+                            pietro = wynik[1].toString();
+                            pomieszczenie = wynik[2].toString();
+
                             inicjalizujDane = true;
                           }
                         });
@@ -465,9 +468,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
                         if (!((budynek == wynik[0]) &&
                             (pietro == wynik[1]) &&
                             (pomieszczenie == wynik[2]))) {
-                          budynek = wynik[0];
-                          pietro = wynik[1];
-                          pomieszczenie = wynik[2];
+                          budynek = wynik[0].toString();
+                          pietro = wynik[1].toString();
+                          pomieszczenie = wynik[2].toString();
                           inicjalizujDane = true;
                         }
                       });
@@ -808,9 +811,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
   Future<List<int>?> doZmianyPomieszczenia(BuildContext context) async {
     final result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ChangePlacePage(
-          budynek: widget.budynek,
-          pietro: widget.pietro,
-          pomieszczenie: widget.pomieszczenie,
+          budynek: budynek,
+          pietro: pietro,
+          pomieszczenie: pomieszczenie,
           listaBudynkow: widget.listaBudynkow,
           listaPieter: widget.listaPieter,
           listaPomieszczen: widget.listaPomieszczen,

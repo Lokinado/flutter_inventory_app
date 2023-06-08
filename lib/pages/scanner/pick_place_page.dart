@@ -31,27 +31,19 @@ class _PickPlaceState extends State<PickPlace>
 
   // !!! funkcje znajdują się na dole stony !!!
 
-  List<List<String>> listaBudynkow = [];
-  List<List<String>> listaPieter = [];
-  List<List<String>> listaPomieszczen = [];
-
-  List<String> numeryBudynkow = [];
-  List<String> numeryPietra = [];
-  List<String> numeryPomieszczen = [];
+  List<String> listaBudynkow = [];
+  List<String> listaPieter = [];
+  List<String> listaPomieszczen = [];
 
 
   /// Wybrany budynek
-  int budynek = 0;
-  late String budynekId;
+  String budynek = "";
 
   /// Wybrane pietro
-  var pietro = 0;
-  late String pietroId;
+  String pietro  = "";
 
   /// Wybrane pomieszczenie
-  var pomieszczenie = 0;
-  late String pomieszczenieId;
-
+  String pomieszczenie = "";
 
   var zaiZmienPocz = false;
 
@@ -122,8 +114,7 @@ class _PickPlaceState extends State<PickPlace>
                                 borderRadius: BorderRadius.circular(roundness),
                                 color: zielonySGGW),
                             child: Text(
-                              // Podstawienie wybranego numeru jeśli > 0
-                              "${budynek > 0 ? budynek : ""}",
+                              budynek,
                               style: const TextStyle(
                                   fontSize: 22, color: Colors.white),
                             ),
@@ -140,23 +131,18 @@ class _PickPlaceState extends State<PickPlace>
                                 String? wyborBudynku = await showPickerDialog(
                                   context: context,
                                   label: "Budynek",
-                                  items: numeryBudynkow,
+                                  items: listaBudynkow,
                                 );
                                 if (wyborBudynku != null) {
-                                  var value = int.parse(wyborBudynku); // wybrany budynek
-                                  int index = znajdzNaLiscie(listaBudynkow, wyborBudynku);
-                                  budynekId = listaBudynkow[index][1];
                                   setState(() {
-                                    if (budynek != value) {
-                                      budynek = value;
-                                      pietro = 0;
-                                      pomieszczenie = 0;
+                                    // wybrano wartość inną niż wpisana => reset
+                                    if (budynek != wyborBudynku) {
+                                      budynek = wyborBudynku;
+                                      pietro = "";
+                                      pomieszczenie = "";
                                     }
                                   });
-                                  print(listaBudynkow[index][1]);
-                                  var tmp = await pobierzPietra(listaBudynkow[index][1]);
-                                  listaPieter = tmp[0];
-                                  numeryPietra = tmp[1];
+                                  listaPieter = await pobierzPietra(budynek);
                                 }
                               },
                               child: const Text(
@@ -187,11 +173,11 @@ class _PickPlaceState extends State<PickPlace>
                             height: numberBoxSize,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(roundness),
-                                color: budynek != 0
+                                color: budynek != ""
                                     ? zielonySGGW
                                     : zielonySlabaSGGW),
                             child: Text(
-                              "${pietro > 0 ? pietro : ""}",
+                              pietro,
                               style: const TextStyle(
                                   fontSize: 22, color: Colors.white),
                             ),
@@ -203,27 +189,25 @@ class _PickPlaceState extends State<PickPlace>
                             width: szerokoscPrzycisku,
                             height: 60.0,
                             child: ElevatedButton(
-                              style: budynek != 0
+                              style: budynek != ""
                                   ? leftTextActive
                                   : leftTextNotActive,
                               onPressed: () async {
-                                if (budynek != 0) {
+                                if (budynek != "") {
                                   String? wyborPietra = await showPickerDialog(
                                     context: context,
-                                    label: "",
-                                    items: numeryPietra,
+                                    label: "Piętro",
+                                    items: listaPieter,
                                   );
                                   if (wyborPietra != null) {
-                                    var value = int.parse(wyborPietra);
-                                    int index = znajdzNaLiscie(listaPieter, wyborPietra);
-                                    pietroId = listaPieter[index][1];
                                     setState(() {
-                                      if (pietro != value) {
-                                        pietro = value;
-                                        pomieszczenie = 0;
+                                      // wybrano wartość inną niż wpisana => reset
+                                      if (pietro != wyborPietra) {
+                                        pietro = wyborPietra;
+                                        pomieszczenie = "";
                                       }
                                     });
-                                    await pobierzPomieszczenia(budynekId, pietroId);
+                                    listaPomieszczen = await pobierzPomieszczenia(budynek, pietro);
                                   }
                                 }
                               },
@@ -255,11 +239,11 @@ class _PickPlaceState extends State<PickPlace>
                             height: numberBoxSize,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(roundness),
-                                color: pietro != 0
+                                color: pietro != ""
                                     ? zielonySGGW
                                     : zielonySlabaSGGW),
                             child: Text(
-                              "${pomieszczenie > 0 ? pomieszczenie : ""}",
+                              pomieszczenie,
                               style: const TextStyle(
                                   fontSize: 22, color: Colors.white),
                             ),
@@ -271,21 +255,23 @@ class _PickPlaceState extends State<PickPlace>
                             width: szerokoscPrzycisku,
                             height: 60.0,
                             child: ElevatedButton(
-                              style: pietro != 0 && budynek != 0
+                              style: pietro != "" && budynek != ""
                                   ? leftTextActive
                                   : leftTextNotActive,
                               onPressed: () async {
-                                if (pietro != 0) {
+                                if (pietro != "") {
                                   String? wyborPomieszczenia =
                                       await showPickerDialog(
                                     context: context,
-                                    label: "Budynek",
-                                    items: numeryPomieszczen,
+                                    label: "Pomieszczenie",
+                                    items: listaPomieszczen,
                                   );
                                   if (wyborPomieszczenia != null) {
                                     setState(() {
-                                      pomieszczenie =
-                                          int.parse(wyborPomieszczenia);
+                                      // wybrano wartość inną niż wpisana => reset
+                                      if (pomieszczenie != wyborPomieszczenia) {
+                                        pomieszczenie = wyborPomieszczenia;
+                                      }
                                     });
                                   }
                                 }
@@ -311,20 +297,20 @@ class _PickPlaceState extends State<PickPlace>
                       width: rozmiar.width - 40,
                       height: 60.0,
                       child: ElevatedButton(
-                        style: pietro > 0
+                        style: pietro != ""
                             ? centerTextActive
                             : centerTextNotActive,
                         onPressed: () async {
-                          if (pietro >= 0) {
+                          if (pietro != "") {
                             var wynik =
                                 await doSkanowaniaPomieszczenia(context);
                             if (wynik != null) {
                               if (wynik == "reset") {
                                 setState(() {
                                   //inicjalizujPusteDane();
-                                  budynek = 0;
-                                  pietro = 0;
-                                  pomieszczenie = 0;
+                                  budynek = "";
+                                  pietro = "";
+                                  pomieszczenie = "";
                                 });
                               }
                             }
@@ -364,9 +350,9 @@ class _PickPlaceState extends State<PickPlace>
                 budynek: budynek,
                 pietro: pietro,
                 pomieszczenie: pomieszczenie,
-                listaBudynkow: numeryBudynkow,
-                listaPieter: numeryPietra,
-                listaPomieszczen: numeryPomieszczen,
+                listaBudynkow: listaBudynkow,
+                listaPieter: listaPieter,
+                listaPomieszczen: listaPomieszczen,
               )),
     );
     return result;
@@ -374,10 +360,6 @@ class _PickPlaceState extends State<PickPlace>
 
   /// Dodatkowa funkcja do wywołania funkcji pobierającej listę budynków
   Future inicjalizujBudynki() async {
-    List<dynamic> x = await pobierzBudynki();
-    listaBudynkow = x[0];
-    numeryBudynkow = x[1];
-    print(listaBudynkow);
-    print(numeryBudynkow);
+    listaBudynkow = await pobierzBudynki();
   }
 }
