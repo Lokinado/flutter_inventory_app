@@ -1,18 +1,5 @@
-/// Ten plik jest odpowiedzialny za pobieranie informacji nt budynków, pięter
-/// lub sal - pobrane wyniki są zwracane jako listy danych
-/// zostaje on użyty w pick_place_page.dart i change_place_page.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Funkcja znajduąca indeks danego elementu na liście, wiedząc którą listę
-/// trzeba przejrzeć, i jaki numer jest szukany
-int znajdzNaLiscie(List lista, wartosc) {
-  for (int i = 0; i < lista.length; i++) {
-    if (lista[i][0].contains(wartosc)) {
-      return i;
-    }
-  }
-  return -1;
-}
 
 /// Funkcja zwracająca dwie listy, budynków i numerów budynków;
 /// pierwsza zwraca listę list, gdzie każdy element to lista skłądająca się
@@ -60,6 +47,8 @@ Future pobierzPomieszczenia(
   return numPom;
 }
 
+/// Funkcja pobierająca informacj o lokaliczacji pomieszczenia i zwracająca
+/// tablicę elementów znajdujących się w tym pomieszczeniu
 Future pobieraniePrzedmiotow(
     wybranyBudynekId, wybranePietroId, wybranePomId) async {
   var collection = await FirebaseFirestore.instance.collection(
