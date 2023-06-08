@@ -15,9 +15,9 @@ class ChangePlacePage extends StatefulWidget {
     required this.listaPomieszczen,
   }) : super(key: key);
 
-  final int budynek;
-  final int pietro;
-  final int pomieszczenie;
+  final String budynek;
+  final String pietro;
+  final String pomieszczenie;
   final List<String> listaBudynkow;
   final List<String> listaPieter;
   final List<String> listaPomieszczen;
@@ -33,9 +33,9 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
   /// Przechowuje rezultat wyskakujacych popupowych okienek
   late TextEditingController _textEditingController;
 
-  late int budynek; /// Wybrany przez użytkownika budynek
-  late int pietro; /// Wybrane przez użytkownika pietro
-  late int pomieszczenie; /// Wybrane przez użytkownika pomieszczenie
+  late String budynek; /// Wybrany przez użytkownika budynek
+  late String pietro; /// Wybrane przez użytkownika pietro
+  late String pomieszczenie; /// Wybrane przez użytkownika pomieszczenie
 
   var inicjalizujDane = true; /// Utworzeni / pobranie danych do / z bazy
 
@@ -113,7 +113,7 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                               color: zielonySGGW),
                           child: Text(
                             // Podstawienie wybranego numeru jeśli > 0
-                            "${budynek > 0 ? budynek : ""}",
+                            budynek,
                             style: const TextStyle(
                                 fontSize: 22, color: Colors.white),
                           ),
@@ -134,12 +134,11 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                                 items: widget.listaBudynkow,
                               );
                               if (wyborBudynku != null) {
-                                var value = int.parse(wyborBudynku);
                                 setState(() {
-                                  if (budynek != value) {
-                                    budynek = value;
-                                    pietro = 0;
-                                    pomieszczenie = 0;
+                                  if (budynek != "value") {
+                                    budynek = wyborBudynku;
+                                    pietro = "";
+                                    pomieszczenie = "";
                                   }
                                 });
                               }
@@ -172,11 +171,11 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                           height: numberBoxSize,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(roundness),
-                              color: budynek != 0
+                              color: budynek != ""
                                   ? zielonySGGW
                                   : zielonySlabaSGGW),
                           child: Text(
-                            "${pietro > 0 ? pietro : ""}",
+                            pietro,
                             style: const TextStyle(
                                 fontSize: 22, color: Colors.white),
                           ),
@@ -188,22 +187,21 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                           width: szerokoscPrzycisku,
                           height: numberBoxSize,
                           child: ElevatedButton(
-                            style: budynek != 0
+                            style: budynek != ""
                                 ? leftTextActive
                                 : leftTextNotActive,
                             onPressed: () async {
-                              if (budynek != 0) {
+                              if (budynek != "") {
                                 String? wyborPietra = await showPickerDialog(
                                   context: context,
                                   label: "piętro",
                                   items: widget.listaPieter,
                                 );
                                 if (wyborPietra != null) {
-                                  var value = int.parse(wyborPietra);
                                   setState(() {
-                                    if (pietro != value) {
-                                      pietro = value;
-                                      pomieszczenie = 0;
+                                    if (pietro != wyborPietra) {
+                                      pietro = wyborPietra;
+                                      pomieszczenie = "";
                                     }
                                   });
                                 }
@@ -238,9 +236,9 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(roundness),
                               color:
-                                  pietro != 0 ? zielonySGGW : zielonySlabaSGGW),
+                                  pietro != "" ? zielonySGGW : zielonySlabaSGGW),
                           child: Text(
-                            "${pomieszczenie > 0 ? pomieszczenie : ""}",
+                            pomieszczenie,
                             style: const TextStyle(
                                 fontSize: 22, color: Colors.white),
                           ),
@@ -252,11 +250,11 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                           width: szerokoscPrzycisku,
                           height: numberBoxSize,
                           child: ElevatedButton(
-                            style: pietro != 0 && budynek != 0
+                            style: pietro != "" && budynek != ""
                                 ? leftTextActive
                                 : leftTextNotActive,
                             onPressed: () async {
-                              if (pietro != 0) {
+                              if (pietro != "") {
                                 String? wyborPomieszczenia =
                                     await showPickerDialog(
                                   context: context,
@@ -265,8 +263,7 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                                 );
                                 if (wyborPomieszczenia != null) {
                                   setState(() {
-                                    pomieszczenie =
-                                        int.parse(wyborPomieszczenia);
+                                    pomieszczenie = wyborPomieszczenia;
                                   });
                                 }
                               }
@@ -321,7 +318,7 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                   /// Podłączony przycisk zatwierdzenia zmiany pomieszczenia
                   GestureDetector(
                     onTap: () {
-                      if (pomieszczenie > 0) {
+                      if (pomieszczenie != "") {
                         Navigator.of(context)
                             .pop([budynek, pietro, pomieszczenie]);
                       }
@@ -331,7 +328,7 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                       width: rozmiar.width * 0.53,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: pomieszczenie > 0
+                        color: pomieszczenie != ""
                             ? Colors.green
                             : Colors.green.shade200,
                         borderRadius: BorderRadius.circular(20),
@@ -340,7 +337,7 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                         "Zmiana",
                         style: TextStyle(
                             fontSize: elementsOffset * 1.2,
-                            color: pomieszczenie > 0
+                            color: pomieszczenie != ""
                                 ? Colors.black
                                 : Colors.black.withOpacity(0.4),
                             fontWeight: FontWeight.w500),
