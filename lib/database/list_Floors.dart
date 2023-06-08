@@ -60,7 +60,7 @@ class _ListFloorsState extends State<ListFloors> {
                               ),
                               child: ListTile(
                                 title: Text(
-                                  floor.name,
+                                  'Piętro ' +floor.name,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 24,

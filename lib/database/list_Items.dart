@@ -1,22 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'globalsClasses.dart';
-import 'package:inventory_app/database/edit_Item.dart';
+import 'package:inventory_app/database/show_Item.dart';
 
 class DisplayItems extends StatelessWidget {
   final String buildingId;
   final String floorId;
   final String roomId;
-  final String itemTypeId;
-  final String itemTypeName;
+  final String roomName;
 
   const DisplayItems({
     Key? key,
     required this.buildingId,
     required this.floorId,
     required this.roomId,
-    required this.itemTypeId,
-    required this.itemTypeName,
+    required this.roomName
   }) : super(key: key);
 
   @override
@@ -24,7 +22,18 @@ class DisplayItems extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(0, 50, 39, 1),
-        title: Text(itemTypeName),
+        title: Text('Przedmioty z pomieszczenia ' + roomName,
+         style: TextStyle(fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+          shadows: [
+                      Shadow(
+                        color: Colors.grey,
+                        blurRadius: 0.1,
+                      ),
+          ],
+       ),
+         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -45,40 +54,44 @@ class DisplayItems extends StatelessWidget {
               return ListView(
                 children: items!
                     .map((item) => Card(
-                  color: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: ListTile(
-                    title: Center(
-                      child: Text(
-                        '${item.name} \n ${item.barcode}',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditItem(
-                            name: item.name,
-                            roomId: roomId,
-                            floorId: floorId,
-                            itemTypeId: itemTypeId,
-                            itemTypeName: itemTypeName,
-                            itemId: item.id,
-                            comment: item.comment,
-                            barcode: item.barcode,
+                          color: Colors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                ))
+                          child: ListTile(
+                            title: Center(
+                              child: Text(
+                                '${item.name} \n  barcode: ${item.barcode}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                      Shadow(
+                        color: Colors.grey,
+                        blurRadius: 0.1,
+                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ShowItem(
+                                    name: item.name,
+                                    roomId: roomId,
+                                    floorId: floorId,
+                                    itemId: item.id,
+                                    comment: item.comment,
+                                    barcode: item.barcode,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ))
                     .toList(),
               );
             } else {
@@ -97,10 +110,8 @@ class DisplayItems extends StatelessWidget {
       .doc(floorId)
       .collection('Rooms')
       .doc(roomId)
-      .collection('ItemTypes')
-      .doc(itemTypeId)
       .collection('Item')
       .snapshots()
       .map((snapshot) =>
-      snapshot.docs.map((doc) => Item.fromJson(doc.data())).toList());
+          snapshot.docs.map((doc) => Item.fromJson(doc.data())).toList());
 }

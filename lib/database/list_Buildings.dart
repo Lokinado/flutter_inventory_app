@@ -51,7 +51,7 @@ class _ListBuildingsState extends State<ListBuildings> {
                                   ),
                                   child: ListTile(
                                     title: Text(
-                                      building.name,
+                                       'Budynek ' + building.name,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: 24,

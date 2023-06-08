@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_app/database/globalsClasses.dart';
 import 'package:inventory_app/database/edit_Room.dart';
-import 'package:inventory_app/database/list_ItemTypes.dart';
+import 'package:inventory_app/database/list_Items.dart';
 
 class DisplayRooms extends StatefulWidget {
   final String buildingId;
@@ -36,10 +36,11 @@ class _ListRoomsState extends State<DisplayRooms> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DisplayItemsType(
+                      builder: (context) => DisplayItems(
                         buildingId:widget.buildingId,
                         floorId: widget.floorId,
-                        roomId: room.id, roomName: room.name,
+                        roomId: room.id, 
+                        roomName: room.name,
 
                       ),
                     ),
@@ -55,7 +56,7 @@ class _ListRoomsState extends State<DisplayRooms> {
                   ),
                   child: Center(
                     child: Text(
-                      room.name,
+                      'Pomieszczenie ' +room.name,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
