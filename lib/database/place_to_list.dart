@@ -45,9 +45,7 @@ Future pobierzBudynki() async {
 /// listy z informacjami nt. kolejnych pięter
 Future<List<dynamic>> pobierzPietra(wybranyBudynekId) async {
   var collection = FirebaseFirestore.instance
-      .collection('Building')
-      .doc(wybranyBudynekId)
-      .collection('Floor');
+      .collection("/Building/$wybranyBudynekId/Floor");
   var querySnapshot = await collection.get();
 
   List<List<String>> pietra = [];
@@ -69,16 +67,12 @@ Future<List<dynamic>> pobierzPietra(wybranyBudynekId) async {
 /// budynku, na danym piętrze
 Future<List<dynamic>> pobierzPomieszczenia(
     wybranyBudynekId, wybranePietroId) async {
-  var collection = FirebaseFirestore.instance
-      .collection('Building')
-      .doc(wybranyBudynekId)
-      .collection('Floors')
-      .doc(wybranePietroId)
-      .collection('Rooms');
+  var collection = await FirebaseFirestore.instance
+      .collection("/Building/$wybranyBudynekId/Floor/$wybranePietroId/Rooms");
   var querySnapshot = await collection.get();
 
-  List<dynamic> pom = [];
-  List<dynamic> numPom = [];
+  List<List<String>> pom = [];
+  List<String> numPom = [];
 
   for (var doc in querySnapshot.docs) {
     Map<String, dynamic> data = doc.data();
@@ -88,6 +82,7 @@ Future<List<dynamic>> pobierzPomieszczenia(
     pom.add(lista);
     numPom.add(pomieszczenie);
   }
+
   // tak jak przy poprzednich funkcjach
   return [pom, numPom];
 }

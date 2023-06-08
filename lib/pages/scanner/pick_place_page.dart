@@ -153,7 +153,6 @@ class _PickPlaceState extends State<PickPlace>
                                       pomieszczenie = 0;
                                     }
                                   });
-                                  print(listaBudynkow[index][1]);
                                   var tmp = await pobierzPietra(listaBudynkow[index][1]);
                                   listaPieter = tmp[0];
                                   numeryPietra = tmp[1];
@@ -210,7 +209,7 @@ class _PickPlaceState extends State<PickPlace>
                                 if (budynek != 0) {
                                   String? wyborPietra = await showPickerDialog(
                                     context: context,
-                                    label: "",
+                                    label: "Piętro",
                                     items: numeryPietra,
                                   );
                                   if (wyborPietra != null) {
@@ -223,7 +222,9 @@ class _PickPlaceState extends State<PickPlace>
                                         pomieszczenie = 0;
                                       }
                                     });
-                                    await pobierzPomieszczenia(budynekId, pietroId);
+                                    var tmp = await pobierzPomieszczenia(budynekId, pietroId);
+                                    listaPomieszczen = tmp[0];
+                                    numeryPomieszczen = tmp[1];
                                   }
                                 }
                               },
@@ -279,13 +280,12 @@ class _PickPlaceState extends State<PickPlace>
                                   String? wyborPomieszczenia =
                                       await showPickerDialog(
                                     context: context,
-                                    label: "Budynek",
+                                    label: "Pomieszczenie",
                                     items: numeryPomieszczen,
                                   );
                                   if (wyborPomieszczenia != null) {
                                     setState(() {
-                                      pomieszczenie =
-                                          int.parse(wyborPomieszczenia);
+                                      pomieszczenie = int.parse(wyborPomieszczenia);
                                     });
                                   }
                                 }
