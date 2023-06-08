@@ -7,16 +7,16 @@ class DisplayItems extends StatelessWidget {
   final String buildingId;
   final String floorId;
   final String roomId;
-  final String itemTypeId;
-  final String itemTypeName;
+  // final String itemTypeId;
+  // final String itemTypeName;
 
   const DisplayItems({
     Key? key,
     required this.buildingId,
     required this.floorId,
     required this.roomId,
-    required this.itemTypeId,
-    required this.itemTypeName,
+    // required this.itemTypeId,
+    // required this.itemTypeName,
   }) : super(key: key);
 
   @override
@@ -62,8 +62,8 @@ class DisplayItems extends StatelessWidget {
       .doc(floorId)
       .collection('Rooms')
       .doc(roomId)
-      .collection('ItemTypes')
-      .doc(itemTypeId)
+      // .collection('ItemTypes')
+      // .doc(itemTypeId)
       .collection('Item')
       .snapshots()
       .map((snapshot) =>
@@ -76,14 +76,13 @@ class DisplayItems extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => EditItem(
                 name: item.name,
-                roomId: roomId,
+                buildingId: buildingId,
                 floorId: floorId,
-                itemTypeId: itemTypeId,
-                itemTypeName: itemTypeName,
+                roomId: roomId,
                 itemId: item.id,
                 comment: item.comment,
-
-                barcode: item.barcode, //new
+                barcode: item.barcode,
+                type: item.type,
               ),
             ),
           );

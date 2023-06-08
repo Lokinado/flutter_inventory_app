@@ -10,13 +10,13 @@ class DisplayFloors extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 400,
       child: StreamBuilder<List<Floor>>(
         stream: readFloors(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text('Something went wrong');
+            return const Text('Something went wrong');
           } else if (snapshot.hasData) {
             final floors = snapshot.data;
 
@@ -30,14 +30,15 @@ class DisplayFloors extends StatelessWidget {
                             width: 5,
                             color: Colors.amber,
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(50)),
                         ),
                         child: buildFloor(floor, context),
                       ))
                   .toList(),
             );
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),

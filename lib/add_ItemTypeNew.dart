@@ -33,7 +33,7 @@ class AddItemType extends StatelessWidget {
                 hintText: 'Name',
               ),
             ),
-            const SizedBox(height: 24),
+            // const SizedBox(height: 24),
             const SizedBox(height: 32),
             ElevatedButton(
               child: const Text('Create new item type'),
@@ -51,17 +51,9 @@ class AddItemType extends StatelessWidget {
       );
 
   Future createItemType(ItemType itemType) async {
-    final docItemType = FirebaseFirestore.instance
-        .collection('Building')
-        .doc(buildingId)
-        .collection('Floor')
-        .doc(floorId)
-        .collection('Rooms')
-        .doc(roomId)
-        .collection('ItemTypes')
-        .doc();
+    final docItemType =
+        FirebaseFirestore.instance.collection('ItemTypes').doc();
     itemType.id = docItemType.id;
-
     final json = itemType.toJson();
     await docItemType.set(json);
   }

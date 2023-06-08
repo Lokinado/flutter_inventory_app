@@ -3,25 +3,32 @@ import 'package:flutter/material.dart';
 
 class EditItem extends StatelessWidget {
   final String name;
-  final String roomId;
+  final String buildingId;
   final String floorId;
-  final String itemTypeId;
-  final String itemTypeName;
+  final String roomId;
+  // final String itemTypeId;
+  // final String itemTypeName;
   final String itemId;
   final String comment;
 
   final String barcode;
 
+  final String type;
+  // final String floorId;
+  // final String roomId;
+
   EditItem({
     Key? key,
     required this.name,
-    required this.roomId,
+    required this.buildingId,
     required this.floorId,
-    required this.itemTypeId,
-    required this.itemTypeName,
+    required this.roomId,
+    // required this.itemTypeId,
+    // required this.itemTypeName,
     required this.itemId,
     required this.comment,
     required this.barcode,
+    required this.type,
   }) : super(key: key);
 
   final controllerComment = TextEditingController();
@@ -37,7 +44,7 @@ class EditItem extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(bottom: 16),
               child: SizedBox(
-                height: 190,
+                height: 300,
                 width: 240,
                 child: Container(
                   decoration: BoxDecoration(
@@ -51,7 +58,7 @@ class EditItem extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.all(10),
                     child: Text(
-                      'Name: $name \nID: $itemId \nComment: $comment\nBarcode: \n$barcode',
+                      'Name: $name \nID: $itemId \nComment: $comment\nBarcode: \n$barcode\nbuildingId: $buildingId\nfloorId: $floorId\nroomId: $roomId\nType: $type',
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
@@ -83,10 +90,11 @@ class EditItem extends StatelessWidget {
                     .doc(floorId)
                     .collection('Rooms')
                     .doc(roomId)
-                    .collection('ItemTypes')
-                    .doc(itemTypeId)
                     .collection('Item')
                     .doc(itemId);
+                print(itemId);
+                print(itemId);
+                print(itemId);
                 // Update user
                 docUser.update({
                   'name':
