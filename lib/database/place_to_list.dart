@@ -9,13 +9,8 @@ Future pobierzBudynki() async {
 
   List<String> lisbud = [];
 
-  for (var doc in querySnapshot.docs) {
-    Map<String, dynamic> data = doc.data();
-    String budynek = data['Nazwa'];
-    String id = data['Nazwa'];
-    List<String> lista = [budynek, id];
-    bud.add(lista);
-    lisbud.add(budynek);
+  for (var doc in listaBudynkow.docs) {
+    lisbud.add(doc.id.toString());
   }
 
   return lisbud;
@@ -29,13 +24,8 @@ Future pobierzPietra(wybranyBudynekId) async {
 
   List<String> numpietra = [];
 
-  for (var doc in querySnapshot.docs) {
-    Map<String, dynamic> data = doc.data();
-    String pietro = data['Nazwa'];
-    String id = data['Nazwa'];
-    List<String> lista = [pietro, id];
-    pietra.add(lista);
-    numpietra.add(pietro);
+  for (var doc in listaPomie.docs) {
+    numpietra.add(doc.id.toString());
   }
 
   return numpietra;
@@ -69,12 +59,11 @@ Future pobieraniePrzedmiotow(
   List<List<String>> pom = [];
 
   for (var doc in querySnapshot.docs) {
-    Map<String, dynamic> data = doc.data();
-    String pomieszczenie = data['Nazwa'];
-    String id = data['Nazwa'];
-    List<String> lista = [pomieszczenie, id];
-    pom.add(lista);
-    numPom.add(pomieszczenie);
+    var dane = doc.data();
+    List<String> item = [];
+    item.add(dane["typ"].toString());
+    item.add(dane["typ"].toString());
+    pom.add(item);
   }
   print(pom);
 }
