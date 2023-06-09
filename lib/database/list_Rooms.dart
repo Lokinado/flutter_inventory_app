@@ -37,38 +37,38 @@ class _ListRoomsState extends State<DisplayRooms> {
               children: rooms
                   .map(
                     (room) => GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DisplayItems(
-                              buildingId: widget.buildingId,
-                              floorId: widget.floorId,
-                              roomId: room,
-                            ),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.all(5.0),
-                        padding: const EdgeInsets.all(5.0),
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(50),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DisplayItems(
+                          buildingId: widget.buildingId,
+                          floorId: widget.floorId,
+                          roomId: room,
                         ),
-                        child: Center(
-                          child: Text(
-                            'Pomieszczenie ' + room,
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Pomieszczenie ' + room,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
                       ),
                     ),
-                  )
+                  ),
+                ),
+              )
                   .toList(),
             );
           } else {
@@ -76,7 +76,7 @@ class _ListRoomsState extends State<DisplayRooms> {
           }
         },
       ),
-    
+
     );
   }
 }

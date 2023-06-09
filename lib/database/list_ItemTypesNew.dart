@@ -1,43 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_app/database/edit_%20Building.dart';
-import 'add_Building.dart';
-// import 'add_Floor.dart';
-// import 'edit_Floor.dart';
-import 'readJSON.dart';
+import 'add_ItemTypeNew.dart';
+import 'edit_ItemTypeNew.dart';
 import 'globalsClasses.dart';
+// import 'package:inventory_app/edit_%20Building.dart';
+import 'readJSON.dart';
 
-class ListBuildings extends StatelessWidget {
+class ListItemTypes extends StatelessWidget {
+  final String buildingId;
+  final String floorId;
+  final String roomId;
+
   final controller = TextEditingController();
 
-  ListBuildings({super.key});
+  ListItemTypes(
+      {super.key,
+      required this.buildingId,
+      required this.floorId,
+      required this.roomId});
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text('List Building'),
+          title: const Text('List ItemTypes'),
         ),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => AddBuilding()));
+            // getAllCollectionNames2();
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => AddItemType(
+                      buildingId: buildingId,
+                      floorId: floorId,
+                      roomId: roomId,
+                    )));
           },
         ),
         body: Center(
           child: Container(
             padding: const EdgeInsets.all(8),
             margin: const EdgeInsets.all(10.0),
-            child: StreamBuilder<List<Building>>(
-              stream: readBuilding(),
+            child: StreamBuilder<List<ItemType>>(
+              stream: readItemTypes(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return const Text('Something went wrong');
                 } else if (snapshot.hasData) {
-                  final buildings = snapshot.data;
+                  final itemTypes = snapshot.data;
 
                   return ListView(
-                    children: buildings!
-                        .map((building) => Container(
+                    children: itemTypes!
+                        .map((itemType) => Container(
                               margin: const EdgeInsets.all(5.0),
                               padding: const EdgeInsets.all(5.0),
                               decoration: BoxDecoration(
@@ -50,7 +62,7 @@ class ListBuildings extends StatelessWidget {
                                     const BorderRadius.all(Radius.circular(50)),
                                 // border: Border.all(),
                               ),
-                              child: buildBuilding(building, context),
+                              child: buildBuilding(itemType, context),
                             ))
                         .toList(),
                   );
@@ -63,21 +75,24 @@ class ListBuildings extends StatelessWidget {
         ),
       );
 
-  Widget buildBuilding(Building building, BuildContext context) =>
+  Widget buildBuilding(ItemType itemType, BuildContext context) =>
       GestureDetector(
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => EditBuilding(
-                name: building.name,
-                buildingId: building.id,
+              builder: (context) => EditItemType(
+                buildingId: buildingId,
+                floorId: floorId,
+                roomId: roomId,
+                name: itemType.name,
+                itemTypeId: itemType.id,
               ),
             ),
           ); // Navigator.push
         },
         child: ListTile(
-          title: Text(building.name),
+          title: Text(itemType.name),
         ),
       );
 }
