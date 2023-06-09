@@ -27,10 +27,10 @@ class _LoginPageState extends State<LoginPage> {
         }
     );
     // try sign in
-    try{
+    try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: usernameController.text,
-        password: passwordController.text,
+      email: usernameController.text, 
+      password: passwordController.text,
       );
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
 
   }
 
-  wrongLoginData(){
+  wrongLoginData() {
     showDialog(
         context: context,
         builder: (context){
@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
 
   // this methon in the futher will be used to sign the user in
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset : false, //to avoid the keyboard to resize the page
         backgroundColor: Colors.grey[300], //background color
