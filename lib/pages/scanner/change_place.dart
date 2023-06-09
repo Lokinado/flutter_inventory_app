@@ -18,8 +18,8 @@ class ChangePlacePage extends StatefulWidget {
   final int pietro;
   final int pomieszczenie;
   final List<String> listaBudynkow;
-  final List<List<String>> listaPieter;
-  final List<List<List<String>>> listaPomieszczen;
+  final List<String> listaPieter;
+  final List<String> listaPomieszczen;
 
   @override
   State<ChangePlacePage> createState() => _ChangePlacePageState();
@@ -195,7 +195,7 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                                 String? wyborPietra = await showPickerDialog(
                                   context: context,
                                   label: "piętro",
-                                  items: widget.listaPieter[budynek],
+                                  items: widget.listaPieter,
                                 );
                                 if (wyborPietra != null) {
                                   var value = int.parse(wyborPietra);
@@ -260,7 +260,7 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                                     await showPickerDialog(
                                   context: context,
                                   label: "pomieszczenie",
-                                  items: widget.listaPomieszczen[budynek][pietro],
+                                  items: widget.listaPomieszczen,
                                 );
                                 if (wyborPomieszczenia != null) {
                                   setState(() {
