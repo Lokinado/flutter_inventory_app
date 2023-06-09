@@ -79,7 +79,6 @@ class Item {
   final String name;
   final String comment;
   final String barcode; // id.floor + id.room + id.item i tyle
-
   Item({
     this.id = '',
     required this.name,

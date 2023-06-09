@@ -1,42 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../database/list_ItemTypes.dart';
-import 'package:inventory_app/database/add_ItemType.dart';
 
-class EditRoom extends StatelessWidget {
+class EditItem extends StatelessWidget {
   final String name;
   final String buildingId;
-  final String roomId;
   final String floorId;
+  final String roomId;
+  // final String itemTypeId;
+  // final String itemTypeName;
+  final String itemId;
+  final String comment;
 
-  EditRoom({
+  final String barcode;
+
+  final String type;
+  // final String floorId;
+  // final String roomId;
+
+  EditItem({
     Key? key,
     required this.name,
     required this.buildingId,
-    required this.roomId,
     required this.floorId,
+    required this.roomId,
+    // required this.itemTypeId,
+    // required this.itemTypeName,
+    required this.itemId,
+    required this.comment,
+    required this.barcode,
+    required this.type,
   }) : super(key: key);
 
+  final controllerComment = TextEditingController();
   final controllerName = TextEditingController();
-
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('Edit room: $name'),
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => AddItemType(
-                  buildingId: buildingId,
-                  floorId: floorId,
-                  roomId: roomId,
-                ),
-              ),
-            );
-          },
+          title: Text('Edit item: $name'),
         ),
         body: ListView(
           padding: const EdgeInsets.all(16),
@@ -44,7 +44,7 @@ class EditRoom extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(bottom: 16),
               child: SizedBox(
-                height: 100,
+                height: 300,
                 width: 240,
                 child: Container(
                   decoration: BoxDecoration(
@@ -58,7 +58,7 @@ class EditRoom extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.all(10),
                     child: Text(
-                      'Name: $name \nID: $roomId',
+                      'Name: $name \nID: $itemId \nComment: $comment\nBarcode: \n$barcode\nbuildingId: $buildingId\nfloorId: $floorId\nroomId: $roomId\nType: $type',
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
@@ -66,27 +66,42 @@ class EditRoom extends StatelessWidget {
               ),
             ),
             TextField(
+              maxLength: 20,
               controller: controllerName,
               decoration: const InputDecoration(
+                counterText: '',
                 border: OutlineInputBorder(),
                 hintText: 'Name',
               ),
             ),
+            TextField(
+              controller: controllerComment,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Comment',
+              ),
+            ),
             const SizedBox(height: 24),
             ElevatedButton(
-              child: Text('Update'),
+              child: Text('Update Item'),
               onPressed: () async {
                 final docUser = FirebaseFirestore.instance
-                    .collection('Building')
-                    .doc(buildingId)
                     .collection('Floor')
                     .doc(floorId)
                     .collection('Rooms')
-                    .doc('$roomId');
+                    .doc(roomId)
+                    .collection('Item')
+                    .doc(itemId);
+                print(itemId);
+                print(itemId);
+                print(itemId);
                 // Update user
                 docUser.update({
                   'name':
                       (controllerName.text == '' ? name : controllerName.text),
+                  'comment': (controllerComment.text == ''
+                      ? comment
+                      : controllerComment.text),
                 });
                 Navigator.pop(context);
               },

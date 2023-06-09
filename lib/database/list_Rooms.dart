@@ -76,7 +76,6 @@ class _ListRoomsState extends State<DisplayRooms> {
           }
         },
       ),
-    
     );
   }
 }
