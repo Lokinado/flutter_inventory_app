@@ -22,13 +22,14 @@ class _ListRoomsState extends State<DisplayRooms> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 400,
-      child: StreamBuilder<List<Room>>(
-        stream: DisplayRooms(),
+    return Scaffold(
+      body: FutureBuilder<List<String>>(
+        future: pobierzPomieszczenia(widget.buildingId, widget.floorId),
         builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Text('Something went wrong');
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Something went wrong');
           } else if (snapshot.hasData) {
             final rooms = snapshot.data!;
 
@@ -36,55 +37,46 @@ class _ListRoomsState extends State<DisplayRooms> {
               children: rooms
                   .map(
                     (room) => GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DisplayItems(
-                              buildingId: widget.buildingId,
-                              floorId: widget.floorId,
-                              roomId: room,
-                            ),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.all(5.0),
-                        padding: const EdgeInsets.all(5.0),
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(50),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DisplayItems(
+                          buildingId: widget.buildingId,
+                          floorId: widget.floorId,
+                          roomId: room,
                         ),
-                        child: Center(
-                          child: Text(
-                            'Pomieszczenie ' + room,
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-<<<<<<< HEAD:lib/database/list_Rooms.dart
-=======
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(50)),
->>>>>>> DBCreatingUpdating:lib/list_Rooms.dart
+                      ),
+                    );
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Pomieszczenie ' + room,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
                       ),
                     ),
-                  )
+                  ),
+                ),
+              )
                   .toList(),
             );
           } else {
-<<<<<<< HEAD:lib/database/list_Rooms.dart
             return Center(child: Text('No rooms found'));
-=======
-            return const Center(child: CircularProgressIndicator());
->>>>>>> DBCreatingUpdating:lib/list_Rooms.dart
           }
         },
       ),
-    
+
     );
   }
 }
