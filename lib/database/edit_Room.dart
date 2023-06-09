@@ -92,8 +92,7 @@ class EditRoom extends StatelessWidget {
               },
             ),
             const SizedBox(height: 24),
-            DisplayItemsType(
-                buildingId: buildingId, floorId: floorId, roomId: roomId, roomName: '',),
+           
           ],
         ),
       );
