@@ -1,16 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:inventory_app/database/add_Floor.dart';
-import 'package:inventory_app/database/list_Floors.dart';
+import 'package:inventory_app/list_SpecificItemTypes.dart';
 
-class EditBuilding extends StatelessWidget {
-  final String name;
+import 'add_SpecificItemTypes.dart';
+// import 'package:inventory_app/add_Floor.dart';
+// import 'list_Floors.dart';
+
+class EditItemType extends StatelessWidget {
   final String buildingId;
+  final String floorId;
+  final String roomId;
 
-  EditBuilding({
+  final String name;
+  final String itemTypeId;
+  EditItemType({
     Key? key,
-    required this.name,
     required this.buildingId,
+    required this.floorId,
+    required this.roomId,
+    required this.name,
+    required this.itemTypeId,
   }) : super(key: key);
 
   final controllerName = TextEditingController();
@@ -18,15 +27,17 @@ class EditBuilding extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('Edit building: $name'),
+          title: Text('Edit item type: $name'),
         ),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
+            // print('kruwa');
+            // print(itemTypeId);
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => AddFloor(
-                  buildingId: buildingId,
+                builder: (context) => AddSpecificItemType(
+                  itemTypeId: itemTypeId,
                 ),
               ),
             );
@@ -52,7 +63,7 @@ class EditBuilding extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Text(
-                      'Name: $name \nID: $buildingId',
+                      'Name: $name \nID: $itemTypeId',
                       style: const TextStyle(fontSize: 20),
                     ),
                   ),
@@ -60,8 +71,10 @@ class EditBuilding extends StatelessWidget {
               ),
             ),
             TextField(
+              maxLength: 20,
               controller: controllerName,
               decoration: const InputDecoration(
+                counterText: '',
                 border: OutlineInputBorder(),
                 hintText: 'Name',
               ),
@@ -70,10 +83,12 @@ class EditBuilding extends StatelessWidget {
             ElevatedButton(
               child: const Text('Update'),
               onPressed: () async {
-                final docBuilding = FirebaseFirestore.instance
-                    .collection('Building')
-                    .doc(buildingId);
-                docBuilding.update({
+                // print(itemTypeId);
+
+                final docItemType = FirebaseFirestore.instance
+                    .collection('ItemTypes')
+                    .doc(itemTypeId);
+                docItemType.update({
                   'name':
                       (controllerName.text == '' ? name : controllerName.text),
                 });
@@ -81,7 +96,14 @@ class EditBuilding extends StatelessWidget {
               },
             ),
             const SizedBox(height: 24),
-            ListFloors(buildingId: buildingId),
+            // DisplayFloors(buildingId: itemTypeId),
+            DisplaySpecificItemType(
+              itemTypeId: itemTypeId,
+              buildingId: buildingId,
+              floorId: floorId,
+              roomId: roomId,
+              nameItemType: name,
+            )
           ],
         ),
       );

@@ -22,6 +22,7 @@ class _ListRoomsState extends State<DisplayRooms> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD:lib/database/list_Rooms.dart
     return Scaffold(
       body: FutureBuilder<List<String>>(
         future: pobierzPomieszczenia(widget.buildingId, widget.floorId),
@@ -30,6 +31,15 @@ class _ListRoomsState extends State<DisplayRooms> {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Text('Something went wrong');
+=======
+    return SizedBox(
+      height: 400,
+      child: StreamBuilder<List<Room>>(
+        stream: readRooms(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Text('Something went wrong');
+>>>>>>> DBCreatingUpdating:lib/list_Rooms.dart
           } else if (snapshot.hasData) {
             final rooms = snapshot.data!;
 
@@ -65,6 +75,11 @@ class _ListRoomsState extends State<DisplayRooms> {
                               color: Colors.white,
                             ),
                           ),
+<<<<<<< HEAD:lib/database/list_Rooms.dart
+=======
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(50)),
+>>>>>>> DBCreatingUpdating:lib/list_Rooms.dart
                         ),
                       ),
                     ),
@@ -72,7 +87,11 @@ class _ListRoomsState extends State<DisplayRooms> {
                   .toList(),
             );
           } else {
+<<<<<<< HEAD:lib/database/list_Rooms.dart
             return Center(child: Text('No rooms found'));
+=======
+            return const Center(child: CircularProgressIndicator());
+>>>>>>> DBCreatingUpdating:lib/list_Rooms.dart
           }
         },
       ),
