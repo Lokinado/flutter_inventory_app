@@ -21,7 +21,7 @@ class EditBuilding extends StatelessWidget {
           title: Text('Edit building: $name'),
         ),
         floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
+          child: Icon(Icons.add),
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
@@ -36,7 +36,7 @@ class EditBuilding extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 16),
+              padding: EdgeInsets.only(bottom: 16),
               child: SizedBox(
                 height: 80,
                 width: 240,
@@ -50,10 +50,10 @@ class EditBuilding extends StatelessWidget {
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(10),
+                    padding: EdgeInsets.all(10),
                     child: Text(
                       'Name: $name \nID: $buildingId',
-                      style: const TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 20),
                     ),
                   ),
                 ),
@@ -68,11 +68,11 @@ class EditBuilding extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             ElevatedButton(
-              child: const Text('Update'),
+              child: Text('Update'),
               onPressed: () async {
                 final docBuilding = FirebaseFirestore.instance
                     .collection('Building')
-                    .doc(buildingId);
+                    .doc('$buildingId');
                 docBuilding.update({
                   'name':
                       (controllerName.text == '' ? name : controllerName.text),
@@ -81,7 +81,7 @@ class EditBuilding extends StatelessWidget {
               },
             ),
             const SizedBox(height: 24),
-            DisplayFloors(buildingId: buildingId),
+            ListFloors(buildingId: buildingId),
           ],
         ),
       );

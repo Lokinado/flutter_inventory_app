@@ -6,9 +6,3 @@ Stream<List<Building>> readBuilding() => FirebaseFirestore.instance
     .snapshots()
     .map((snapshot) =>
         snapshot.docs.map((doc) => Building.fromJson(doc.data())).toList());
-
-Stream<List<ItemType>> readItemTypes() => FirebaseFirestore.instance
-    .collection('ItemTypes')
-    .snapshots()
-    .map((snapshot) =>
-        snapshot.docs.map((doc) => ItemType.fromJson(doc.data())).toList());

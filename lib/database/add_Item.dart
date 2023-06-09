@@ -7,11 +7,7 @@ class AddItem extends StatelessWidget {
   final String floorId;
   final String roomId;
   final String itemTypeId;
-  final String specItemId;
-
   final String nameItemType;
-  final String nameSpecItemType;
-  // final String nameItemType;
 
   AddItem({
     Key? key,
@@ -19,10 +15,7 @@ class AddItem extends StatelessWidget {
     required this.floorId,
     required this.roomId,
     required this.itemTypeId,
-    required this.specItemId,
     required this.nameItemType,
-    required this.nameSpecItemType,
-    // required this.nameItemType,
   }) : super(key: key);
 
   final controllerName = TextEditingController();
@@ -58,14 +51,10 @@ class AddItem extends StatelessWidget {
                   name: controllerName.text,
                   comment: controllerComment.text,
                   barcode: '',
-                  type: nameItemType + '_' + nameSpecItemType,
                 );
 
                 createItem(item);
-                Navigator.pop(context); //x4
-                // Navigator.popUntil(context, ModalRoute.withName("/edit_room"));
-                // Navigator.popUntil(
-                //     context, (Route<dynamic> route) => route.isFirst);
+                Navigator.pop(context);
               },
             )
           ],
@@ -80,6 +69,8 @@ class AddItem extends StatelessWidget {
         .doc(floorId)
         .collection('Rooms')
         .doc(roomId)
+        .collection('ItemTypes')
+        .doc(itemTypeId)
         .collection('Item')
         .doc();
     item.id = docItem.id;

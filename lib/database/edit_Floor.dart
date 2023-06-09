@@ -23,7 +23,7 @@ class EditFloor extends StatelessWidget {
           title: Text('Edit floor: $name'),
         ),
         floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
+          child: Icon(Icons.add),
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
@@ -39,7 +39,7 @@ class EditFloor extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 16),
+              padding: EdgeInsets.only(bottom: 16),
               child: SizedBox(
                 height: 80,
                 width: 240,
@@ -53,10 +53,10 @@ class EditFloor extends StatelessWidget {
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(10),
+                    padding: EdgeInsets.all(10),
                     child: Text(
                       'Name: $name \nID: $floorId',
-                      style: const TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 20),
                     ),
                   ),
                 ),
@@ -71,13 +71,13 @@ class EditFloor extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             ElevatedButton(
-              child: const Text('Update'),
+              child: Text('Update'),
               onPressed: () async {
                 final docUser = FirebaseFirestore.instance
                     .collection('Building')
                     .doc(buildingId)
                     .collection('Floor')
-                    .doc(floorId);
+                    .doc('$floorId');
                 docUser.update({
                   'name':
                       (controllerName.text == '' ? name : controllerName.text),

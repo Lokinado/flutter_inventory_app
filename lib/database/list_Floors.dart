@@ -1,73 +1,92 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'edit_Floor.dart';
+import 'list_Rooms.dart';
 import 'globalsClasses.dart';
+import 'listing_items.dart';
 
-class DisplayFloors extends StatelessWidget {
+class ListFloors extends StatefulWidget {
   final String buildingId;
 
-  const DisplayFloors({Key? key, required this.buildingId}) : super(key: key);
+  const ListFloors({Key? key, required this.buildingId}) : super(key: key);
+
+  @override
+  _ListFloorsState createState() => _ListFloorsState();
+}
+
+class _ListFloorsState extends State<ListFloors> {
+  String? selectedFloorId;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 400,
-      child: StreamBuilder<List<Floor>>(
-        stream: readFloors(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Text('Something went wrong');
-          } else if (snapshot.hasData) {
-            final floors = snapshot.data;
+    return Scaffold(
+      
+    
+      body: Center(
+        
+        child: Container(
+          color: Colors.white,
+          child: FutureBuilder<List<String>>(
+            future: pobierzPietra(widget.buildingId),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Something went wrong: ${snapshot.error}');
+              } else if (snapshot.hasData) {
+                final floors = snapshot.data!;
 
-            return ListView(
-              children: floors!
-                  .map((floor) => Container(
-                        margin: const EdgeInsets.all(5.0),
-                        padding: const EdgeInsets.all(5.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 5,
-                            color: Colors.amber,
-                          ),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(50)),
+                return Column(
+                  children: [
+                    if (selectedFloorId == null)
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: floors.length,
+                          itemBuilder: (context, index) {
+                            final floor = floors[index];
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedFloorId = floor;
+                                });
+                              },
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 5.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: ListTile(
+                                  title: Text(
+                                    'Piętro $floor',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                        child: buildFloor(floor, context),
-                      ))
-                  .toList(),
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
+                      ),
+                    if (selectedFloorId != null)
+                      Expanded(
+                        child: DisplayRooms(
+                          floorId: selectedFloorId!,
+                          buildingId: widget.buildingId,
+                        ),
+                      ),
+                  ],
+                );
+              } else {
+                return CircularProgressIndicator();
+              }
+            },
+          ),
+        ),
       ),
     );
   }
-
-  Stream<List<Floor>> readFloors() => FirebaseFirestore.instance
-      .collection('Building')
-      .doc(buildingId)
-      .collection('Floor')
-      .snapshots()
-      .map((snapshot) =>
-          snapshot.docs.map((doc) => Floor.fromJson(doc.data())).toList());
-
-  Widget buildFloor(Floor floor, BuildContext context) => GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => EditFloor(
-                name: floor.name,
-                buildingId: buildingId,
-                floorId: floor.id,
-              ),
-            ),
-          ); // Navigator.push
-        },
-        child: ListTile(
-          title: Text(floor.name),
-        ),
-      );
 }
