@@ -4,7 +4,6 @@ import 'package:inventory_app/pages/scanner/pick_place_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:inventory_app/pages/adding/add_page.dart';
 
-
 class LoggedMainPage extends StatefulWidget {
   const LoggedMainPage({Key? key, required this.size}) : super(key: key);
 
