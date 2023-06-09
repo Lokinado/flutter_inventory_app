@@ -81,7 +81,7 @@ class EditBuilding extends StatelessWidget {
               },
             ),
             const SizedBox(height: 24),
-            ListFloors(buildingId: buildingId),
+            DisplayFloors(buildingId: buildingId),
           ],
         ),
       );

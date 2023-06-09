@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD:lib/database/edit_Room.dart
 import '../database/list_ItemTypes.dart';
 import 'package:inventory_app/database/add_ItemType.dart';
-=======
 // import 'add_ItemTypeNew.dart';
 // import 'edit_ItemTypeNew.dart';
 // import 'list_ItemTypes.dart';
@@ -11,7 +9,6 @@ import 'list_ItemTypesNew.dart';
 import 'list_Items.dart';
 // import 'list_of_ItemTypes.dart';
 // import 'add_ItemType.dart';
->>>>>>> DBCreatingUpdating:lib/edit_Room.dart
 
 class EditRoom extends StatelessWidget {
   final String name;
@@ -101,34 +98,21 @@ class EditRoom extends StatelessWidget {
                     .doc(buildingId)
                     .collection('Floor')
                     .doc(floorId)
-                    .collection('Rooms')
-<<<<<<< HEAD:lib/database/edit_Room.dart
-                    .doc('$roomId');
+                    .collection('Rooms').doc('$roomId');
                 // Update user
-                docUser.update({
-=======
-                    .doc(roomId);
-                docRoom.update({
->>>>>>> DBCreatingUpdating:lib/edit_Room.dart
-                  'name':
+                docUser.update({'name':
                       (controllerName.text == '' ? name : controllerName.text),
                 });
                 Navigator.pop(context);
               },
             ),
-            const SizedBox(height: 24),
-<<<<<<< HEAD:lib/database/edit_Room.dart
-           
-=======
-
-            DisplayItems(
+            const SizedBox(height: 24),DisplayItems(
               buildingId: buildingId,
               floorId: floorId,
               roomId: roomId,
             )
             // DisplayItemsType(
             // buildingId: buildingId, floorId: floorId, roomId: roomId),
->>>>>>> DBCreatingUpdating:lib/edit_Room.dart
           ],
         ),
       );

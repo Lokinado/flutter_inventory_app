@@ -1,55 +1,43 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:inventory_app/add_Item.dart';
+import 'package:inventory_app/database/list_SpecificItemTypes.dart';
 
-class EditSpecificItemType extends StatelessWidget {
-  final String name;
-  final String itemTypeId;
-  final String specItemId;
-  final double price;
+import 'add_SpecificItemTypes.dart';
+// import 'package:inventory_app/add_Floor.dart';
+// import 'list_Floors.dart';
 
+class EditItemType extends StatelessWidget {
   final String buildingId;
   final String floorId;
   final String roomId;
 
-  final String nameItemType;
-  EditSpecificItemType({
+  final String name;
+  final String itemTypeId;
+  EditItemType({
     Key? key,
-    required this.name,
-    required this.itemTypeId,
-    required this.specItemId,
-    required this.price,
     required this.buildingId,
     required this.floorId,
     required this.roomId,
-    required this.nameItemType,
+    required this.name,
+    required this.itemTypeId,
   }) : super(key: key);
 
   final controllerName = TextEditingController();
-  final controllerPrice = TextEditingController();
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('Edit item specific type: $name'),
+          title: Text('Edit item type: $name'),
         ),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
-            // print(
-            //     'buildingId: $buildingId\nfloorId: $floorId\nroomId: $roomId\nitemTypeId: $itemTypeId\nspecItemId: $specItemId\nnameItemType: $nameItemType\nnameSpecItemType: $name\n');
-
-            Navigator.push(
-              context,
+            // print('kruwa');
+            // print(itemTypeId);
+            Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => AddItem(
-                  buildingId: buildingId,
-                  floorId: floorId,
-                  roomId: roomId,
+                builder: (context) => AddSpecificItemType(
                   itemTypeId: itemTypeId,
-                  specItemId: specItemId,
-                  nameItemType: nameItemType,
-                  nameSpecItemType: name,
                 ),
               ),
             );
@@ -61,7 +49,7 @@ class EditSpecificItemType extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: SizedBox(
-                height: 300,
+                height: 80,
                 width: 240,
                 child: Container(
                   decoration: BoxDecoration(
@@ -75,7 +63,7 @@ class EditSpecificItemType extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Text(
-                      'Name: $name \nID: $itemTypeId\nPrice: $price\nbuilding: $buildingId\nfloorId: $floorId\nroomId: $roomId\nnameItemType: $nameItemType\nnameSpecItemType: $name\n ',
+                      'Name: $name \nID: $itemTypeId',
                       style: const TextStyle(fontSize: 20),
                     ),
                   ),
@@ -91,37 +79,31 @@ class EditSpecificItemType extends StatelessWidget {
                 hintText: 'Name',
               ),
             ),
-            TextField(
-              maxLength: 20,
-              keyboardType: TextInputType.number,
-              controller: controllerPrice,
-              decoration: const InputDecoration(
-                counterText: '',
-                border: OutlineInputBorder(),
-                hintText: 'Price',
-              ),
-            ),
             const SizedBox(height: 24),
             ElevatedButton(
-              child: const Text('Update Item Type'),
+              child: const Text('Update'),
               onPressed: () async {
+                // print(itemTypeId);
+
                 final docItemType = FirebaseFirestore.instance
                     .collection('ItemTypes')
-                    .doc(itemTypeId)
-                    .collection('Branch')
-                    .doc(specItemId);
-
+                    .doc(itemTypeId);
                 docItemType.update({
                   'name':
                       (controllerName.text == '' ? name : controllerName.text),
-                  'price': (controllerPrice.text == ''
-                      ? price
-                      : double.parse(controllerPrice.text)),
                 });
                 Navigator.pop(context);
               },
             ),
             const SizedBox(height: 24),
+            // DisplayFloors(buildingId: itemTypeId),
+            DisplaySpecificItemType(
+              itemTypeId: itemTypeId,
+              buildingId: buildingId,
+              floorId: floorId,
+              roomId: roomId,
+              nameItemType: name,
+            )
           ],
         ),
       );

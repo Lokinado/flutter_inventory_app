@@ -22,24 +22,13 @@ class _ListRoomsState extends State<DisplayRooms> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD:lib/database/list_Rooms.dart
-    return Scaffold(
-      body: FutureBuilder<List<String>>(
-        future: pobierzPomieszczenia(widget.buildingId, widget.floorId),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Text('Something went wrong');
-=======
     return SizedBox(
       height: 400,
       child: StreamBuilder<List<Room>>(
-        stream: readRooms(),
+        stream: DisplayRooms(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Text('Something went wrong');
->>>>>>> DBCreatingUpdating:lib/list_Rooms.dart
           } else if (snapshot.hasData) {
             final rooms = snapshot.data!;
 
