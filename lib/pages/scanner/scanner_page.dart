@@ -44,31 +44,35 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Utworzeni / pobranie danych do / z bazy
   var odswierzRozmiar = true;
 
+  /// Pobranie wszystkich przedmiotów do skanowania
   late Map<String, Map<String, dynamic>> przedmiotyDoSkanowania;
 
   // Zmienne przechowywujące informacje nt. przedmiotów do skanownaia
-  late List<List<dynamic>> krzesla = [];
 
   /// Lista krzeseł w sali w raz z informacjami
-  late List<List<dynamic>> monitory = [];
+  late List<List<dynamic>> krzesla = [];
 
   /// Lista monitorow w sali w raz z informacjami
-  late List<List<dynamic>> biurka = [];
+  late List<List<dynamic>> monitory = [];
 
   /// Lista biurek w sali w raz z informacjami
+  late List<List<dynamic>> biurka = [];
+
 
   // Przy wyświetlaniu okienek potrzebna jest lista tekstowa więc dla każdego
   // zbioru eementów tworzę taką listę
 
-  late List<String> krzeslaIdentyfikatory = [];
 
   /// Dynamicznie utworznona lista krzesel
-  late List<String> monitoryIdentyfikatory = [];
+  late List<String> krzeslaIdentyfikatory = [];
 
   /// Dynamicznie utworznona lista monitorów
-  late List<String> biurkaIdentyfikatory = [];
+  late List<String> monitoryIdentyfikatory = [];
 
   /// Dynamicznie utworznona lista biurek
+  late List<String> biurkaIdentyfikatory = [];
+
+
 
   /// Przechowuje rezultat wyskakujacych popupowych okienek
   late TextEditingController _textEditingController;
@@ -76,40 +80,39 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Kontroluje działanie kamery
   ScanController controller = ScanController();
 
+  /// Liczba zeskanowanych krzeseł
   late int liczbaKrzesel;
 
-  /// Liczba zeskanowanych krzeseł
+  /// Liczba zeskanownanych monitorow
   late int liczbaMonitorow;
 
-  /// Liczba zeskanownanych monitorow
+  /// Liczba zeskanowanych biurek
   late int liczbaBiurek;
 
-  /// Liczba zeskanowanych biurek
 
   // TE ZMIENNE MUSZĄ BYĆ, BO TYCH PRZEKAZYWNAYCH PRZY WYWOŁANIU STRONY
   // NIE DA SIĘ MODYFIKOWAĆ, WIĘC TRZEBA MIEĆ ODDZIELNY ZESTAW
   // do tych przekazywanch w parametrach dostajemy się poprzez 'widget. ...'
 
+  /// Wybrany przez użytkownika budynek
   late String budynek;
 
-  /// Wybrany przez użytkownika budynek
+  /// Wybrane przez użytkownika pietro
   late String pietro;
 
-  /// Wybrane przez użytkownika pietro
+  /// Wybrane przez użytkownika pomieszczenie
   late String pomieszczenie;
 
-  /// Wybrane przez użytkownika pomieszczenie
-
-  late String scannedValue;
 
   /// Zeskanowan wartość
+  String scannedValue = "";
 
+  /// Grubość offsetu na jakiś element - stylistyczna zmienna pomocnicza
   late double textHeighOffset;
 
   /// Grubość offsetu na jakiś element - stylistyczna zmienna pomocnicza
   late double elementsOffset;
 
-  /// Grubość offsetu na jakiś element - stylistyczna zmienna pomocnicza
   late Size rozmiar;
 
   //
@@ -135,8 +138,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
       krzesla = zwrot[0];
       monitory = zwrot[1];
       biurka = zwrot[2];
-
-      scannedValue = krzesla[1][1].toString();
 
       budynek = widget.budynek;
       pietro = widget.pietro;

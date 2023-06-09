@@ -66,3 +66,21 @@ Future<Map<String, Map<String, dynamic>>> pobieraniePrzedmiotow(
 
   return rzeczy;
 }
+
+Future<Map<String, String>> pobranieListyTypow() async {
+  var przedmioty = await FirebaseFirestore.instance.collection(
+    "ItemTypes").get();
+
+  Map<String, String> elemTyp = {};
+
+  /// Utworzenie listy typów
+  for (var prze in przedmioty.docs){
+    var wersje = await FirebaseFirestore.instance.collection(
+        "ItemTypes/${prze.id}/Wersja").get();
+    for (var odmiana in wersje.docs){
+      elemTyp[odmiana.id] = prze.id;
+    }
+  }
+
+  return elemTyp;
+}
