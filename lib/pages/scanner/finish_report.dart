@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/components/color_palette.dart';
 import 'package:inventory_app/pages/scanner/ready_report.dart';
 import 'package:inventory_app/components/popups.dart';
+import 'package:inventory_app/database/report_generator.dart';
 
 class FinishReportPage extends StatefulWidget {
-  const FinishReportPage({Key? key}) : super(key: key);
+  FinishReportPage({Key? key, required this.raport}) : super(key: key);
+
+  Report raport;
 
   @override
   State<FinishReportPage> createState() => _FinishReportPageState();
 }
 
 class _FinishReportPageState extends State<FinishReportPage> {
+
   /// Przechowuje rezultat wyskakujacych popupowych okienek
   late TextEditingController _textEditingController;
 
@@ -25,6 +29,10 @@ class _FinishReportPageState extends State<FinishReportPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    // Jak uzyskać dane
+    //var ala = widget.raport;
+
     /// Pobranie informacji nt. wymiarów okna
     final Size rozmiar = MediaQuery.of(context).size;
 

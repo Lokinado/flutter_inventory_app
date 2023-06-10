@@ -350,9 +350,6 @@ class _PickPlaceState extends State<PickPlace>
                 budynek: budynek,
                 pietro: pietro,
                 pomieszczenie: pomieszczenie,
-                listaBudynkow: listaBudynkow,
-                listaPieter: listaPieter,
-                listaPomieszczen: listaPomieszczen,
               )),
     );
     return result;
