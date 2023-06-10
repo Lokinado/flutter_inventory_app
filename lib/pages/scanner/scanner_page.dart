@@ -132,7 +132,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
     /// Inicjalizacja zmienneych i dynamiczne zmiany ich wartości
     /// -> przechowują informacje nt. stanu skonowania elementów
     if (inicjalizujDane) {
-      //List<List<List<dynamic>>> zwrot = losuj();
+      List<List<List<dynamic>>> zwrot = losuj();
+
+      krzesla = zwrot[0];
 
       budynek = widget.budynek;
       pietro = widget.pietro;
@@ -191,17 +193,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
                           ? spacedGreenButtonActive
                           : spacedGreenButtonNActive,
                       onPressed: () async {
-                        String? wybraneKrzeslo = await showPickerDialog(
-                          context: context,
-                          label: "krzesło",
-                          items: krzeslaIdentyfikatory,
-                        );
-                        if (wybraneKrzeslo != null) {
-                          setState(() {
-                            krzesla[int.parse(wybraneKrzeslo.split(":")[0]) - 1]
-                            [2] = true;
-                          });
-                        }
+                        await nestedComentDialog(krzeslaIdentyfikatory, "Krzesła");
                       },
                       child: Container(
                         margin: EdgeInsets.only(
@@ -647,7 +639,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   /// Po zeksnaowaniu należy odświerżyć wyświetlane dane w popupach, między
   /// innymi komentarze, i zeskanowane przedmoty
-  void odswierzZeskanowane() {
+  Future odswierzZeskanowane() async {
     liczbaKrzesel = liczGotowe(krzesla);
     liczbaMonitorow = liczGotowe(monitory);
     liczbaBiurek = liczGotowe(biurka);
@@ -776,6 +768,44 @@ class _DemoCamPageState extends State<DemoCamPage> {
     cameraController.resume();
   }
 
+
+  Future nestedComentDialog(lista, naglowek) async {
+    odswierzRozmiar = false;
+    /// Kod wstrzymujcy dziaanie kamery
+    cameraController.pause();
+
+
+    while (true){
+      final wynik = await showPickerDialog(
+        context: context,
+        label: naglowek,
+        items: lista,
+      );
+
+      if (wynik == null) {
+        /// zresetuj wpisaną wartość
+        odswierzRozmiar = true;
+        cameraController.resume();
+        /// dodaj komentarz do przedmiotu
+        _textEditingController.text = "";
+
+        /// zresetuj wpisaną wartość
+        odswierzRozmiar = true;
+        cameraController.resume();
+        return;
+      }
+      else{
+        wynik.split(": ")[1];
+        final kom = await commentDialog("Przedmiot: $wynik");
+        print(kom);
+        await Future.delayed(Duration(seconds: 1));
+        await dodajKomentarz(wynik, kom);
+        await odswierzZeskanowane();
+      }
+    }
+
+  }
+
   /// Popup do wpisania kodu ręcznie przy próbie skanowania
   Future inputCodeManually() async {
     odswierzRozmiar = false;
@@ -867,10 +897,10 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Metoda która rekurencyjnie przeszukuje dane, i dla odpowiedniego elementu
   /// dodaje do niego przekazany komentarz
   /// zwraca true / false, w zależności od tego czy element jest w tym pomiedzczeniu
-  Future<bool> dodajKomentarz(wartosc, komentarz) async {
+  Future<bool> dodajKomentarz(barcode, komentarz) async {
     for (List<List<dynamic>> l in [krzesla, monitory, biurka]) {
       for (int i = 0; i < l.length; i++) {
-        if (l[i][1] == wartosc) {
+        if (l[i][1] == barcode) {
           l[i][3] = komentarz;
           return true;
         }
