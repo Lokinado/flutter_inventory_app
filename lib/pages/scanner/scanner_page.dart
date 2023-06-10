@@ -42,7 +42,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
 
   /// Pobranie wszystkich przedmiotów do skanowania, podzielnoych na kategorie
-  late Map<String, Map<String, String>> przedmiotyWgTypu;
+  Map<String, Map<String, String>> przedmiotyWgTypu = {};
 
   // Zmienne przechowywujące informacje nt. przedmiotów do skanownaia
 
@@ -136,20 +136,15 @@ class _DemoCamPageState extends State<DemoCamPage> {
     /// Inicjalizacja zmienneych i dynamiczne zmiany ich wartości
     /// -> przechowują informacje nt. stanu skonowania elementów
     if (inicjalizujDane) {
-      List<List<List<dynamic>>> zwrot = losuj();
-
-      krzesla = zwrot[0];
 
       budynek = widget.budynek;
       pietro = widget.pietro;
       pomieszczenie = widget.pomieszczenie;
 
-      przygotujZeskanowane();
       pobierz(budynek, pietro, pomieszczenie);
+      utworzRaport(budynek, pietro, pomieszczenie);
 
-      nowyRaport = new Report();
-      nowyRaport.nowePomieszczenie(budynek, pietro, pomieszczenie);
-
+      przygotujZeskanowane();
       inicjalizujDane = false;
     }
 
@@ -599,15 +594,15 @@ class _DemoCamPageState extends State<DemoCamPage> {
               setState(() {
                 scannedValue = data;
               });
+              // Kod wstrzymujcy dziaanie kamery
               cameraController.pause();
 
-              /// Kod wstrzymujcy dziaanie kamery
 
-              /// ... sprawdź czy element jest w bazie i ...
+              // ... sprawdź czy element jest w bazie i ...
               var czyWBazie = await szukajAzZnajdziesz(
-                  _textEditingController.text.toString());
+                  _textEditingController.text);
 
-              /// ... w zależności od odopowiedzi odznacz i pokaż odpowiedni komunikat
+              // ... w zależności od odopowiedzi odznacz i pokaż odpowiedni komunikat
               if (czyWBazie) {
                 showTopSnackBar(
                     Overlay.of(context),
@@ -669,6 +664,11 @@ class _DemoCamPageState extends State<DemoCamPage> {
     przedmiotyWgTypu = await przedmiotyWKategoriach(b, pi, po);
   }
 
+  Future utworzRaport(b, pi, po) async {
+    nowyRaport = Report();
+    await nowyRaport.nowePomieszczenie(b, pi, po);
+  }
+
   /// Początkowe wpisanie danych - działa prawie tak jak 'odswierzZeksnowane'
   /// ale inicjalizuje dane, a nie je nadpisuje
   void przygotujZeskanowane() {
@@ -690,41 +690,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
     }
   }
 
-  /// Metoda tymczasowa - generowanie danych do testów
-  List<List<List<dynamic>>> losuj() {
-    biurka = [];
-    monitory = [];
-    krzesla = [];
-
-    for (int i = 1; i <= 20; i++) {
-      List<dynamic> tmp = [];
-      tmp.add("Biurko $i");
-      tmp.add(Random().hashCode.toString());
-      tmp.add(false);
-      tmp.add("");
-      biurka.add(tmp);
-    }
-
-    for (int i = 1; i <= 20; i++) {
-      List<dynamic> tmp = [];
-      tmp.add("Monitor $i");
-      tmp.add(Random().hashCode.toString());
-      tmp.add(false);
-      tmp.add("");
-      monitory.add(tmp);
-    }
-
-    for (int i = 1; i <= 20; i++) {
-      List<dynamic> tmp = [];
-      tmp.add("Krzeslo $i");
-      tmp.add(Random().hashCode.toString());
-      tmp.add(false);
-      tmp.add("");
-      krzesla.add(tmp);
-    }
-
-    return [krzesla, monitory, biurka];
-  }
 
   /// Zliczanie gotowych elementów na liście dynamicznej
   /// do użycia by pokazać ile już zeskanowano elementów
@@ -890,6 +855,13 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   /// Rekurancyjne przeszukanie danych w celu odnalezienia i odznaczenia kodu
   Future<bool> szukajAzZnajdziesz(wartosc) async {
+
+    for (var kategoria in przedmiotyWgTypu.keys){
+      for (var barcode in przedmiotyWgTypu[kategoria]!.keys){
+
+      }
+    }
+
     for (List<List<dynamic>> l in [krzesla, monitory, biurka]) {
       for (int i = 0; i < l.length; i++) {
         if (l[i][1] == wartosc) {

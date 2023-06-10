@@ -7,18 +7,21 @@ class Report {
   /// Funkcja służąca do dodawania nowego pomieszczenie do listy zeskanowanych
   /// przyjmuje ona nową lokalizację do dodania i umieszcza ją w zmiennej skan
   Future nowePomieszczenie(budynek, pietro, pomieszczenie) async {
-    Map<String, String> miejsce = {};
-
-    final lokalizacja = await FirebaseFirestore.instance
-        .collection("/Building/$budynek/Floors/" +
-            "$pietro/Rooms/$pomieszczenie/Items/")
-        .get();
-
-    for (var s in lokalizacja.docs) {
-      miejsce[s.id] = s.data()["comment"];
+    if (!skan.containsKey(budynek)){
+      Map<String,Map<String, Map<String, String>>> pietra = {};
+      skan[budynek] = pietra;
+    }
+    if (!skan[budynek]!.containsKey(pietro)){
+      Map<String, Map<String, String>> pomiesz = {};
+      skan[budynek]![pietro] = pomiesz;
+    }
+    if (!skan[budynek]![pietro]!.containsKey(pomieszczenie)){
+      Map<String, String> przed = {};
+      skan[budynek]![pietro]![pomieszczenie] = przed;
     }
 
-    skan[budynek]![pietro]![pomieszczenie] = miejsce;
+    print("ala");
+
   }
 
   /// Funkcja która jest wywoływana przy przejściu do skanowania nowego
@@ -27,7 +30,9 @@ class Report {
       Map<String, Map<String, String>> dane) async {
     for(String typ in dane.keys){
       for(String barcode in dane[typ]!.keys){
-        skan[budynek]![pomieszczenie]![pietro]![barcode] = dane[typ]![barcode]!;
+        Map<String, String> miejsce = {};
+        miejsce[barcode] = dane[typ]![barcode]!;
+        skan[budynek]![pietro]![pomieszczenie]![barcode] = dane[typ]![barcode]!;
       }
     }
   }

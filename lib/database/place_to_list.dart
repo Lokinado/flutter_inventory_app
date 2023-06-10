@@ -110,6 +110,5 @@ Future<Map<String, Map<String, String>>> przedmiotyWKategoriach(
     przedmiotyWgKat[typy![kat].toString()]![p] = przedmioty[p]!["comment"].toString();
   }
 
-  print(przedmiotyWgKat);
   return przedmiotyWgKat;
 }
