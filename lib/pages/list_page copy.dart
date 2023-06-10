@@ -32,6 +32,7 @@ class _ListPageState extends State<ListPage> {
     Room(3, 2, 17),
     Room(3, 2, 18),
   ];
+  Future<dynamic> buildings = pobierzBudynki();
 
 
   final List<int> uniqueBuildings = [];
@@ -63,7 +64,7 @@ class _ListPageState extends State<ListPage> {
             child: CircleAvatar(
               backgroundColor: const Color.fromARGB(255 ,87, 178, 122),
               child: IconButton(
-                onPressed: () =>{},
+                onPressed: () =>{print(buildings)},
                 icon: const Icon(Icons.add, color: Colors.white,),
                 style: IconButton.styleFrom(
                   shape: const CircleBorder(),
@@ -73,75 +74,60 @@ class _ListPageState extends State<ListPage> {
             ),
           ),
         ),
-        FutureBuilder(
-          future: pobierzBudynki(),
-          builder: (context, snapshot) {
-            switch(snapshot.connectionState){
-              case(ConnectionState.waiting):
-                return const Text("Loading...");
-            default:
-            if(snapshot.hasError) {
-              return const Text("Błąd Połączenia z Bazą");
-            } else {
-              var buildings = snapshot.data;
-              return Expanded(
-            child: ListView(
-              children: [
-                for (var building in buildings)
-                  Container(
-                    margin: const EdgeInsets.only(left: 10.0),
-                    child: Theme(
-                      data: Theme.of(context).copyWith(
-                        unselectedWidgetColor: Colors.black, // here for close state
-                        colorScheme: const ColorScheme.light(
-                          primary: Colors.black,
-                        ), // here for open state in replacement of deprecated accentColor
-                        dividerColor: Colors.transparent, // if you want to remove the border
-                      ),
-                      child: ExpansionTile(
-                        title: Text('Budynek $building'),
-                        textColor: Colors.black,
-                        collapsedTextColor: Colors.black,
-                        shape: const Border(),
-                        children: [
-                          for (int level in uniqueFloors)
-                            if (rooms
-                                .where((room) =>
-                            room.building == building && room.level == level)
-                                .isNotEmpty)
-                              Container(
-                                margin: const EdgeInsets.only(left: 12.0),
-                                child: Theme(
-                                  data: Theme.of(context).copyWith(
-                                    unselectedWidgetColor: Colors.black, // here for close state
-                                    colorScheme: const ColorScheme.light(
-                                      primary: Colors.black,
-                                    ), // here for open state in replacement of deprecated accentColor
-                                    dividerColor: Colors.transparent, // if you want to remove the border
-                                  ),
-                                  child: ExpansionTile(
-                                    title: Text('Piętro $level'),
-                                    textColor: Colors.black,
-                                    collapsedTextColor: Colors.black,
-                                    children: [
-                                      Column(
-                                        children: _buildRoomTiles(building, level, mediaWidth),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                        ],
-                      ),
-                    ),
+        Expanded(
+        child: ListView(
+          children: [
+            for (int building in uniqueBuildings)
+              Container(
+                margin: const EdgeInsets.only(left: 10.0),
+                child: Theme(
+                  data: Theme.of(context).copyWith(
+                    unselectedWidgetColor: Colors.black, // here for close state
+                    colorScheme: const ColorScheme.light(
+                      primary: Colors.black,
+                    ), // here for open state in replacement of deprecated accentColor
+                    dividerColor: Colors.transparent, // if you want to remove the border
                   ),
+                  child: ExpansionTile(
+                    title: Text('Budynek $building'),
+                    textColor: Colors.black,
+                    collapsedTextColor: Colors.black,
+                    shape: const Border(),
+                    children: [
+                      for (int level in uniqueFloors)
+                        if (rooms
+                            .where((room) =>
+                        room.building == building && room.level == level)
+                            .isNotEmpty)
+                          Container(
+                            margin: const EdgeInsets.only(left: 12.0),
+                            child: Theme(
+                              data: Theme.of(context).copyWith(
+                                unselectedWidgetColor: Colors.black, // here for close state
+                                colorScheme: const ColorScheme.light(
+                                  primary: Colors.black,
+                                ), // here for open state in replacement of deprecated accentColor
+                                dividerColor: Colors.transparent, // if you want to remove the border
+                              ),
+                              child: ExpansionTile(
+                                title: Text('Piętro $level'),
+                                textColor: Colors.black,
+                                collapsedTextColor: Colors.black,
+                                children: [
+                                  Column(
+                                    children: _buildRoomTiles(building, level, mediaWidth),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                    ],
+                  ),
+                ),
+              ),
 
-              ],
-            ),
-            );
-            }
-            }
-          }
+          ],
+        ),
         ),
           GestureDetector(
             onTap: () => print("tu przekierowanie"),
