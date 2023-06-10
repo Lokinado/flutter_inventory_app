@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => AuthPage(),
-        '/details': (context) => DetailsPage(title: this.toString(),),
+        '/': (context) => const AuthPage(),
+        '/details': (context) => DetailsPage(title: context.toString(),),
       },
     );
   }
