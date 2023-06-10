@@ -20,7 +20,11 @@ class _AddPageState extends State<AddPage> {
 }
 */
 
-class _AddPageState extends State<AddPage> {
+class _AddPageState extends State<AddPage>
+    with AutomaticKeepAliveClientMixin<AddPage> {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
     return ListPage();

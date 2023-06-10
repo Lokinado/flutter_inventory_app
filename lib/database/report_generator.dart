@@ -20,8 +20,6 @@ class Report {
       skan[budynek]![pietro]![pomieszczenie] = przed;
     }
 
-    print("ala");
-
   }
 
   /// Funkcja która jest wywoływana przy przejściu do skanowania nowego
@@ -54,7 +52,7 @@ class Report {
                 .collection("/Building/$budynek" +
                     "/Floors/$pietro/Rooms/$pomieszczenie/Items")
                 .doc(przedmiot)
-                .set({
+                .update({
               "comment": skan[budynek]![pietro]![pomieszczenie]!["comment"],
             });
           }

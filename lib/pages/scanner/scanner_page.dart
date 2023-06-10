@@ -135,6 +135,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
       for (var k in przedmiotyWgTypu.keys){
         listaListElem[k] = przedmiotyWgTypu[k]!.values.toList();
+        zeskanowaneLiczba[k] = 0;
       }
 
       //przygotujZeskanowane();
@@ -430,7 +431,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
               onPressed: () async {
                 nestedComentDialog(listaListElem[item], item);
               },
-              style: liczbaBiurek == biurka.length
+              style: zeskanowaneLiczba[item] == przedmiotyWgTypu[item]!.length
                   ? spacedGreenButtonActive
                   : spacedGreenButtonNActive,
               child: Row(
@@ -445,7 +446,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    "$liczbaKrzesel/${krzesla.length}",
+                    "${zeskanowaneLiczba[item]}/${listaListElem[item]}",
                     style: TextStyle(
                         fontSize: elementsOffset,
                         color: Colors.black,
