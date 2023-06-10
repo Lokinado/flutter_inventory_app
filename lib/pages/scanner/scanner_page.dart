@@ -78,14 +78,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Kontroluje działanie kamery
   ScanController cameraController = ScanController();
 
-  /// Liczba zeskanowanych krzeseł
-  int liczbaKrzesel = 20;
-
-  /// Liczba zeskanownanych monitorow
-  late int liczbaMonitorow;
-
-  /// Liczba zeskanowanych biurek
-  late int liczbaBiurek;
+  Map<String, int> zeskanowaneLiczba = {};
 
   // TE ZMIENNE MUSZĄ BYĆ, BO TYCH PRZEKAZYWNAYCH PRZY WYWOŁANIU STRONY
   // NIE DA SIĘ MODYFIKOWAĆ, WIĘC TRZEBA MIEĆ ODDZIELNY ZESTAW
