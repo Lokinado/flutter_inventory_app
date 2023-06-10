@@ -33,15 +33,17 @@ class _DemoCamPageState extends State<DemoCamPage> {
   // Przypisanie i inicjalizacja zmiennych
   //
 
+  /// Zmienna która odpowiada za odświerzenie zmiennych po pojawieniu się popupu
   var inicjalizujDane = true;
 
   /// Utworzeni / pobranie danych do / z bazy
   var odswierzRozmiar = true;
 
-  /// Pobranie wszystkich przedmiotów do skanowania
-  late Map<String, Map<String, dynamic>> przedmiotyDoSkanowania;
+  /// Pobranie wszystkich przedmiotów do skanowania, podzielnoych na kategorie
+  late Map<String, Map<String, String>> przedmiotyWgTypu;
 
   // Zmienne przechowywujące informacje nt. przedmiotów do skanownaia
+
 
   /// Lista krzeseł w sali w raz z informacjami
   late List<List<dynamic>> krzesla = [];
@@ -72,10 +74,10 @@ class _DemoCamPageState extends State<DemoCamPage> {
   late TextEditingController _textEditingController;
 
   /// Kontroluje działanie kamery
-  ScanController controller = ScanController();
+  ScanController cameraController = ScanController();
 
   /// Liczba zeskanowanych krzeseł
-  late int liczbaKrzesel;
+  int liczbaKrzesel = 20;
 
   /// Liczba zeskanownanych monitorow
   late int liczbaMonitorow;
@@ -115,6 +117,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   @override
   Widget build(BuildContext context) {
+
     /// Pobranie informacji nt. wymiarów okna
     if (odswierzRozmiar) {
       rozmiar = MediaQuery.of(context).size;
@@ -122,23 +125,21 @@ class _DemoCamPageState extends State<DemoCamPage> {
       // Przygotowanie zmiennenych pomodniczych do rozmiarowania elementów
       textHeighOffset = rozmiar.height * 0.04;
       elementsOffset = rozmiar.height * 0.023;
+      cameraController.pause();
+      cameraController.resume();
     }
 
     /// Inicjalizacja zmienneych i dynamiczne zmiany ich wartości
     /// -> przechowują informacje nt. stanu skonowania elementów
     if (inicjalizujDane) {
-      List<List<List<dynamic>>> zwrot = losuj();
-
-      krzesla = zwrot[0];
-      monitory = zwrot[1];
-      biurka = zwrot[2];
+      //List<List<List<dynamic>>> zwrot = losuj();
 
       budynek = widget.budynek;
       pietro = widget.pietro;
       pomieszczenie = widget.pomieszczenie;
 
       przygotujZeskanowane();
-      pobierz();
+      pobierz(budynek, pietro, pomieszczenie);
 
       inicjalizujDane = false;
     }
@@ -172,6 +173,226 @@ class _DemoCamPageState extends State<DemoCamPage> {
         body: Column(
           children: [
             /// Separator oddzielający szare pole z kamerą od nagłówka
+            SizedBox(
+              height: elementsOffset,
+            ),
+
+
+            SizedBox(
+              height: rozmiar.height * 0.2,
+              width: rozmiar.width * 0.9,
+              child: ListView(
+                children: [
+                  SizedBox(
+                    width: rozmiar.width * 0.8,
+                    height: 2.5 * elementsOffset,
+                    child: ElevatedButton(
+                      style: liczbaKrzesel == krzesla.length
+                          ? spacedGreenButtonActive
+                          : spacedGreenButtonNActive,
+                      onPressed: () async {
+                        String? wybraneKrzeslo = await showPickerDialog(
+                          context: context,
+                          label: "krzesło",
+                          items: krzeslaIdentyfikatory,
+                        );
+                        if (wybraneKrzeslo != null) {
+                          setState(() {
+                            krzesla[int.parse(wybraneKrzeslo.split(":")[0]) - 1]
+                            [2] = true;
+                          });
+                        }
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            left: elementsOffset * 0.2,
+                            right: elementsOffset * 0.2),
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Krzesło",
+                              style: TextStyle(
+                                  fontSize: elementsOffset,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              "$liczbaKrzesel/${krzesla.length}",
+                              style: TextStyle(
+                                  fontSize: elementsOffset,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.right,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  SizedBox(
+                    width: rozmiar.width * 0.8,
+                    height: 2.5 * elementsOffset,
+                    child: ElevatedButton(
+                      style: liczbaMonitorow == monitory.length
+                          ? spacedGreenButtonActive
+                          : spacedGreenButtonNActive,
+                      onPressed: () async {
+                        String? wybranyMonitor = await showPickerDialog(
+                          context: context,
+                          label: "monitor",
+                          items: monitoryIdentyfikatory,
+                        );
+                        if (wybranyMonitor != null) {
+                          setState(() {
+                            monitory[int.parse(wybranyMonitor.split(":")[0]) - 1]
+                            [2] = true;
+                          });
+                        }
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            left: elementsOffset * 0.2,
+                            right: elementsOffset * 0.2),
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Monitory",
+                              style: TextStyle(
+                                  fontSize: elementsOffset,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              "$liczbaMonitorow/${monitory.length}",
+                              style: TextStyle(
+                                  fontSize: elementsOffset,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.right,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  SizedBox(
+                    width: rozmiar.width * 0.8,
+                    height: 2.5 * elementsOffset,
+                    child: ElevatedButton(
+                      style: liczbaBiurek == biurka.length
+                          ? spacedGreenButtonActive
+                          : spacedGreenButtonNActive,
+                      onPressed: () async {
+                        String? wybraneBiurko = await showPickerDialog(
+                          context: context,
+                          label: "biurko",
+                          items: biurkaIdentyfikatory,
+                        );
+                        if (wybraneBiurko != null) {
+                          setState(() {
+                            biurka[int.parse(wybraneBiurko.split(":")[0]) - 1]
+                            [2] = true;
+                          });
+                        }
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            left: elementsOffset * 0.2,
+                            right: elementsOffset * 0.2),
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Biurko",
+                              style: TextStyle(
+                                  fontSize: elementsOffset,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              "$liczbaBiurek/${biurka.length}",
+                              style: TextStyle(
+                                  fontSize: elementsOffset,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.right,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  SizedBox(
+                    width: rozmiar.width * 0.8,
+                    height: 2.5 * elementsOffset,
+                    child: ElevatedButton(
+                      style: liczbaBiurek == biurka.length
+                          ? spacedGreenButtonActive
+                          : spacedGreenButtonNActive,
+                      onPressed: () async {
+                        String? wybraneBiurko = await showPickerDialog(
+                          context: context,
+                          label: "biurko",
+                          items: biurkaIdentyfikatory,
+                        );
+                        if (wybraneBiurko != null) {
+                          setState(() {
+                            biurka[int.parse(wybraneBiurko.split(":")[0]) - 1]
+                            [2] = true;
+                          });
+                        }
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            left: elementsOffset * 0.2,
+                            right: elementsOffset * 0.2),
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Biurko",
+                              style: TextStyle(
+                                  fontSize: elementsOffset,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              "$liczbaBiurek/${biurka.length}",
+                              style: TextStyle(
+                                  fontSize: elementsOffset,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.right,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            /// Separator oddzielający przyciski dolne
             SizedBox(
               height: elementsOffset,
             ),
@@ -274,170 +495,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
               height: elementsOffset * 1.5,
             ),
 
-            /// Wyświetlanie zeskanowanych przedmiotów
-            Column(
-              children: [
-                SizedBox(
-                  width: rozmiar.width * 0.8,
-                  height: 2.5 * elementsOffset,
-                  child: ElevatedButton(
-                    style: liczbaKrzesel == krzesla.length
-                        ? spacedGreenButtonActive
-                        : spacedGreenButtonNActive,
-                    onPressed: () async {
-                      String? wybraneKrzeslo = await showPickerDialog(
-                        context: context,
-                        label: "krzesło",
-                        items: krzeslaIdentyfikatory,
-                      );
-                      if (wybraneKrzeslo != null) {
-                        setState(() {
-                          krzesla[int.parse(wybraneKrzeslo.split(":")[0]) - 1]
-                              [2] = true;
-                        });
-                      }
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(
-                          left: elementsOffset * 0.2,
-                          right: elementsOffset * 0.2),
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Krzesło",
-                            style: TextStyle(
-                                fontSize: elementsOffset,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500),
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            "$liczbaKrzesel/${krzesla.length}",
-                            style: TextStyle(
-                                fontSize: elementsOffset,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500),
-                            textAlign: TextAlign.right,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                SizedBox(
-                  width: rozmiar.width * 0.8,
-                  height: 2.5 * elementsOffset,
-                  child: ElevatedButton(
-                    style: liczbaMonitorow == monitory.length
-                        ? spacedGreenButtonActive
-                        : spacedGreenButtonNActive,
-                    onPressed: () async {
-                      String? wybranyMonitor = await showPickerDialog(
-                        context: context,
-                        label: "monitor",
-                        items: monitoryIdentyfikatory,
-                      );
-                      if (wybranyMonitor != null) {
-                        setState(() {
-                          monitory[int.parse(wybranyMonitor.split(":")[0]) - 1]
-                              [2] = true;
-                        });
-                      }
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(
-                          left: elementsOffset * 0.2,
-                          right: elementsOffset * 0.2),
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Monitory",
-                            style: TextStyle(
-                                fontSize: elementsOffset,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500),
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            "$liczbaMonitorow/${monitory.length}",
-                            style: TextStyle(
-                                fontSize: elementsOffset,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500),
-                            textAlign: TextAlign.right,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                SizedBox(
-                  width: rozmiar.width * 0.8,
-                  height: 2.5 * elementsOffset,
-                  child: ElevatedButton(
-                    style: liczbaBiurek == biurka.length
-                        ? spacedGreenButtonActive
-                        : spacedGreenButtonNActive,
-                    onPressed: () async {
-                      String? wybraneBiurko = await showPickerDialog(
-                        context: context,
-                        label: "biurko",
-                        items: biurkaIdentyfikatory,
-                      );
-                      if (wybraneBiurko != null) {
-                        setState(() {
-                          biurka[int.parse(wybraneBiurko.split(":")[0]) - 1]
-                              [2] = true;
-                        });
-                      }
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(
-                          left: elementsOffset * 0.2,
-                          right: elementsOffset * 0.2),
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Biurko",
-                            style: TextStyle(
-                                fontSize: elementsOffset,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500),
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            "$liczbaBiurek/${biurka.length}",
-                            style: TextStyle(
-                                fontSize: elementsOffset,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500),
-                            textAlign: TextAlign.right,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            /// Separator oddzielający przyciski dolne
-            SizedBox(
-              height: elementsOffset * 1.5,
-            ),
-
             /// Przyciski dolne na stronie
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -497,6 +554,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
                           inicjalizujDane = true;
                         }
                       });
+                      await pobierz(budynek, pietro, pomieszczenie);
                     }
                   },
                   child: Container(
@@ -535,14 +593,14 @@ class _DemoCamPageState extends State<DemoCamPage> {
           borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20)),
           child: ScanView(
-            controller: controller,
+            controller: cameraController,
             scanAreaScale: .8,
             scanLineColor: Colors.green.shade400,
             onCapture: (data) async {
               setState(() {
                 scannedValue = data;
               });
-              controller.pause();
+              cameraController.pause();
 
               /// Kod wstrzymujcy dziaanie kamery
 
@@ -567,7 +625,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
                     animationDuration: const Duration(microseconds: 500));
               }
               await Future.delayed(const Duration(seconds: 1));
-              controller.resume();
+              cameraController.resume();
             },
           ),
         ),
@@ -603,14 +661,13 @@ class _DemoCamPageState extends State<DemoCamPage> {
       ][lista];
       for (int i = 0; i < wybor.length; i++) {
         identyfikatory[i] =
-            "${(i + 1).toString()}:  ${wybor[i][1].toString()}  ${wybor[i][2].toString()} ${wybor[i][3].toString()}";
+            "${(i + 1).toString()}:  ${wybor[i][1].toString()}  ${wybor[i][3].toString()}";
       }
     }
   }
 
-  Future pobierz() async {
-    przedmiotyDoSkanowania = await pobieraniePrzedmiotow(
-        widget.budynek, widget.pietro, widget.pomieszczenie);
+  Future pobierz(b, pi, po) async {
+    przedmiotyWgTypu = await przedmiotyWKategoriach(b, pi, po);
   }
 
   /// Początkowe wpisanie danych - działa prawie tak jak 'odswierzZeksnowane'
@@ -682,10 +739,11 @@ class _DemoCamPageState extends State<DemoCamPage> {
     return licznik;
   }
 
+
   /// Okienko do wyświetlania popupu do dodania komentarza
   Future commentDialog(naglowek) async {
     odswierzRozmiar = false;
-    controller.pause();
+    cameraController.pause();
 
     /// Kod wstrzymujcy dziaanie kamery
     final wynik = await showDialog(
@@ -715,13 +773,13 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
     /// zresetuj wpisaną wartość
     odswierzRozmiar = true;
-    controller.resume();
+    cameraController.resume();
   }
 
   /// Popup do wpisania kodu ręcznie przy próbie skanowania
   Future inputCodeManually() async {
     odswierzRozmiar = false;
-    controller.pause();
+    cameraController.pause();
 
     /// Kod wstrzymujcy dziaanie kamery /// Kod wstrzymuj
     await showDialog(
@@ -787,10 +845,10 @@ class _DemoCamPageState extends State<DemoCamPage> {
       /// A na koniec zresetuj zmmienną do przechwytywania teksut
       /// (bez tego po ponownym otwarciu popupu mamy wpisany poprzedni kod)
       _textEditingController.text = "";
-      controller.resume();
+      cameraController.resume();
     }
     odswierzRozmiar = true;
-    controller.resume();
+    cameraController.resume();
   }
 
   /// Rekurancyjne przeszukanie danych w celu odnalezienia i odznaczenia kodu
@@ -825,11 +883,11 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// i ewentualnie zwracające informację o tym czy należy przejść do strony
   /// zmiany pomieszczenia
   Future<String> doZakonczeniaRaportu(BuildContext context) async {
-    controller.pause();
+    cameraController.pause();
     final result = await Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => const FinishReportPage()));
     if (result == null) {
-      controller.resume();
+      cameraController.resume();
     } else {
       dispose();
     }
@@ -840,12 +898,14 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// i zwrtacające informacje listę oznaczajacaą pomieszczenia, lub null
   /// jeśli operacja została anulowana
   Future<List<String>> doZmianyPomieszczenia(BuildContext context) async {
+    cameraController.pause();
     final result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ChangePlacePage(
               budynek: budynek,
               pietro: pietro,
               pomieszczenie: pomieszczenie,
             )));
+    cameraController.resume();
     return result;
   }
 }
