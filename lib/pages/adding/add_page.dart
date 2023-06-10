@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/topbodysection.dart';
-import 'package:inventory_app/pages/adding/addhomebody.dart';
 import 'package:inventory_app/pages/list_page.dart';
 import 'package:inventory_app/database/place_to_list.dart';
 
