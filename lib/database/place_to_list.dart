@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 
 /// Funkcja zwracająca dwie listy, budynków i numerów budynków;
 /// pierwsza zwraca listę list, gdzie każdy element to lista skłądająca się
