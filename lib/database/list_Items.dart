@@ -64,7 +64,7 @@ class DisplayItems extends StatelessWidget {
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 10.0, horizontal: 20.0),
                           title: Text(
-                            '${item[2].toString().substring(50).substring(0, item[2].toString().substring(50).length - 1)}\nbarcode: ${item[0]}',
+                            '${BetterText(item[2])}\nbarcode: ${item[0]}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 18.0,
@@ -105,4 +105,14 @@ class DisplayItems extends StatelessWidget {
       ),
     );
   }
+}
+
+String BetterText(String input) {
+  List<String> NoSlashes = input.split('/');
+  int textlen = NoSlashes.length;
+  String rettext = "";
+  for (int i = 1; i < textlen; i++) {
+    rettext = rettext + NoSlashes[i] + " ";
+  }
+  return rettext;
 }
