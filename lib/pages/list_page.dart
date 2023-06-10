@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_app/prefab/homebody.dart';
-import 'package:inventory_app/prefab/scanerhomepagecenter.dart';
+
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/database/place_to_list.dart';
 
@@ -22,32 +21,8 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
 
 
-  final List<Room> rooms = [
-    Room(1, 1, 101),
-    Room(1, 1, 102),
-    Room(1, 2, 201),
-    Room(2, 1, 101),
-    Room(2, 2, 201),
-    Room(2, 2, 202),
-    Room(3, 2, 17),
-    Room(3, 2, 18),
-  ];
 
 
-  final List<int> uniqueBuildings = [];
-
-  final List<int> uniqueFloors = [];
-
-  void _getUniqueBuildingsAndFloors() {
-    for (Room room in rooms) {
-      if (!uniqueBuildings.contains(room.building)) {
-        uniqueBuildings.add(room.building);
-      }
-      if (!uniqueFloors.contains(room.level)) {
-        uniqueFloors.add(room.level);
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,40 +73,82 @@ class _ListPageState extends State<ListPage> {
                         ), // here for open state in replacement of deprecated accentColor
                         dividerColor: Colors.transparent, // if you want to remove the border
                       ),
-                      child: ExpansionTile(
-                        title: Text('Budynek $building'),
-                        textColor: Colors.black,
-                        collapsedTextColor: Colors.black,
-                        shape: const Border(),
-                        children: [
-                          for (int level in uniqueFloors)
-                            if (rooms
-                                .where((room) =>
-                            room.building == building && room.level == level)
-                                .isNotEmpty)
-                              Container(
-                                margin: const EdgeInsets.only(left: 12.0),
-                                child: Theme(
-                                  data: Theme.of(context).copyWith(
-                                    unselectedWidgetColor: Colors.black, // here for close state
-                                    colorScheme: const ColorScheme.light(
-                                      primary: Colors.black,
-                                    ), // here for open state in replacement of deprecated accentColor
-                                    dividerColor: Colors.transparent, // if you want to remove the border
+                      child: FutureBuilder(
+                        future: pobierzPietra(building),
+                        builder: (context,snapshot) {
+                          switch(snapshot.connectionState)
+                          {
+                            case (ConnectionState.waiting):
+                              return const Text("Loading...");
+                            default:
+                          if(snapshot.hasError) 
+                          {
+                          return const Text("Błąd Połączenia z Bazą");
+                          } 
+                         else
+                         {
+                          var floors=snapshot.data;
+                          return ExpansionTile(
+                            title: Text('Budynek $building'),
+                            textColor: Colors.black,
+                            collapsedTextColor: Colors.black,
+                            shape: const Border(),
+                            children: [
+                                for(var floor in floors)
+                                  FutureBuilder(
+                                    future: pobierzPomieszczenia(building, floor),
+                                    builder: (context, snapshot) {
+                                      switch(snapshot.connectionState){
+                                        case (ConnectionState.waiting):
+                                          return const Text("Loading...");
+                                        default:
+                                        if(snapshot.hasError)
+                                        {
+                                          return const Text("Błąd Połączenia z Bazą");
+                                        }
+                                        else
+                                        {
+                                      var rooms=snapshot.data;
+                                      return Container(
+                                        margin: const EdgeInsets.only(left: 12.0),
+                                        child: Theme(
+                                          data: Theme.of(context).copyWith(
+                                          unselectedWidgetColor: Colors.black, // here for close state
+                                          colorScheme: const ColorScheme.light(
+                                            primary: Colors.black,
+                                          ), // here for open state in replacement of deprecated accentColor
+                                          dividerColor: Colors.transparent, // if you want to remove the border
+                                        ),
+                                          child: ExpansionTile
+                                          (
+                                            title: Text("Piętro $floor"),
+                                            textColor: Colors.black,
+                                            collapsedTextColor: Colors.black,
+                                            children: [
+                                                      for(var room in rooms)
+                                                      Container(
+                                                        height: 50.0,
+                                                        width: mediaWidth*0.7,
+                                                        decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.circular(50.0),
+                                                            color: const Color.fromARGB(217, 217, 217, 217)),
+                                                        margin: const EdgeInsets.only(left: 5.0, bottom: 5.0),
+                                                        child: ListTile(title: Text("Sala $room"))
+                                                        ),
+                                                      
+                                                    ],
+                                            ),
+                                        ),
+                                      );
+                                    }
+                                    }
+                                    }
                                   ),
-                                  child: ExpansionTile(
-                                    title: Text('Piętro $level'),
-                                    textColor: Colors.black,
-                                    collapsedTextColor: Colors.black,
-                                    children: [
-                                      Column(
-                                        children: _buildRoomTiles(building, level, mediaWidth),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                        ],
+                            ],
+                          );
+                        }
+                          }
+                        }
                       ),
                     ),
                   ),
@@ -202,30 +219,6 @@ class _ListPageState extends State<ListPage> {
   );
   }
 
-  List<Widget> _buildRoomTiles(int building, int floor, mediaWidth) {
-    List<Widget> roomTiles = [];
-
-    for (Room room in rooms) {
-      if (room.building == building && room.level == floor) {
-        roomTiles.add(
-          Container(
-            height: 50.0,
-            width: mediaWidth*0.7,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50.0),
-                color: const Color.fromARGB(217, 217, 217, 217)),
-            margin: const EdgeInsets.only(left: 5.0, bottom: 5.0),
-            child: ListTile(
-
-              title: Text('Sala ${room.roomNumber}'),
-              onTap: ()=>print("tu mam przejśc gdzieś!"), //TODO: Przejście do innej strony
-            ),
-          ),
-        );
-      }
-    }
-
-    return roomTiles;
-  }
+  
 }
 
