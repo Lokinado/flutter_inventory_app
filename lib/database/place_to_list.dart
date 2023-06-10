@@ -98,7 +98,7 @@ Future<Map<String, Map<String, String>>> przedmiotyWKategoriach(
   Map<String, Map<String, String>> przedmiotyWgKat = {};
 
   // Utworzenie gotowych kategorii
-  for (var k in typy.keys){
+  for (var k in typy.values){
     przedmiotyWgKat[k] = {};
   }
 
@@ -106,11 +106,10 @@ Future<Map<String, Map<String, String>>> przedmiotyWKategoriach(
   for (var p in przedmioty.keys){
     var item = przedmioty[p];
     var indexKat = item!["typ"].toString().split("/").length;
-    var kat = item!["typ"].toString().split("/")[indexKat];
-    Map<String, String> para = {};
-    para[p] = przedmioty[p]!["comment"].toString();
-    przedmiotyWgKat[typy![kat].toString()] = para;
+    var kat = item!["typ"].toString().split("/")[indexKat-1];
+    przedmiotyWgKat[typy![kat].toString()]![p] = przedmioty[p]!["comment"].toString();
   }
 
+  print(przedmiotyWgKat);
   return przedmiotyWgKat;
 }
