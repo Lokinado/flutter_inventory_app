@@ -21,6 +21,6 @@ class _AddPageState extends State<AddPage> {
 class _AddPageState extends State<AddPage> {
   @override
   Widget build(BuildContext context) {
-    return ListPage();//zmien pare rzeczy, góra strony etc
+    return ListPage();
   }
 }

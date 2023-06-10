@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/prefab/homebody.dart';
+import 'package:inventory_app/prefab/scanerhomepagecenter.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 
 class Room {
@@ -51,8 +52,7 @@ class _ListPageState extends State<ListPage> {
     return Scaffold(
       body: Column(
         children:[
-        TopBodySection(key: UniqueKey(),
-            tekst: 'Pomieszczenia',size: MediaQuery.of(context).size, location: Location.left),
+        leftSectionHeader(context),
         Align(
           alignment: Alignment.topLeft,
           child: Container(
@@ -159,6 +159,29 @@ class _ListPageState extends State<ListPage> {
         ],
       ),
     );
+  }
+
+  Wrap leftSectionHeader(BuildContext context) {
+    return Wrap(
+    children: <Widget>[
+      TopBodySection(key: UniqueKey(),
+        tekst: 'Pomieszczenia',size: MediaQuery.of(context).size, location: Location.left,),
+      Container(
+      color: const Color.fromRGBO(0, 50, 39, 1),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 50,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft:
+            Radius.circular(75),
+          ),
+        ),
+      ),
+      ),
+    ],
+  );
   }
 
   List<Widget> _buildRoomTiles(int building, int floor, mediaWidth) {
