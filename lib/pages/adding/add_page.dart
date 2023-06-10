@@ -1,7 +1,10 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/pages/adding/addhomebody.dart';
 import 'package:inventory_app/pages/list_page.dart';
+import 'package:inventory_app/database/place_to_list.dart';
 
 class AddPage extends StatefulWidget {
   @override
@@ -23,4 +26,5 @@ class _AddPageState extends State<AddPage> {
   Widget build(BuildContext context) {
     return ListPage();
   }
+
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/prefab/homebody.dart';
 import 'package:inventory_app/prefab/scanerhomepagecenter.dart';
 import 'package:inventory_app/components/topbodysection.dart';
+import 'package:inventory_app/database/place_to_list.dart';
 
 class Room {
   final int building;
@@ -12,7 +13,6 @@ class Room {
 }
 
 class ListPage extends StatefulWidget {
-
   ListPage({super.key});
 
   @override
@@ -20,6 +20,8 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
+
+
   final List<Room> rooms = [
     Room(1, 1, 101),
     Room(1, 1, 102),
@@ -30,6 +32,8 @@ class _ListPageState extends State<ListPage> {
     Room(3, 2, 17),
     Room(3, 2, 18),
   ];
+  Future<dynamic> buildings = pobierzBudynki();
+
 
   final List<int> uniqueBuildings = [];
 
@@ -60,7 +64,7 @@ class _ListPageState extends State<ListPage> {
             child: CircleAvatar(
               backgroundColor: const Color.fromARGB(255 ,87, 178, 122),
               child: IconButton(
-                onPressed: () {print("dodaje obiekt!");},
+                onPressed: () =>{print(buildings)},
                 icon: const Icon(Icons.add, color: Colors.white,),
                 style: IconButton.styleFrom(
                   shape: const CircleBorder(),
