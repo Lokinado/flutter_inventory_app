@@ -1,16 +1,21 @@
-# inventory_app
 
-A new Flutter project.
+# Inventory App
+## PL | [EN](https://github.com/Lokinado/flutter_inventory_app/blob/Markdown/README.md#en--pl)
+### Opis
+Aplikacja do robienia inwentaryzacji tworzona na życzenie. Środki trwałe w pomieszczeniach są identyfikowane po numerze zapisanym na naklejce oraz odwzorowanym za pomocą kodu kreskowego. Istnieje możliwość rozróżnienia budynków, w każdym budynku pięter, a na każdym piętrze pomieszczeń.
 
-## Getting Started
+### Funkcjonalności
+- Skanowanie kodów kreskowych kamerą
+- Wpisywanie kodów kreskowych ręcznie
+- Raportowanie poszczególnych pomieszczeń
+- Walidacja umiejscowienia przedmiotów
 
-This project is a starting point for a Flutter application.
+## EN | [PL](https://github.com/Lokinado/flutter_inventory_app/blob/Markdown/README.md#pl--en)
+### Description
+Tailored app. Fixed assets in rooms are identified by the number written on the sticker and mapped with a barcode. It is possible to distinguish between buildings, floors in each building, and rooms on each floor.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Functions
+- Scanning barcodes with the camera
+- Typing barcodes manually
+- Reporting of individual rooms
+- Validation of item placement
