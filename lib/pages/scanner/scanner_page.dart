@@ -11,6 +11,7 @@ import 'package:inventory_app/components/element_styling.dart';
 import 'package:inventory_app/pages/scanner/finish_report.dart';
 import 'package:inventory_app/pages/scanner/change_place.dart';
 import 'package:inventory_app/database/place_to_list.dart';
+import 'package:inventory_app/database/report_generator.dart';
 
 class DemoCamPage extends StatefulWidget {
   const DemoCamPage({
@@ -38,6 +39,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   /// Utworzeni / pobranie danych do / z bazy
   var odswierzRozmiar = true;
+
 
   /// Pobranie wszystkich przedmiotów do skanowania, podzielnoych na kategorie
   late Map<String, Map<String, String>> przedmiotyWgTypu;
@@ -111,6 +113,8 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   late Size rozmiar;
 
+  late Report nowyRaport;
+
   //
   // Najważniejszy element budujący wszystko w tym pliku
   //
@@ -142,6 +146,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
       przygotujZeskanowane();
       pobierz(budynek, pietro, pomieszczenie);
+
+      nowyRaport = new Report();
+      nowyRaport.nowePomieszczenie(budynek, pietro, pomieszczenie);
 
       inicjalizujDane = false;
     }
@@ -915,7 +922,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
   Future<String> doZakonczeniaRaportu(BuildContext context) async {
     cameraController.pause();
     final result = await Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const FinishReportPage()));
+        MaterialPageRoute(builder: (context) => FinishReportPage(
+          raport: nowyRaport,
+        )));
     if (result == null) {
       cameraController.resume();
     } else {
