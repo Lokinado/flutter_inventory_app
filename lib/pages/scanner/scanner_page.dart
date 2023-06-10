@@ -58,7 +58,8 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   // Przy wyświetlaniu okienek potrzebna jest lista tekstowa więc dla każdego
   // zbioru eementów tworzę taką listę
-
+  /*
+  *
   /// Dynamicznie utworznona lista krzesel
   late List<String> krzeslaIdentyfikatory = [];
 
@@ -67,6 +68,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   /// Dynamicznie utworznona lista biurek
   late List<String> biurkaIdentyfikatory = [];
+  * */
+
+  Map<String, List<String>> listaListElem = {};
 
   /// Przechowuje rezultat wyskakujacych popupowych okienek
   late TextEditingController _textEditingController;
@@ -136,7 +140,11 @@ class _DemoCamPageState extends State<DemoCamPage> {
       pobierz(budynek, pietro, pomieszczenie);
       utworzRaport(budynek, pietro, pomieszczenie);
 
-      przygotujZeskanowane();
+      for (var k in przedmiotyWgTypu.keys){
+        listaListElem[k] = przedmiotyWgTypu[k]!.values.toList();
+      }
+
+      //przygotujZeskanowane();
       inicjalizujDane = false;
     }
 
@@ -368,6 +376,8 @@ class _DemoCamPageState extends State<DemoCamPage> {
   //  Funkcje używane w tym pliku
   //
 
+
+
   /// Widget wyświetlający działąjący skanner
   Widget camera() => Container(
         height: rozmiar.height * 0.3 - 6,
@@ -425,7 +435,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
             margin: EdgeInsets.only(bottom: elementsOffset*0.2),
             child: ElevatedButton(
               onPressed: () async {
-                await nestedComentDialog(krzeslaIdentyfikatory, item);
+                nestedComentDialog(listaListElem[item], item);
               },
               style: liczbaBiurek == biurka.length
                   ? spacedGreenButtonActive
@@ -475,22 +485,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Po zeksnaowaniu należy odświerżyć wyświetlane dane w popupach, między
   /// innymi komentarze, i zeskanowane przedmoty
   Future odswierzZeskanowane() async {
-    liczbaKrzesel = liczGotowe(krzesla);
-    liczbaMonitorow = liczGotowe(monitory);
-    liczbaBiurek = liczGotowe(biurka);
 
-    for (int lista = 0; lista < 3; lista++) {
-      List<List<dynamic>> wybor = [krzesla, monitory, biurka][lista];
-      List<String> identyfikatory = [
-        krzeslaIdentyfikatory,
-        monitoryIdentyfikatory,
-        biurkaIdentyfikatory
-      ][lista];
-      for (int i = 0; i < wybor.length; i++) {
-        identyfikatory[i] =
-            "${(i + 1).toString()}:  ${wybor[i][1].toString()}  ${wybor[i][3].toString()}";
-      }
-    }
   }
 
   Future pobierz(b, pi, po) async {
@@ -502,7 +497,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
     await nowyRaport.nowePomieszczenie(b, pi, po);
   }
 
-  /// Początkowe wpisanie danych - działa prawie tak jak 'odswierzZeksnowane'
+  /*/// Początkowe wpisanie danych - działa prawie tak jak 'odswierzZeksnowane'
   /// ale inicjalizuje dane, a nie je nadpisuje
   void przygotujZeskanowane() {
     liczbaKrzesel = liczGotowe(krzesla);
@@ -521,7 +516,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
             "${(i + 1).toString()}:  ${wybor[i][1].toString()}  ${wybor[i][2].toString()} ${wybor[i][3].toString()}");
       }
     }
-  }
+  }*/
 
   /// Zliczanie gotowych elementów na liście dynamicznej
   /// do użycia by pokazać ile już zeskanowano elementów
@@ -581,7 +576,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
       final wynik = await showPickerDialog(
         context: context,
         label: naglowek,
-        items: lista,
+        items: listaListElem[lista]!,
       );
 
       if (wynik == null) {
