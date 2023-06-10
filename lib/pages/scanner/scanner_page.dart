@@ -18,17 +18,11 @@ class DemoCamPage extends StatefulWidget {
     required this.budynek,
     required this.pietro,
     required this.pomieszczenie,
-    required this.listaBudynkow,
-    required this.listaPieter,
-    required this.listaPomieszczen,
   }) : super(key: key);
 
   final String budynek;
   final String pietro;
   final String pomieszczenie;
-  final List<String> listaBudynkow;
-  final List<String> listaPieter;
-  final List<String> listaPomieszczen;
 
   @override
   State<DemoCamPage> createState() => _DemoCamPageState();
@@ -459,9 +453,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
                           if (!((budynek == wynik[0]) &&
                               (pietro == wynik[1]) &&
                               (pomieszczenie == wynik[2]))) {
-                            budynek = wynik[0].toString();
-                            pietro = wynik[1].toString();
-                            pomieszczenie = wynik[2].toString();
+                            budynek = wynik[0];
+                            pietro = wynik[1];
+                            pomieszczenie = wynik[2];
 
                             inicjalizujDane = true;
                           }
@@ -730,7 +724,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
     controller.pause();
 
     /// Kod wstrzymujcy dziaanie kamery /// Kod wstrzymuj
-    final result = await showDialog(
+    await showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Wpisz kod ręcznie"),
@@ -845,15 +839,12 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Wywołanie asynchroniczne przechodząde to zmiany pomieszczenia
   /// i zwrtacające informacje listę oznaczajacaą pomieszczenia, lub null
   /// jeśli operacja została anulowana
-  Future<List<int>?> doZmianyPomieszczenia(BuildContext context) async {
+  Future<List<String>> doZmianyPomieszczenia(BuildContext context) async {
     final result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ChangePlacePage(
               budynek: budynek,
               pietro: pietro,
               pomieszczenie: pomieszczenie,
-              listaBudynkow: widget.listaBudynkow,
-              listaPieter: widget.listaPieter,
-              listaPomieszczen: widget.listaPomieszczen,
             )));
     return result;
   }
