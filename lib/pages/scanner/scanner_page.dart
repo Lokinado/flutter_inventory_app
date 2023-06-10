@@ -40,12 +40,12 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Utworzeni / pobranie danych do / z bazy
   var odswierzRozmiar = true;
 
-
   /// Pobranie wszystkich przedmiotów do skanowania, podzielnoych na kategorie
   Map<String, Map<String, String>> przedmiotyWgTypu = {};
 
-  // Zmienne przechowywujące informacje nt. przedmiotów do skanownaia
+  Map<String, Map<String, String>> zeskanowanePrzedmioty = {};
 
+  // Zmienne przechowywujące informacje nt. przedmiotów do skanownaia
 
   /// Lista krzeseł w sali w raz z informacjami
   late List<List<dynamic>> krzesla = [];
@@ -56,10 +56,8 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Lista biurek w sali w raz z informacjami
   late List<List<dynamic>> biurka = [];
 
-
   // Przy wyświetlaniu okienek potrzebna jest lista tekstowa więc dla każdego
   // zbioru eementów tworzę taką listę
-
 
   /// Dynamicznie utworznona lista krzesel
   late List<String> krzeslaIdentyfikatory = [];
@@ -69,8 +67,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   /// Dynamicznie utworznona lista biurek
   late List<String> biurkaIdentyfikatory = [];
-
-
 
   /// Przechowuje rezultat wyskakujacych popupowych okienek
   late TextEditingController _textEditingController;
@@ -87,7 +83,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Liczba zeskanowanych biurek
   late int liczbaBiurek;
 
-
   // TE ZMIENNE MUSZĄ BYĆ, BO TYCH PRZEKAZYWNAYCH PRZY WYWOŁANIU STRONY
   // NIE DA SIĘ MODYFIKOWAĆ, WIĘC TRZEBA MIEĆ ODDZIELNY ZESTAW
   // do tych przekazywanch w parametrach dostajemy się poprzez 'widget. ...'
@@ -100,7 +95,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   /// Wybrane przez użytkownika pomieszczenie
   late String pomieszczenie;
-
 
   /// Zeskanowan wartość
   String scannedValue = "";
@@ -121,7 +115,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   @override
   Widget build(BuildContext context) {
-
     /// Pobranie informacji nt. wymiarów okna
     if (odswierzRozmiar) {
       rozmiar = MediaQuery.of(context).size;
@@ -136,7 +129,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
     /// Inicjalizacja zmienneych i dynamiczne zmiany ich wartości
     /// -> przechowują informacje nt. stanu skonowania elementów
     if (inicjalizujDane) {
-
       budynek = widget.budynek;
       pietro = widget.pietro;
       pomieszczenie = widget.pomieszczenie;
@@ -181,210 +173,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
               height: elementsOffset,
             ),
 
-
-            SizedBox(
-              height: rozmiar.height * 0.2,
-              width: rozmiar.width * 0.9,
-              child: ListView(
-                children: [
-                  SizedBox(
-                    width: rozmiar.width * 0.8,
-                    height: 2.5 * elementsOffset,
-                    child: ElevatedButton(
-                      style: liczbaKrzesel == krzesla.length
-                          ? spacedGreenButtonActive
-                          : spacedGreenButtonNActive,
-                      onPressed: () async {
-                        await nestedComentDialog(krzeslaIdentyfikatory, "Krzesła");
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(
-                            left: elementsOffset * 0.2,
-                            right: elementsOffset * 0.2),
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Krzesło",
-                              style: TextStyle(
-                                  fontSize: elementsOffset,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              "$liczbaKrzesel/${krzesla.length}",
-                              style: TextStyle(
-                                  fontSize: elementsOffset,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.right,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  SizedBox(
-                    width: rozmiar.width * 0.8,
-                    height: 2.5 * elementsOffset,
-                    child: ElevatedButton(
-                      style: liczbaMonitorow == monitory.length
-                          ? spacedGreenButtonActive
-                          : spacedGreenButtonNActive,
-                      onPressed: () async {
-                        String? wybranyMonitor = await showPickerDialog(
-                          context: context,
-                          label: "monitor",
-                          items: monitoryIdentyfikatory,
-                        );
-                        if (wybranyMonitor != null) {
-                          setState(() {
-                            monitory[int.parse(wybranyMonitor.split(":")[0]) - 1]
-                            [2] = true;
-                          });
-                        }
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(
-                            left: elementsOffset * 0.2,
-                            right: elementsOffset * 0.2),
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Monitory",
-                              style: TextStyle(
-                                  fontSize: elementsOffset,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              "$liczbaMonitorow/${monitory.length}",
-                              style: TextStyle(
-                                  fontSize: elementsOffset,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.right,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  SizedBox(
-                    width: rozmiar.width * 0.8,
-                    height: 2.5 * elementsOffset,
-                    child: ElevatedButton(
-                      style: liczbaBiurek == biurka.length
-                          ? spacedGreenButtonActive
-                          : spacedGreenButtonNActive,
-                      onPressed: () async {
-                        String? wybraneBiurko = await showPickerDialog(
-                          context: context,
-                          label: "biurko",
-                          items: biurkaIdentyfikatory,
-                        );
-                        if (wybraneBiurko != null) {
-                          setState(() {
-                            biurka[int.parse(wybraneBiurko.split(":")[0]) - 1]
-                            [2] = true;
-                          });
-                        }
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(
-                            left: elementsOffset * 0.2,
-                            right: elementsOffset * 0.2),
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Biurko",
-                              style: TextStyle(
-                                  fontSize: elementsOffset,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              "$liczbaBiurek/${biurka.length}",
-                              style: TextStyle(
-                                  fontSize: elementsOffset,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.right,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  SizedBox(
-                    width: rozmiar.width * 0.8,
-                    height: 2.5 * elementsOffset,
-                    child: ElevatedButton(
-                      style: liczbaBiurek == biurka.length
-                          ? spacedGreenButtonActive
-                          : spacedGreenButtonNActive,
-                      onPressed: () async {
-                        String? wybraneBiurko = await showPickerDialog(
-                          context: context,
-                          label: "biurko",
-                          items: biurkaIdentyfikatory,
-                        );
-                        if (wybraneBiurko != null) {
-                          setState(() {
-                            biurka[int.parse(wybraneBiurko.split(":")[0]) - 1]
-                            [2] = true;
-                          });
-                        }
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(
-                            left: elementsOffset * 0.2,
-                            right: elementsOffset * 0.2),
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Biurko",
-                              style: TextStyle(
-                                  fontSize: elementsOffset,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              "$liczbaBiurek/${biurka.length}",
-                              style: TextStyle(
-                                  fontSize: elementsOffset,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.right,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            listaElem(),
 
             /// Separator oddzielający przyciski dolne
             SizedBox(
@@ -597,10 +386,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
               // Kod wstrzymujcy dziaanie kamery
               cameraController.pause();
 
-
               // ... sprawdź czy element jest w bazie i ...
-              var czyWBazie = await szukajAzZnajdziesz(
-                  _textEditingController.text);
+              var czyWBazie =
+                  await szukajAzZnajdziesz(_textEditingController.text);
 
               // ... w zależności od odopowiedzi odznacz i pokaż odpowiedni komunikat
               if (czyWBazie) {
@@ -624,6 +412,51 @@ class _DemoCamPageState extends State<DemoCamPage> {
           ),
         ),
       );
+
+  /// Widget generujący dynamicznie listę elementów do wyswietlenia
+  Widget listaElem() {
+    return SizedBox(
+      width: rozmiar.width * 0.87,
+      height: rozmiar.height * 0.2,
+      child: ListView(
+        children: przedmiotyWgTypu.keys.map((item) {
+          return Container(
+            height: 2.5 * elementsOffset,
+            margin: EdgeInsets.only(bottom: elementsOffset*0.2),
+            child: ElevatedButton(
+              onPressed: () async {
+                await nestedComentDialog(krzeslaIdentyfikatory, item);
+              },
+              style: liczbaBiurek == biurka.length
+                  ? spacedGreenButtonActive
+                  : spacedGreenButtonNActive,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    item,
+                    style: TextStyle(
+                        fontSize: elementsOffset,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    "$liczbaKrzesel/${krzesla.length}",
+                    style: TextStyle(
+                        fontSize: elementsOffset,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.right,
+                  ),
+                ],
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
 
   /// Początkowa inicjalizacja ekranu
   @override
@@ -690,7 +523,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
     }
   }
 
-
   /// Zliczanie gotowych elementów na liście dynamicznej
   /// do użycia by pokazać ile już zeskanowano elementów
   int liczGotowe(List<List<dynamic>> lista) {
@@ -702,7 +534,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
     }
     return licznik;
   }
-
 
   /// Okienko do wyświetlania popupu do dodania komentarza
   Future commentDialog(naglowek) async {
@@ -740,14 +571,13 @@ class _DemoCamPageState extends State<DemoCamPage> {
     cameraController.resume();
   }
 
-
   Future nestedComentDialog(lista, naglowek) async {
     odswierzRozmiar = false;
+
     /// Kod wstrzymujcy dziaanie kamery
     cameraController.pause();
 
-
-    while (true){
+    while (true) {
       final wynik = await showPickerDialog(
         context: context,
         label: naglowek,
@@ -758,6 +588,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
         /// zresetuj wpisaną wartość
         odswierzRozmiar = true;
         cameraController.resume();
+
         /// dodaj komentarz do przedmiotu
         _textEditingController.text = "";
 
@@ -765,8 +596,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
         odswierzRozmiar = true;
         cameraController.resume();
         return;
-      }
-      else{
+      } else {
         wynik.split(": ")[1];
         final kom = await commentDialog("Przedmiot: $wynik");
         print(kom);
@@ -775,7 +605,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
         await odswierzZeskanowane();
       }
     }
-
   }
 
   /// Popup do wpisania kodu ręcznie przy próbie skanowania
@@ -855,11 +684,8 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   /// Rekurancyjne przeszukanie danych w celu odnalezienia i odznaczenia kodu
   Future<bool> szukajAzZnajdziesz(wartosc) async {
-
-    for (var kategoria in przedmiotyWgTypu.keys){
-      for (var barcode in przedmiotyWgTypu[kategoria]!.keys){
-
-      }
+    for (var kategoria in przedmiotyWgTypu.keys) {
+      for (var barcode in przedmiotyWgTypu[kategoria]!.keys) {}
     }
 
     for (List<List<dynamic>> l in [krzesla, monitory, biurka]) {
@@ -893,10 +719,10 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// zmiany pomieszczenia
   Future<String> doZakonczeniaRaportu(BuildContext context) async {
     cameraController.pause();
-    final result = await Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => FinishReportPage(
-          raport: nowyRaport,
-        )));
+    final result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => FinishReportPage(
+              raport: nowyRaport,
+            )));
     if (result == null) {
       cameraController.resume();
     } else {
