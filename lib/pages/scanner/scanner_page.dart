@@ -34,10 +34,12 @@ class _DemoCamPageState extends State<DemoCamPage> {
   // Przypisanie i inicjalizacja zmiennych
   //
 
+  /// Zmienna która ogranicza wykonanie części instrukcji tylko przy pierwszej
+  /// inicjalizacji naszego elementu
+  var inicjalizujRaz = true;
+
   /// Zmienna która odpowiada za odświerzenie zmiennych po pojawieniu się popupu
   var inicjalizujDane = true;
-
-  var inicjalizujRaz = true;
 
   /// Utworzeni / pobranie danych do / z bazy
   var odswierzRozmiar = true;
@@ -45,21 +47,12 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Pobranie wszystkich przedmiotów do skanowania, podzielnoych na kategorie
   Map<String, Map<String, String>> przedmiotyWgTypu = {};
 
+  /// Tablica przechowywująca zeskanowane przedmioty w danej sesji
   Map<String, Map<String, String>> zeskanowanePrzedmioty = {};
 
   // Zmienne przechowywujące informacje nt. przedmiotów do skanownaia
 
-  /// Lista krzeseł w sali w raz z informacjami
-  late List<List<dynamic>> krzesla = [];
-
-  /// Lista monitorow w sali w raz z informacjami
-  late List<List<dynamic>> monitory = [];
-
-  /// Lista biurek w sali w raz z informacjami
-  late List<List<dynamic>> biurka = [];
-
-
-
+  ///
   Map<String, List<String>> listaListElem = {};
 
   /// Przechowuje rezultat wyskakujacych popupowych okienek
@@ -103,6 +96,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    //cameraController.pause();
+    //cameraController.resume();
 
     if (inicjalizujRaz){
       budynek = widget.budynek;
@@ -367,7 +363,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
               // ... sprawdź czy element jest w bazie i ...
               var czyWBazie =
-                  await szukajAzZnajdziesz(_textEditingController.text);
+                  await checkItemsInRoom(_textEditingController.text);
 
               // ... w zależności od odopowiedzi odznacz i pokaż odpowiedni komunikat
               if (czyWBazie) {
@@ -508,6 +504,8 @@ class _DemoCamPageState extends State<DemoCamPage> {
     }
   }
 
+  /// Funkcja zaciągająca dane z naszej bazy wiedząc jakie pomieszczenie chcemy
+  /// zeskanować
   Future pobierzPrzedmioty(b, pi, po) async {
     przedmiotyWgTypu = await przedmiotyWKategoriach(b, pi, po);
 
@@ -519,40 +517,10 @@ class _DemoCamPageState extends State<DemoCamPage> {
       zeskanowaneLiczba[k] = 0;
       zeskanowanePrzedmioty[k] = {};
     }
-  }
+    setState(() {
+      przedmiotyWgTypu = przedmiotyWgTypu;
+    });
 
-
-  /*/// Początkowe wpisanie danych - działa prawie tak jak 'odswierzZeksnowane'
-  /// ale inicjalizuje dane, a nie je nadpisuje
-  void przygotujZeskanowane() {
-    liczbaKrzesel = liczGotowe(krzesla);
-    liczbaMonitorow = liczGotowe(monitory);
-    liczbaBiurek = liczGotowe(biurka);
-
-    for (int lista = 0; lista < 3; lista++) {
-      List<List<dynamic>> wybor = [krzesla, monitory, biurka][lista];
-      List<String> identyfikatory = [
-        krzeslaIdentyfikatory,
-        monitoryIdentyfikatory,
-        biurkaIdentyfikatory
-      ][lista];
-      for (int i = 0; i < wybor.length; i++) {
-        identyfikatory.add(
-            "${(i + 1).toString()}:  ${wybor[i][1].toString()}  ${wybor[i][2].toString()} ${wybor[i][3].toString()}");
-      }
-    }
-  }*/
-
-  /// Zliczanie gotowych elementów na liście dynamicznej
-  /// do użycia by pokazać ile już zeskanowano elementów
-  int liczGotowe(List<List<dynamic>> lista) {
-    int licznik = 0;
-    for (int i = 0; i < lista.length; i++) {
-      if (lista[i][2]) {
-        licznik++;
-      }
-    }
-    return licznik;
   }
 
   /// Okienko do wyświetlania popupu do dodania komentarza
@@ -591,6 +559,8 @@ class _DemoCamPageState extends State<DemoCamPage> {
     cameraController.resume();
   }
 
+  /// Okiednko które umożliwia wprowadzenie komentarza do konkretnego elementu
+  /// w naszej bazie wg. kategorii
   Future nestedComentDialog(lista, naglowek) async {
     odswierzRozmiar = false;
 
@@ -620,9 +590,11 @@ class _DemoCamPageState extends State<DemoCamPage> {
         wynik.split(": ")[1];
         final kom = await commentDialog("Przedmiot: $wynik");
         print(kom);
-        await Future.delayed(Duration(seconds: 1));
         await dodajKomentarz(wynik, kom);
         await odswierzZeskanowane();
+        setState(() {
+          zeskanowanePrzedmioty = zeskanowanePrzedmioty;
+        });
       }
     }
   }
@@ -670,11 +642,15 @@ class _DemoCamPageState extends State<DemoCamPage> {
       ),
     );
 
+    setState(() {
+      scannedValue = _textEditingController.text;
+    });
+
     /// O ile wpisano jakiś kod to:
     if (_textEditingController.text != "") {
       /// ... sprawdź czy element jest w bazie i ...
       var czyWBazie =
-          await szukajAzZnajdziesz(_textEditingController.text);
+          await checkItemsInRoom(_textEditingController.text);
 
       /// ... w zależności od odopowiedzi odznacz i pokaż odpowiedni komunikat
       if (czyWBazie) {
@@ -703,7 +679,8 @@ class _DemoCamPageState extends State<DemoCamPage> {
   }
 
   /// Rekurancyjne przeszukanie danych w celu odnalezienia i odznaczenia kodu
-  Future<bool> szukajAzZnajdziesz(barcode) async {
+  /// wśród elementów w naszym pomieszczeniu
+  Future<bool> checkItemsInRoom(barcode) async {
     for (var kategoria in przedmiotyWgTypu.keys){
       for (var elem in przedmiotyWgTypu[kategoria]!.keys){
         if (elem == barcode){
@@ -741,8 +718,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
             )));
     if (result == null) {
       cameraController.resume();
-    } else {
-      dispose();
     }
     return result;
   }
@@ -768,9 +743,13 @@ class _DemoCamPageState extends State<DemoCamPage> {
           pomieszczenie = wynik[2].toString();
         }
       });
+      setState(() {
+        scannedValue = "";
+      });
       await nowyRaport.wpiszNoweZmiany(budynek, pietro, pomieszczenie, zeskanowanePrzedmioty);
       await pobierzPrzedmioty(budynek, pietro, pomieszczenie);
       await odswierzZeskanowane();
+      await Future.delayed(Duration(milliseconds: 2000));
     }
     cameraController.resume();
   }
