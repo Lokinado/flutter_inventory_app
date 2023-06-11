@@ -19,7 +19,6 @@ class Report {
       Map<String, String> przed = {};
       skan[budynek]![pietro]![pomieszczenie] = przed;
     }
-
   }
 
   /// Funkcja która jest wywoływana przy przejściu do skanowania nowego

@@ -37,6 +37,8 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Zmienna która odpowiada za odświerzenie zmiennych po pojawieniu się popupu
   var inicjalizujDane = true;
 
+  var inicjalizujRaz = true;
+
   /// Utworzeni / pobranie danych do / z bazy
   var odswierzRozmiar = true;
 
@@ -56,19 +58,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Lista biurek w sali w raz z informacjami
   late List<List<dynamic>> biurka = [];
 
-  // Przy wyświetlaniu okienek potrzebna jest lista tekstowa więc dla każdego
-  // zbioru eementów tworzę taką listę
-  /*
-  *
-  /// Dynamicznie utworznona lista krzesel
-  late List<String> krzeslaIdentyfikatory = [];
 
-  /// Dynamicznie utworznona lista monitorów
-  late List<String> monitoryIdentyfikatory = [];
-
-  /// Dynamicznie utworznona lista biurek
-  late List<String> biurkaIdentyfikatory = [];
-  * */
 
   Map<String, List<String>> listaListElem = {};
 
@@ -93,6 +83,8 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Wybrane przez użytkownika pomieszczenie
   late String pomieszczenie;
 
+
+
   /// Zeskanowan wartość
   String scannedValue = "";
 
@@ -103,7 +95,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
   late double elementsOffset;
 
   late Size rozmiar;
-
   late Report nowyRaport;
 
   //
@@ -112,6 +103,14 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    if (inicjalizujRaz){
+      budynek = widget.budynek;
+      pietro = widget.pietro;
+      pomieszczenie = widget.pomieszczenie;
+      inicjalizujRaz = false;
+    }
+
     /// Pobranie informacji nt. wymiarów okna
     if (odswierzRozmiar) {
       rozmiar = MediaQuery.of(context).size;
@@ -126,19 +125,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
     /// Inicjalizacja zmienneych i dynamiczne zmiany ich wartości
     /// -> przechowują informacje nt. stanu skonowania elementów
     if (inicjalizujDane) {
-      budynek = widget.budynek;
-      pietro = widget.pietro;
-      pomieszczenie = widget.pomieszczenie;
 
-      pobierz(budynek, pietro, pomieszczenie);
-      utworzRaport(budynek, pietro, pomieszczenie);
+      pobierzPrzedmioty(budynek, pietro, pomieszczenie);
 
-      for (var k in przedmiotyWgTypu.keys){
-        listaListElem[k] = przedmiotyWgTypu[k]!.values.toList();
-        zeskanowaneLiczba[k] = 0;
-      }
-
-      //przygotujZeskanowane();
       inicjalizujDane = false;
     }
 
@@ -298,10 +287,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
                             budynek = wynik[0];
                             pietro = wynik[1];
                             pomieszczenie = wynik[2];
-
-                            inicjalizujDane = true;
                           }
                         });
+                        await pobierzPrzedmioty(budynek, pietro, pomieszczenie);
                       }
                     }
                   },
@@ -327,20 +315,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
                 /// Przycisk zmiany pomieszczenia
                 GestureDetector(
                   onTap: () async {
-                    var wynik = await doZmianyPomieszczenia(context);
-                    if (wynik != null) {
-                      setState(() {
-                        if (!((budynek == wynik[0]) &&
-                            (pietro == wynik[1]) &&
-                            (pomieszczenie == wynik[2]))) {
-                          budynek = wynik[0].toString();
-                          pietro = wynik[1].toString();
-                          pomieszczenie = wynik[2].toString();
-                          inicjalizujDane = true;
-                        }
-                      });
-                      await pobierz(budynek, pietro, pomieszczenie);
-                    }
+                    await doZmianyPomieszczenia(context);
                   },
                   child: Container(
                     height: elementsOffset * 4,
@@ -429,7 +404,21 @@ class _DemoCamPageState extends State<DemoCamPage> {
             margin: EdgeInsets.only(bottom: elementsOffset*0.2),
             child: ElevatedButton(
               onPressed: () async {
-                nestedComentDialog(listaListElem[item], item);
+                //await AddNestedComment(item, listaListElem[item]);
+                while (true){
+                  String? wynik = await showPickerDialog(
+                      context: context,
+                      label: item,
+                      items: przedmiotyWgTypu[item]!.keys.toList());
+                  if (wynik == null){
+                    break;
+                  }
+                  else{
+                    var Komentarz = await commentDialog("$item: $wynik");
+                    await dodajKomentarz(item, Komentarz);
+                  }
+                }
+
               },
               style: zeskanowaneLiczba[item] == przedmiotyWgTypu[item]!.length
                   ? spacedGreenButtonActive
@@ -446,7 +435,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    "${zeskanowaneLiczba[item]}/${listaListElem[item]}",
+                    "${zeskanowaneLiczba[item]}/${listaListElem[item]!.length}",
                     style: TextStyle(
                         fontSize: elementsOffset,
                         color: Colors.black,
@@ -461,6 +450,41 @@ class _DemoCamPageState extends State<DemoCamPage> {
       ),
     );
   }
+
+  Widget AddNestedComment(String title, items) {
+    return Dialog(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              title,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+          ),
+          Divider(),
+          Container(
+            height: 200, // Set the desired height for the list
+            child: ListView(
+              children: items.map((item) {
+                return ElevatedButton(
+                  onPressed: () {
+                    // Handle button press
+                  },
+                  child: Text(item),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   /// Początkowa inicjalizacja ekranu
   @override
@@ -479,17 +503,24 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Po zeksnaowaniu należy odświerżyć wyświetlane dane w popupach, między
   /// innymi komentarze, i zeskanowane przedmoty
   Future odswierzZeskanowane() async {
-
+    for (var k in zeskanowanePrzedmioty.keys){
+      zeskanowaneLiczba[k] = zeskanowanePrzedmioty[k]!.length;
+    }
   }
 
-  Future pobierz(b, pi, po) async {
+  Future pobierzPrzedmioty(b, pi, po) async {
     przedmiotyWgTypu = await przedmiotyWKategoriach(b, pi, po);
-  }
 
-  Future utworzRaport(b, pi, po) async {
     nowyRaport = Report();
     await nowyRaport.nowePomieszczenie(b, pi, po);
+
+    for (var k in przedmiotyWgTypu.keys){
+      listaListElem[k] = await przedmiotyWgTypu[k]!.values.toList();
+      zeskanowaneLiczba[k] = 0;
+      zeskanowanePrzedmioty[k] = {};
+    }
   }
+
 
   /*/// Początkowe wpisanie danych - działa prawie tak jak 'odswierzZeksnowane'
   /// ale inicjalizuje dane, a nie je nadpisuje
@@ -643,7 +674,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
     if (_textEditingController.text != "") {
       /// ... sprawdź czy element jest w bazie i ...
       var czyWBazie =
-          await szukajAzZnajdziesz(_textEditingController.text.toString());
+          await szukajAzZnajdziesz(_textEditingController.text);
 
       /// ... w zależności od odopowiedzi odznacz i pokaż odpowiedni komunikat
       if (czyWBazie) {
@@ -672,15 +703,11 @@ class _DemoCamPageState extends State<DemoCamPage> {
   }
 
   /// Rekurancyjne przeszukanie danych w celu odnalezienia i odznaczenia kodu
-  Future<bool> szukajAzZnajdziesz(wartosc) async {
-    for (var kategoria in przedmiotyWgTypu.keys) {
-      for (var barcode in przedmiotyWgTypu[kategoria]!.keys) {}
-    }
-
-    for (List<List<dynamic>> l in [krzesla, monitory, biurka]) {
-      for (int i = 0; i < l.length; i++) {
-        if (l[i][1] == wartosc) {
-          l[i][2] = true;
+  Future<bool> szukajAzZnajdziesz(barcode) async {
+    for (var kategoria in przedmiotyWgTypu.keys){
+      for (var elem in przedmiotyWgTypu[kategoria]!.keys){
+        if (elem == barcode){
+          zeskanowanePrzedmioty[kategoria]![barcode] = "";
           return true;
         }
       }
@@ -692,10 +719,10 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// dodaje do niego przekazany komentarz
   /// zwraca true / false, w zależności od tego czy element jest w tym pomiedzczeniu
   Future<bool> dodajKomentarz(barcode, komentarz) async {
-    for (List<List<dynamic>> l in [krzesla, monitory, biurka]) {
-      for (int i = 0; i < l.length; i++) {
-        if (l[i][1] == barcode) {
-          l[i][3] = komentarz;
+    for (var kategoria in przedmiotyWgTypu.keys){
+      for (var elem in przedmiotyWgTypu[kategoria]!.keys){
+        if (elem == barcode){
+          przedmiotyWgTypu[kategoria]![barcode] = komentarz;
           return true;
         }
       }
@@ -723,15 +750,28 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Wywołanie asynchroniczne przechodząde to zmiany pomieszczenia
   /// i zwrtacające informacje listę oznaczajacaą pomieszczenia, lub null
   /// jeśli operacja została anulowana
-  Future<List<String>> doZmianyPomieszczenia(BuildContext context) async {
+  Future doZmianyPomieszczenia(BuildContext context) async {
     cameraController.pause();
-    final result = await Navigator.of(context).push(MaterialPageRoute(
+    final wynik = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ChangePlacePage(
               budynek: budynek,
               pietro: pietro,
               pomieszczenie: pomieszczenie,
             )));
+    if (wynik != null) {
+      setState(() {
+        if (!((budynek == wynik[0]) &&
+            (pietro == wynik[1]) &&
+            (pomieszczenie == wynik[2]))) {
+          budynek = wynik[0].toString();
+          pietro = wynik[1].toString();
+          pomieszczenie = wynik[2].toString();
+        }
+      });
+      await nowyRaport.wpiszNoweZmiany(budynek, pietro, pomieszczenie, zeskanowanePrzedmioty);
+      await pobierzPrzedmioty(budynek, pietro, pomieszczenie);
+      await odswierzZeskanowane();
+    }
     cameraController.resume();
-    return result;
   }
 }
