@@ -520,7 +520,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
     setState(() {
       przedmiotyWgTypu = przedmiotyWgTypu;
     });
-
   }
 
   /// Okienko do wyświetlania popupu do dodania komentarza
