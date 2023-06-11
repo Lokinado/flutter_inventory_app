@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Building {
   String id;
   final String name;
@@ -79,11 +81,15 @@ class Item {
   final String name;
   final String comment;
   final String barcode; // id.floor + id.room + id.item i tyle
+
+  final Timestamp date_created;
+
   Item({
     this.id = '',
     required this.name,
     required this.comment,
     required this.barcode,
+    required this.date_created,
   });
 
   Map<String, dynamic> toJson() => {
@@ -91,6 +97,7 @@ class Item {
         'name': name,
         'comment': comment,
         'barcode': barcode,
+        'dateCreated': date_created,
       };
 
   static Item fromJson(Map<String, dynamic> json) => Item(
@@ -98,5 +105,6 @@ class Item {
         name: json['name'],
         comment: json['comment'],
         barcode: json['barcode'],
+        date_created: json['dateCreated'],
       );
 }

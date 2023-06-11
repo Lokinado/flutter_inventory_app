@@ -35,10 +35,10 @@ class ShowItem extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.only(bottom: 16),
             child: Column(
               children: [
-                Text(
+                const Text(
                   'Barcode',
                   style: TextStyle(
                     color: Colors.black,
@@ -46,7 +46,7 @@ class ShowItem extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Container(
                   width: 300,
                   decoration: BoxDecoration(
@@ -58,18 +58,18 @@ class ShowItem extends StatelessWidget {
                     ),
                   ),
                     child: Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: Text(
                       name,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 BarcodeWidget(
                   barcode: Barcode.code128(), // Wybierz rodzaj kodu kreskowego, np. Code128
                   data: name, // Dane do wygenerowania kodu kreskowego
@@ -142,8 +142,8 @@ class PdfGenerator extends StatelessWidget {
         onPressed: () async {
           await generatePdf();
         },
-        icon: Icon(Icons.picture_as_pdf),
-        label: Text('Wygeneruj plik PDF'),
+        icon: const Icon(Icons.picture_as_pdf),
+        label: const Text('Wygeneruj plik PDF'),
         style: ElevatedButton.styleFrom(
           primary: Colors.green,
           shape: RoundedRectangleBorder(
@@ -214,8 +214,8 @@ class PrintPdf extends StatelessWidget {
         onPressed: () async {
           await printPdf();
         },
-        icon: Icon(Icons.print),
-        label: Text('Drukuj jako plik PDF'),
+        icon: const Icon(Icons.print),
+        label: const Text('Drukuj jako plik PDF'),
         style: ElevatedButton.styleFrom(
           primary: Colors.green,
           shape: RoundedRectangleBorder(

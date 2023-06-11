@@ -51,6 +51,7 @@ class AddItem extends StatelessWidget {
                   name: controllerName.text,
                   comment: controllerComment.text,
                   barcode: '',
+                  date_created: Timestamp.now(),
                 );
 
                 createItem(item);
