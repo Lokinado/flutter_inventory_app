@@ -50,15 +50,15 @@ class _FinishReportPageState extends State<FinishReportPage> {
     for( var items in raport.skan[Budynek]![Floor]![Room]!.keys ){
       ret.add(Container(
         decoration: const BoxDecoration(
-          color: Colors.cyanAccent,
+          color: Colors.black12,
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        alignment: Alignment.center,
+        alignment: Alignment.centerLeft,
         padding: EdgeInsets.only(left: 20),
         margin: EdgeInsets.only(bottom: 8),
         child: Text(items,
           style: TextStyle(
-            fontSize: 30.0,
+            fontSize: 20.0,
           )),
         ),
       );
@@ -71,6 +71,7 @@ class _FinishReportPageState extends State<FinishReportPage> {
     String Budynek = raport.skan.keys.first;
     for( var room in raport.skan[Budynek]![Floor]!.keys ){
       ret.add(Container(
+        margin: EdgeInsets.only(top: 10),
         padding: EdgeInsets.only(left: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,7 +81,7 @@ class _FinishReportPageState extends State<FinishReportPage> {
             )),
             Container(
               height: 2,
-              margin: EdgeInsets.only(bottom: 8),
+              margin: EdgeInsets.only(bottom: 10),
               color: Colors.black,
             ),
             ...GenerateItems( raport, rozmiar, Floor, room),
@@ -97,6 +98,7 @@ class _FinishReportPageState extends State<FinishReportPage> {
     String Budynek = raport.skan.keys.first;
     for( var floor in raport.skan[Budynek]!.keys ){
       ret.add(Container(
+        margin: EdgeInsets.only(top:10),
         padding: EdgeInsets.only(left: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,29 +123,40 @@ class _FinishReportPageState extends State<FinishReportPage> {
     return Container(
       height: rozmiar.height * 0.53,
       width: rozmiar.width * 0.9,
-      color: Colors.yellow,
-      padding: EdgeInsets.all(40.0),
-      child: ListView(
-        padding: const EdgeInsets.all(8),
-        children: <Widget>[
-          Container(
-            child: Text(
-              "Raport #" + raport.report_number.toString(),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 40.0,
+        decoration: BoxDecoration(
+          border: Border.all(width: 4, color: zielonySGGW),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+      //color: Colors.yellow,
+      padding: EdgeInsets.all(10.0),
+      child: Scrollbar(
+        isAlwaysShown: true,
+        child: ListView(
+          padding: const EdgeInsets.all(20),
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(
+                bottom: 10
               ),
-          ),
-          ),
-          Container(
-            child: Text(raport.date_created + " | " + raport.skan.keys.first),
-          ),
-          Container(
-            height: 2,
-            color: Colors.black,
-          ),
-          ...GenerateFloors(raport, rozmiar),
-        ],
+              child: Text(
+                "Raport #" + raport.report_number.toString(),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30.0,
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.only( bottom: 5 ),
+              child: Text(raport.date_created + " | " + raport.skan.keys.first),
+            ),
+            Container(
+              height: 2,
+              color: Colors.black,
+            ),
+            ...GenerateFloors(raport, rozmiar),
+          ],
+        ),
       )
     );
   }
@@ -200,7 +213,6 @@ class _FinishReportPageState extends State<FinishReportPage> {
     return Scaffold(
       /// Nagłówek aplikacji
       appBar: AppBar(
-        //automaticallyImplyLeading: false,
         backgroundColor: zielonySGGW,
         toolbarHeight: textHeighOffset * 3,
         centerTitle: true,
@@ -220,10 +232,17 @@ class _FinishReportPageState extends State<FinishReportPage> {
         alignment: Alignment.topCenter,
         child: Column(
           children: [
+
+            /// Separotr horyzontalny między guzikami
+            SizedBox(
+              height: elementsOffset,
+            ),
+
             /// Sekcja odpowiedzialna za wyświetlanie podlgądu skanowania
             Container(
-              height: rozmiar.height * 0.6,
+              height: rozmiar.height * 0.55,
               width: rozmiar.width,
+              margin: EdgeInsets.only(bottom: 20),
               alignment: Alignment.center,
               child: GenerateRaprotContainer(raport, rozmiar) as Container,
             ),

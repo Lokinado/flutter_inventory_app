@@ -90,8 +90,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
   late Size rozmiar;
   late Report nowyRaport;
 
-  late Report nowyRaport;
-
   //
   // Najważniejszy element budujący wszystko w tym pliku
   //
