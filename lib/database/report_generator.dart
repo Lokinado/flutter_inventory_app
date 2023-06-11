@@ -1,8 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:math';
 
 class Report {
   //  Budynek   Pietro   Pomieszczenie   Przedmiot  Komentarz
   Map<String, Map<String, Map<String, Map<String, String>>>> skan = {};
+
+  String date_created;
+  int report_number;
+
+  final _random = new Random();
+
+  Report()
+    :date_created = '${DateTime.now().day}.${DateTime.now().month}.${DateTime.now().year}',
+    report_number = 0
+  {
+    report_number = next(100000, 999999);
+  }
+
+  ///Function needed to create proper report number without race conditions
+  /*
+  Future initReport() async{
+    var snapshot = await FirebaseFirestore.instance.collection("ReportsData").doc("Metadata").get();
+    report_number = snapshot["count"] + 1;
+    // NO NEED FOR AWAIT HERE
+    FirebaseFirestore.instance.collection("ReportsData").doc("Metadata").set({"count": report_number});
+  }
+   */
+
+  int next(int min, int max) => min + _random.nextInt(max - min);
 
   /// Funkcja służąca do dodawania nowego pomieszczenie do listy zeskanowanych
   /// przyjmuje ona nową lokalizację do dodania i umieszcza ją w zmiennej skan

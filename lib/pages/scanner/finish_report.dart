@@ -3,6 +3,7 @@ import 'package:inventory_app/components/color_palette.dart';
 import 'package:inventory_app/pages/scanner/ready_report.dart';
 import 'package:inventory_app/components/popups.dart';
 import 'package:inventory_app/database/report_generator.dart';
+import 'package:inventory_app/database/listing_items.dart';
 
 class FinishReportPage extends StatefulWidget {
   FinishReportPage({Key? key, required this.raport}) : super(key: key);
@@ -27,12 +28,159 @@ class _FinishReportPageState extends State<FinishReportPage> {
 
   var czyZainic = true; /// Zmienne odpowiedzialna za jednor. inicjalizację
 
+  Widget GenerateSummary(Report raport, Size rozmiar, String Floor, String Room) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.green,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      alignment: Alignment.center,
+      padding: EdgeInsets.only(left: 20),
+      margin: EdgeInsets.only(bottom: 8),
+      child: Text("Suma: 20/20",
+          style: TextStyle(
+            fontSize: 30.0,
+          )),
+    );
+  }
+
+  List<Widget> GenerateItems( Report raport, Size rozmiar, String Floor, String Room){
+    List<Widget> ret = [];
+    String Budynek = raport.skan.keys.first;
+    for( var items in raport.skan[Budynek]![Floor]![Room]!.keys ){
+      ret.add(Container(
+        decoration: const BoxDecoration(
+          color: Colors.cyanAccent,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        alignment: Alignment.center,
+        padding: EdgeInsets.only(left: 20),
+        margin: EdgeInsets.only(bottom: 8),
+        child: Text(items,
+          style: TextStyle(
+            fontSize: 30.0,
+          )),
+        ),
+      );
+    }
+    return ret;
+  }
+
+  List<Widget> GenerateRooms( Report raport, Size rozmiar, String Floor){
+    List<Widget> ret = [];
+    String Budynek = raport.skan.keys.first;
+    for( var room in raport.skan[Budynek]![Floor]!.keys ){
+      ret.add(Container(
+        padding: EdgeInsets.only(left: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(room, style: TextStyle(
+              fontSize: 20.0,
+            )),
+            Container(
+              height: 2,
+              margin: EdgeInsets.only(bottom: 8),
+              color: Colors.black,
+            ),
+            ...GenerateItems( raport, rozmiar, Floor, room),
+            GenerateSummary(raport, rozmiar, Floor, room)
+          ],
+        ),
+      ));
+    }
+    return ret;
+  }
+
+  List<Widget> GenerateFloors( Report raport, Size rozmiar){
+    List<Widget> ret = [];
+    String Budynek = raport.skan.keys.first;
+    for( var floor in raport.skan[Budynek]!.keys ){
+      ret.add(Container(
+        padding: EdgeInsets.only(left: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(floor, style: TextStyle(
+              fontSize: 15.0,
+            )),
+            ...GenerateRooms( raport, rozmiar, floor),
+          ],
+        ),
+      ));
+    }
+    return ret;
+  }
+
+  Widget GenerateRaprotContainer( Report raport, Size rozmiar ){
+
+    for( var budynek in raport.skan.keys){
+      print(budynek);
+    }
+
+    return Container(
+      height: rozmiar.height * 0.53,
+      width: rozmiar.width * 0.9,
+      color: Colors.yellow,
+      padding: EdgeInsets.all(40.0),
+      child: ListView(
+        padding: const EdgeInsets.all(8),
+        children: <Widget>[
+          Container(
+            child: Text(
+              "Raport #" + raport.report_number.toString(),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 40.0,
+              ),
+          ),
+          ),
+          Container(
+            child: Text(raport.date_created + " | " + raport.skan.keys.first),
+          ),
+          Container(
+            height: 2,
+            color: Colors.black,
+          ),
+          ...GenerateFloors(raport, rozmiar),
+        ],
+      )
+    );
+  }
+
+  /*
+  Text(
+        "Raport #" + raport.report_number.toString(),
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 40.0,
+        ),
+   */
+
   @override
   Widget build(BuildContext context) {
 
     // Jak uzyskać dane
     //var ala = widget.raport;
 
+    Report raport = Report();
+    raport.skan = {
+      "Budynek 32":{
+        "Piętro 3":{
+          "Pomieszczenie 3/14":{
+            "Krzeslo 12": "Komentarz",
+            "Krzeslo 31": "Komentarz",
+            "Krzeslo 41": "Komentarz",
+            "Krzeslo 122": "Komentarz",
+            "Krzeslo 331": "Komentarz",
+            "Krzeslo 121": "Komentarz",
+            "Krzeslo 202": "Komentarz",
+          }
+        }
+      }
+    };
+
+    print(raport.report_number);
     /// Pobranie informacji nt. wymiarów okna
     final Size rozmiar = MediaQuery.of(context).size;
 
@@ -77,13 +225,7 @@ class _FinishReportPageState extends State<FinishReportPage> {
               height: rozmiar.height * 0.6,
               width: rozmiar.width,
               alignment: Alignment.center,
-              child: Container(
-                height: rozmiar.height * 0.53,
-                width: rozmiar.width * 0.9,
-                color: Colors.yellow,
-                alignment: Alignment.center,
-                child: Text("Tutaj będzie raport"),
-              ),
+              child: GenerateRaprotContainer(raport, rozmiar) as Container,
             ),
 
             /// Guzik zmiany pomieszczenia
