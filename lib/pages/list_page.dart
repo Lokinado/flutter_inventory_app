@@ -2,14 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/components/color_palette.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/database/place_to_list.dart';
+import 'package:inventory_app/pages/creation_page.dart';
 
-class Room {
-  final int building;
-  final int level;
-  final int roomNumber;
-
-  Room(this.building, this.level, this.roomNumber);
-}
 
 class ListPage extends StatefulWidget {
   ListPage({super.key});
@@ -171,7 +165,6 @@ class _ListPageState extends State<ListPage> {
   }
 
   Wrap leftSectionHeader(BuildContext context) {
-    final mediaWidth = MediaQuery.of(context).size;
     return Wrap(
     children: <Widget>[
       TopBodySection(key: UniqueKey(),
@@ -188,15 +181,17 @@ class _ListPageState extends State<ListPage> {
             topLeft:
             Radius.circular(75),
           ),
-          border: BorderSide
+          //border: BorderSide
         ),
         child: Container(
-          margin: EdgeInsets.only(left: 30,top: 9),
+          margin: const EdgeInsets.only(left: 30,top: 9),
           child: CircleAvatar(
             radius: 22,
             backgroundColor: const Color.fromARGB(255 ,87, 178, 122),
             child: IconButton(
-              onPressed: () =>{},
+              onPressed: () =>{Navigator.push(
+                context, 
+                MaterialPageRoute(builder: (context)=>CreationPage()))},
               icon: const Icon(Icons.add, color: Colors.white,),
               style: IconButton.styleFrom(
                 shape: const CircleBorder(),
