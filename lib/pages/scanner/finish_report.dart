@@ -5,7 +5,7 @@ import 'package:inventory_app/pages/scanner/ready_report.dart';
 import 'package:inventory_app/components/popups.dart';
 import 'package:inventory_app/database/report_generator.dart';
 import 'package:inventory_app/database/place_to_list.dart';
-import 'package:inventory_app/database/report_to_db.dart ';
+import 'package:inventory_app/database/report_to_db.dart';
 
 class FinishReportPage extends StatefulWidget {
   FinishReportPage({Key? key, required this.raport}) : super(key: key);
@@ -179,7 +179,7 @@ class _FinishReportPageState extends State<FinishReportPage> {
         //color: Colors.yellow,
         padding: EdgeInsets.all(10.0),
         child: Scrollbar(
-          isAlwaysShown: true,
+          thumbVisibility: true,
           child: ListView(
             padding: const EdgeInsets.all(20),
             children: <Widget>[

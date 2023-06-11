@@ -118,6 +118,8 @@ class Report {
     }
   }
 
+  //FirebaseFirestore.instance.collection().set(/aushopd)
+
   /// Wypełnia tablicę do zeskanowania w danej instancji raportu
   /// na podstawie tych danych potem przeprowadzone zostanie porównanie czego brakuje
   Future PobierzWszystkiePrzedmiotyZePietra() async {
