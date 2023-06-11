@@ -1,26 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:math';
 
 class Report {
   //  Budynek   Pietro   Pomieszczenie   Przedmiot  Komentarz
   Map<String, Map<String, Map<String, Map<String, String>>>> skan = {};
 
-  /// Funkcja służąca do dodawania nowego pomieszczenie do listy zeskanowanych
-  /// przyjmuje ona nową lokalizację do dodania i umieszcza ją w zmiennej skan
-  Future nowePomieszczenie(budynek, pietro, pomieszczenie) async {
-    if (!skan.containsKey(budynek)){
-      Map<String,Map<String, Map<String, String>>> pietra = {};
-      skan[budynek] = pietra;
-    }
-    if (!skan[budynek]!.containsKey(pietro)){
-      Map<String, Map<String, String>> pomiesz = {};
-      skan[budynek]![pietro] = pomiesz;
-    }
-    if (!skan[budynek]![pietro]!.containsKey(pomieszczenie)){
-      Map<String, String> przed = {};
-      skan[budynek]![pietro]![pomieszczenie] = przed;
-    }
-  }
+  String date_created;
+  int report_number;
 
+  final _random = new Random();
   /// Funkcja która jest wywoływana przy przejściu do skanowania nowego
   /// pomieszczenia - zapisuje zmiany wprowadzone przez użytkownika do raportu
   Future wpiszNoweZmiany(budynek, pietro, pomieszczenie,
@@ -34,6 +22,14 @@ class Report {
     }
   }
 
+  Report()
+    :date_created = '${DateTime.now().day}.${DateTime.now().month}.${DateTime.now().year}',
+    report_number = 0
+  {
+    report_number = next(100000, 999999);
+
+  int next(int min, int max) => min + _random.nextInt(max - min);
+  
   /// Metoda do wywołania na koniec raportu.
   /// Pozwala ona uaktualnić bazę danych, o wpisanie na stałe komentarzy
   /// które użytkownik dodał przy wpisywaniu przedmiotów
