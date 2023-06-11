@@ -1,26 +1,56 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/rendering.dart';
+import 'package:inventory_app/database/place_to_list.dart';
+import 'dart:math';
 
 class Report {
   //  Budynek   Pietro   Pomieszczenie   Przedmiot  Komentarz
   Map<String, Map<String, Map<String, Map<String, String>>>> skan = {};
+  Map<String, Map<String, Map<String, Map<String, String>>>> doZeskanowania = {};
+
+  String date_created;
+  int report_number;
+
+  final _random = new Random(); // ZARAZ WRACAM
+
+  Report()
+    :date_created = '${DateTime.now().day}.${DateTime.now().month}.${DateTime.now().year}',
+    report_number = 0 {
+    report_number = next(100000, 999999);
+  }
+
+  int next(int min, int max) => min + _random.nextInt(max - min);
+
 
   /// Funkcja służąca do dodawania nowego pomieszczenie do listy zeskanowanych
   /// przyjmuje ona nową lokalizację do dodania i umieszcza ją w zmiennej skan
   Future nowePomieszczenie(budynek, pietro, pomieszczenie) async {
     if (!skan.containsKey(budynek)){
       Map<String,Map<String, Map<String, String>>> pietra = {};
+      Map<String,Map<String, Map<String, String>>> pietraDZ = {};
       skan[budynek] = pietra;
+      doZeskanowania[budynek] = pietraDZ;
     }
     if (!skan[budynek]!.containsKey(pietro)){
       Map<String, Map<String, String>> pomiesz = {};
+      Map<String, Map<String, String>> pomieszDZ = {};
       skan[budynek]![pietro] = pomiesz;
+      doZeskanowania[budynek]![pietro] = pomieszDZ;
     }
-    if (!skan[budynek]![pietro]!.containsKey(pomieszczenie)){
+    if (!skan[budynek]![pietro]!.containsKey(pomieszczenie)) {
       Map<String, String> przed = {};
+      Map<String, String> przedDZ = {};
       skan[budynek]![pietro]![pomieszczenie] = przed;
+      doZeskanowania[budynek]![pietro]![pomieszczenie] = przedDZ;
     }
 
-    print("ala");
+    Map<String, Map<String, dynamic>>result = await pobieraniePrzedmiotow(budynek, pietro, pomieszczenie);
+    doZeskanowania[budynek]![pietro]![pomieszczenie] = {};
+    for ( var key in result.keys){
+      doZeskanowania[budynek]![pietro]![pomieszczenie]![key] = "OK";
+    }
+    print("ROZM");
+    print(doZeskanowania[budynek]![pietro]![pomieszczenie]!.keys.length);
 
   }
 
@@ -54,11 +84,35 @@ class Report {
                 .collection("/Building/$budynek" +
                     "/Floors/$pietro/Rooms/$pomieszczenie/Items")
                 .doc(przedmiot)
-                .set({
+                .update({
               "comment": skan[budynek]![pietro]![pomieszczenie]!["comment"],
             });
           }
         }
+      }
+    }
+  }
+
+  /// Wypełnia tablicę do zeskanowania w danej instancji raportu
+  /// na podstawie tych danych potem przeprowadzone zostanie porównanie czego brakuje
+  Future PobierzWszystkiePrzedmiotyZePietra() async {
+    print("CODE RUNS");
+    String budynek = skan.keys.first;
+    doZeskanowania[budynek] = {};
+    List<String> floors = await pobierzPietra(budynek);
+    for (var floor in floors) {
+      List<String> rooms = await pobierzPomieszczenia(budynek, floor);
+      doZeskanowania[budynek]![floor] = {};
+      for (var room in rooms) {
+        Map<String, Map<String, dynamic>>result = await pobieraniePrzedmiotow(budynek, floor, room);
+        doZeskanowania[budynek]![floor]![room] = {};
+        for ( var key in result.keys){
+          print("OK I ADD " + key);
+          print("OK I ADD " + result[key].toString());
+          doZeskanowania[budynek]![floor]![room]![key] = "OK";
+        }
+        print("ROZM");
+        print(doZeskanowania[budynek]![floor]![room]!.keys.length);
       }
     }
   }

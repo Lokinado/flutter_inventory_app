@@ -34,43 +34,26 @@ class _DemoCamPageState extends State<DemoCamPage> {
   // Przypisanie i inicjalizacja zmiennych
   //
 
+  /// Zmienna która ogranicza wykonanie części instrukcji tylko przy pierwszej
+  /// inicjalizacji naszego elementu
+  var inicjalizujRaz = true;
+
   /// Zmienna która odpowiada za odświerzenie zmiennych po pojawieniu się popupu
   var inicjalizujDane = true;
 
   /// Utworzeni / pobranie danych do / z bazy
   var odswierzRozmiar = true;
 
-
   /// Pobranie wszystkich przedmiotów do skanowania, podzielnoych na kategorie
   Map<String, Map<String, String>> przedmiotyWgTypu = {};
 
+  /// Tablica przechowywująca zeskanowane przedmioty w danej sesji
+  Map<String, Map<String, String>> zeskanowanePrzedmioty = {};
+
   // Zmienne przechowywujące informacje nt. przedmiotów do skanownaia
 
-
-  /// Lista krzeseł w sali w raz z informacjami
-  late List<List<dynamic>> krzesla = [];
-
-  /// Lista monitorow w sali w raz z informacjami
-  late List<List<dynamic>> monitory = [];
-
-  /// Lista biurek w sali w raz z informacjami
-  late List<List<dynamic>> biurka = [];
-
-
-  // Przy wyświetlaniu okienek potrzebna jest lista tekstowa więc dla każdego
-  // zbioru eementów tworzę taką listę
-
-
-  /// Dynamicznie utworznona lista krzesel
-  late List<String> krzeslaIdentyfikatory = [];
-
-  /// Dynamicznie utworznona lista monitorów
-  late List<String> monitoryIdentyfikatory = [];
-
-  /// Dynamicznie utworznona lista biurek
-  late List<String> biurkaIdentyfikatory = [];
-
-
+  ///
+  Map<String, List<String>> listaListElem = {};
 
   /// Przechowuje rezultat wyskakujacych popupowych okienek
   late TextEditingController _textEditingController;
@@ -78,15 +61,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Kontroluje działanie kamery
   ScanController cameraController = ScanController();
 
-  /// Liczba zeskanowanych krzeseł
-  int liczbaKrzesel = 20;
-
-  /// Liczba zeskanownanych monitorow
-  late int liczbaMonitorow;
-
-  /// Liczba zeskanowanych biurek
-  late int liczbaBiurek;
-
+  Map<String, int> zeskanowaneLiczba = {};
 
   // TE ZMIENNE MUSZĄ BYĆ, BO TYCH PRZEKAZYWNAYCH PRZY WYWOŁANIU STRONY
   // NIE DA SIĘ MODYFIKOWAĆ, WIĘC TRZEBA MIEĆ ODDZIELNY ZESTAW
@@ -102,6 +77,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
   late String pomieszczenie;
 
 
+
   /// Zeskanowan wartość
   String scannedValue = "";
 
@@ -112,7 +88,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
   late double elementsOffset;
 
   late Size rozmiar;
-
   late Report nowyRaport;
 
   //
@@ -121,6 +96,17 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    //cameraController.pause();
+    //cameraController.resume();
+
+    if (inicjalizujRaz){
+      nowyRaport = Report();
+      budynek = widget.budynek;
+      pietro = widget.pietro;
+      pomieszczenie = widget.pomieszczenie;
+      inicjalizujRaz = false;
+    }
 
     /// Pobranie informacji nt. wymiarów okna
     if (odswierzRozmiar) {
@@ -137,14 +123,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
     /// -> przechowują informacje nt. stanu skonowania elementów
     if (inicjalizujDane) {
 
-      budynek = widget.budynek;
-      pietro = widget.pietro;
-      pomieszczenie = widget.pomieszczenie;
+      print("INITAAAA");
+      pobierzPrzedmioty(budynek, pietro, pomieszczenie);
 
-      pobierz(budynek, pietro, pomieszczenie);
-      utworzRaport(budynek, pietro, pomieszczenie);
-
-      przygotujZeskanowane();
       inicjalizujDane = false;
     }
 
@@ -181,210 +162,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
               height: elementsOffset,
             ),
 
-
-            SizedBox(
-              height: rozmiar.height * 0.2,
-              width: rozmiar.width * 0.9,
-              child: ListView(
-                children: [
-                  SizedBox(
-                    width: rozmiar.width * 0.8,
-                    height: 2.5 * elementsOffset,
-                    child: ElevatedButton(
-                      style: liczbaKrzesel == krzesla.length
-                          ? spacedGreenButtonActive
-                          : spacedGreenButtonNActive,
-                      onPressed: () async {
-                        await nestedComentDialog(krzeslaIdentyfikatory, "Krzesła");
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(
-                            left: elementsOffset * 0.2,
-                            right: elementsOffset * 0.2),
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Krzesło",
-                              style: TextStyle(
-                                  fontSize: elementsOffset,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              "$liczbaKrzesel/${krzesla.length}",
-                              style: TextStyle(
-                                  fontSize: elementsOffset,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.right,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  SizedBox(
-                    width: rozmiar.width * 0.8,
-                    height: 2.5 * elementsOffset,
-                    child: ElevatedButton(
-                      style: liczbaMonitorow == monitory.length
-                          ? spacedGreenButtonActive
-                          : spacedGreenButtonNActive,
-                      onPressed: () async {
-                        String? wybranyMonitor = await showPickerDialog(
-                          context: context,
-                          label: "monitor",
-                          items: monitoryIdentyfikatory,
-                        );
-                        if (wybranyMonitor != null) {
-                          setState(() {
-                            monitory[int.parse(wybranyMonitor.split(":")[0]) - 1]
-                            [2] = true;
-                          });
-                        }
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(
-                            left: elementsOffset * 0.2,
-                            right: elementsOffset * 0.2),
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Monitory",
-                              style: TextStyle(
-                                  fontSize: elementsOffset,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              "$liczbaMonitorow/${monitory.length}",
-                              style: TextStyle(
-                                  fontSize: elementsOffset,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.right,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  SizedBox(
-                    width: rozmiar.width * 0.8,
-                    height: 2.5 * elementsOffset,
-                    child: ElevatedButton(
-                      style: liczbaBiurek == biurka.length
-                          ? spacedGreenButtonActive
-                          : spacedGreenButtonNActive,
-                      onPressed: () async {
-                        String? wybraneBiurko = await showPickerDialog(
-                          context: context,
-                          label: "biurko",
-                          items: biurkaIdentyfikatory,
-                        );
-                        if (wybraneBiurko != null) {
-                          setState(() {
-                            biurka[int.parse(wybraneBiurko.split(":")[0]) - 1]
-                            [2] = true;
-                          });
-                        }
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(
-                            left: elementsOffset * 0.2,
-                            right: elementsOffset * 0.2),
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Biurko",
-                              style: TextStyle(
-                                  fontSize: elementsOffset,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              "$liczbaBiurek/${biurka.length}",
-                              style: TextStyle(
-                                  fontSize: elementsOffset,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.right,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  SizedBox(
-                    width: rozmiar.width * 0.8,
-                    height: 2.5 * elementsOffset,
-                    child: ElevatedButton(
-                      style: liczbaBiurek == biurka.length
-                          ? spacedGreenButtonActive
-                          : spacedGreenButtonNActive,
-                      onPressed: () async {
-                        String? wybraneBiurko = await showPickerDialog(
-                          context: context,
-                          label: "biurko",
-                          items: biurkaIdentyfikatory,
-                        );
-                        if (wybraneBiurko != null) {
-                          setState(() {
-                            biurka[int.parse(wybraneBiurko.split(":")[0]) - 1]
-                            [2] = true;
-                          });
-                        }
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(
-                            left: elementsOffset * 0.2,
-                            right: elementsOffset * 0.2),
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Biurko",
-                              style: TextStyle(
-                                  fontSize: elementsOffset,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              "$liczbaBiurek/${biurka.length}",
-                              style: TextStyle(
-                                  fontSize: elementsOffset,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.right,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            listaElem(),
 
             /// Separator oddzielający przyciski dolne
             SizedBox(
@@ -507,10 +285,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
                             budynek = wynik[0];
                             pietro = wynik[1];
                             pomieszczenie = wynik[2];
-
-                            inicjalizujDane = true;
                           }
                         });
+                        await pobierzPrzedmioty(budynek, pietro, pomieszczenie);
                       }
                     }
                   },
@@ -536,20 +313,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
                 /// Przycisk zmiany pomieszczenia
                 GestureDetector(
                   onTap: () async {
-                    var wynik = await doZmianyPomieszczenia(context);
-                    if (wynik != null) {
-                      setState(() {
-                        if (!((budynek == wynik[0]) &&
-                            (pietro == wynik[1]) &&
-                            (pomieszczenie == wynik[2]))) {
-                          budynek = wynik[0].toString();
-                          pietro = wynik[1].toString();
-                          pomieszczenie = wynik[2].toString();
-                          inicjalizujDane = true;
-                        }
-                      });
-                      await pobierz(budynek, pietro, pomieszczenie);
-                    }
+                    await doZmianyPomieszczenia(context);
                   },
                   child: Container(
                     height: elementsOffset * 4,
@@ -579,6 +343,8 @@ class _DemoCamPageState extends State<DemoCamPage> {
   //  Funkcje używane w tym pliku
   //
 
+
+
   /// Widget wyświetlający działąjący skanner
   Widget camera() => Container(
         height: rozmiar.height * 0.3 - 6,
@@ -597,10 +363,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
               // Kod wstrzymujcy dziaanie kamery
               cameraController.pause();
 
-
               // ... sprawdź czy element jest w bazie i ...
-              var czyWBazie = await szukajAzZnajdziesz(
-                  _textEditingController.text);
+              var czyWBazie =
+                  await checkItemsInRoom(_textEditingController.text);
 
               // ... w zależności od odopowiedzi odznacz i pokaż odpowiedni komunikat
               if (czyWBazie) {
@@ -625,6 +390,100 @@ class _DemoCamPageState extends State<DemoCamPage> {
         ),
       );
 
+  /// Widget generujący dynamicznie listę elementów do wyswietlenia
+  Widget listaElem() {
+    return SizedBox(
+      width: rozmiar.width * 0.87,
+      height: rozmiar.height * 0.2,
+      child: ListView(
+        children: przedmiotyWgTypu.keys.map((item) {
+          return Container(
+            height: 2.5 * elementsOffset,
+            margin: EdgeInsets.only(bottom: elementsOffset*0.2),
+            child: ElevatedButton(
+              onPressed: () async {
+                //await AddNestedComment(item, listaListElem[item]);
+                while (true){
+                  String? wynik = await showPickerDialog(
+                      context: context,
+                      label: item,
+                      items: przedmiotyWgTypu[item]!.keys.toList());
+                  if (wynik == null){
+                    break;
+                  }
+                  else{
+                    var Komentarz = await commentDialog("$item: $wynik");
+                    await dodajKomentarz(item, Komentarz);
+                  }
+                }
+
+              },
+              style: zeskanowaneLiczba[item] == przedmiotyWgTypu[item]!.length
+                  ? spacedGreenButtonActive
+                  : spacedGreenButtonNActive,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    item,
+                    style: TextStyle(
+                        fontSize: elementsOffset,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    "${zeskanowaneLiczba[item]}/${listaListElem[item]!.length}",
+                    style: TextStyle(
+                        fontSize: elementsOffset,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.right,
+                  ),
+                ],
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget AddNestedComment(String title, items) {
+    return Dialog(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              title,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+          ),
+          Divider(),
+          Container(
+            height: 200, // Set the desired height for the list
+            child: ListView(
+              children: items.map((item) {
+                return ElevatedButton(
+                  onPressed: () {
+                    // Handle button press
+                  },
+                  child: Text(item),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
   /// Początkowa inicjalizacja ekranu
   @override
   void initState() {
@@ -642,67 +501,30 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Po zeksnaowaniu należy odświerżyć wyświetlane dane w popupach, między
   /// innymi komentarze, i zeskanowane przedmoty
   Future odswierzZeskanowane() async {
-    liczbaKrzesel = liczGotowe(krzesla);
-    liczbaMonitorow = liczGotowe(monitory);
-    liczbaBiurek = liczGotowe(biurka);
-
-    for (int lista = 0; lista < 3; lista++) {
-      List<List<dynamic>> wybor = [krzesla, monitory, biurka][lista];
-      List<String> identyfikatory = [
-        krzeslaIdentyfikatory,
-        monitoryIdentyfikatory,
-        biurkaIdentyfikatory
-      ][lista];
-      for (int i = 0; i < wybor.length; i++) {
-        identyfikatory[i] =
-            "${(i + 1).toString()}:  ${wybor[i][1].toString()}  ${wybor[i][3].toString()}";
-      }
+    for (var k in zeskanowanePrzedmioty.keys){
+      zeskanowaneLiczba[k] = zeskanowanePrzedmioty[k]!.length;
     }
   }
 
-  Future pobierz(b, pi, po) async {
+  /// Funkcja zaciągająca dane z naszej bazy wiedząc jakie pomieszczenie chcemy
+  /// zeskanować
+  Future pobierzPrzedmioty(b, pi, po) async {
+    print("I AM DOWNLOADING");
     przedmiotyWgTypu = await przedmiotyWKategoriach(b, pi, po);
-  }
 
-  Future utworzRaport(b, pi, po) async {
-    nowyRaport = Report();
     await nowyRaport.nowePomieszczenie(b, pi, po);
-  }
+    print("KURWA CHUJ DUPA");
+    print(nowyRaport.doZeskanowania.keys.length);
 
-  /// Początkowe wpisanie danych - działa prawie tak jak 'odswierzZeksnowane'
-  /// ale inicjalizuje dane, a nie je nadpisuje
-  void przygotujZeskanowane() {
-    liczbaKrzesel = liczGotowe(krzesla);
-    liczbaMonitorow = liczGotowe(monitory);
-    liczbaBiurek = liczGotowe(biurka);
-
-    for (int lista = 0; lista < 3; lista++) {
-      List<List<dynamic>> wybor = [krzesla, monitory, biurka][lista];
-      List<String> identyfikatory = [
-        krzeslaIdentyfikatory,
-        monitoryIdentyfikatory,
-        biurkaIdentyfikatory
-      ][lista];
-      for (int i = 0; i < wybor.length; i++) {
-        identyfikatory.add(
-            "${(i + 1).toString()}:  ${wybor[i][1].toString()}  ${wybor[i][2].toString()} ${wybor[i][3].toString()}");
-      }
+    for (var k in przedmiotyWgTypu.keys){
+      listaListElem[k] = await przedmiotyWgTypu[k]!.values.toList();
+      zeskanowaneLiczba[k] = 0;
+      zeskanowanePrzedmioty[k] = {};
     }
+    setState(() {
+      przedmiotyWgTypu = przedmiotyWgTypu;
+    });
   }
-
-
-  /// Zliczanie gotowych elementów na liście dynamicznej
-  /// do użycia by pokazać ile już zeskanowano elementów
-  int liczGotowe(List<List<dynamic>> lista) {
-    int licznik = 0;
-    for (int i = 0; i < lista.length; i++) {
-      if (lista[i][2]) {
-        licznik++;
-      }
-    }
-    return licznik;
-  }
-
 
   /// Okienko do wyświetlania popupu do dodania komentarza
   Future commentDialog(naglowek) async {
@@ -740,24 +562,26 @@ class _DemoCamPageState extends State<DemoCamPage> {
     cameraController.resume();
   }
 
-
+  /// Okiednko które umożliwia wprowadzenie komentarza do konkretnego elementu
+  /// w naszej bazie wg. kategorii
   Future nestedComentDialog(lista, naglowek) async {
     odswierzRozmiar = false;
+
     /// Kod wstrzymujcy dziaanie kamery
     cameraController.pause();
 
-
-    while (true){
+    while (true) {
       final wynik = await showPickerDialog(
         context: context,
         label: naglowek,
-        items: lista,
+        items: listaListElem[lista]!,
       );
 
       if (wynik == null) {
         /// zresetuj wpisaną wartość
         odswierzRozmiar = true;
         cameraController.resume();
+
         /// dodaj komentarz do przedmiotu
         _textEditingController.text = "";
 
@@ -765,17 +589,17 @@ class _DemoCamPageState extends State<DemoCamPage> {
         odswierzRozmiar = true;
         cameraController.resume();
         return;
-      }
-      else{
+      } else {
         wynik.split(": ")[1];
         final kom = await commentDialog("Przedmiot: $wynik");
         print(kom);
-        await Future.delayed(Duration(seconds: 1));
         await dodajKomentarz(wynik, kom);
         await odswierzZeskanowane();
+        setState(() {
+          zeskanowanePrzedmioty = zeskanowanePrzedmioty;
+        });
       }
     }
-
   }
 
   /// Popup do wpisania kodu ręcznie przy próbie skanowania
@@ -821,11 +645,15 @@ class _DemoCamPageState extends State<DemoCamPage> {
       ),
     );
 
+    setState(() {
+      scannedValue = _textEditingController.text;
+    });
+
     /// O ile wpisano jakiś kod to:
     if (_textEditingController.text != "") {
       /// ... sprawdź czy element jest w bazie i ...
       var czyWBazie =
-          await szukajAzZnajdziesz(_textEditingController.text.toString());
+          await checkItemsInRoom(_textEditingController.text);
 
       /// ... w zależności od odopowiedzi odznacz i pokaż odpowiedni komunikat
       if (czyWBazie) {
@@ -854,18 +682,12 @@ class _DemoCamPageState extends State<DemoCamPage> {
   }
 
   /// Rekurancyjne przeszukanie danych w celu odnalezienia i odznaczenia kodu
-  Future<bool> szukajAzZnajdziesz(wartosc) async {
-
+  /// wśród elementów w naszym pomieszczeniu
+  Future<bool> checkItemsInRoom(barcode) async {
     for (var kategoria in przedmiotyWgTypu.keys){
-      for (var barcode in przedmiotyWgTypu[kategoria]!.keys){
-
-      }
-    }
-
-    for (List<List<dynamic>> l in [krzesla, monitory, biurka]) {
-      for (int i = 0; i < l.length; i++) {
-        if (l[i][1] == wartosc) {
-          l[i][2] = true;
+      for (var elem in przedmiotyWgTypu[kategoria]!.keys){
+        if (elem == barcode){
+          zeskanowanePrzedmioty[kategoria]![barcode] = "";
           return true;
         }
       }
@@ -877,10 +699,10 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// dodaje do niego przekazany komentarz
   /// zwraca true / false, w zależności od tego czy element jest w tym pomiedzczeniu
   Future<bool> dodajKomentarz(barcode, komentarz) async {
-    for (List<List<dynamic>> l in [krzesla, monitory, biurka]) {
-      for (int i = 0; i < l.length; i++) {
-        if (l[i][1] == barcode) {
-          l[i][3] = komentarz;
+    for (var kategoria in przedmiotyWgTypu.keys){
+      for (var elem in przedmiotyWgTypu[kategoria]!.keys){
+        if (elem == barcode){
+          przedmiotyWgTypu[kategoria]![barcode] = komentarz;
           return true;
         }
       }
@@ -893,14 +715,13 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// zmiany pomieszczenia
   Future<String> doZakonczeniaRaportu(BuildContext context) async {
     cameraController.pause();
-    final result = await Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => FinishReportPage(
-          raport: nowyRaport,
-        )));
+    await nowyRaport.wpiszNoweZmiany(budynek, pietro, pomieszczenie, zeskanowanePrzedmioty);
+    final result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => FinishReportPage(
+              raport: nowyRaport,
+            )));
     if (result == null) {
       cameraController.resume();
-    } else {
-      dispose();
     }
     return result;
   }
@@ -908,15 +729,33 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Wywołanie asynchroniczne przechodząde to zmiany pomieszczenia
   /// i zwrtacające informacje listę oznaczajacaą pomieszczenia, lub null
   /// jeśli operacja została anulowana
-  Future<List<String>> doZmianyPomieszczenia(BuildContext context) async {
+  Future doZmianyPomieszczenia(BuildContext context) async {
     cameraController.pause();
-    final result = await Navigator.of(context).push(MaterialPageRoute(
+    final wynik = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ChangePlacePage(
               budynek: budynek,
               pietro: pietro,
               pomieszczenie: pomieszczenie,
             )));
+    if (wynik != null) {
+      await nowyRaport.wpiszNoweZmiany(budynek, pietro, pomieszczenie, zeskanowanePrzedmioty);
+      setState(() {
+        if (!((budynek == wynik[0]) &&
+            (pietro == wynik[1]) &&
+            (pomieszczenie == wynik[2]))) {
+          budynek = wynik[0].toString();
+          pietro = wynik[1].toString();
+          pomieszczenie = wynik[2].toString();
+        }
+      });
+      setState(() {
+        scannedValue = "";
+      });
+      //może by się przydało jakieś raport clear?
+      await nowyRaport.nowePomieszczenie(budynek, pietro, pomieszczenie);
+      await pobierzPrzedmioty(budynek, pietro, pomieszczenie);
+      await odswierzZeskanowane();
+    }
     cameraController.resume();
-    return result;
   }
 }
