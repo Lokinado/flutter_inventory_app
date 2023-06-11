@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:inventory_app/components/color_palette.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/database/place_to_list.dart';
 
@@ -23,29 +23,12 @@ class _ListPageState extends State<ListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaWidth = MediaQuery.of(context).size.width;
+    final mediaWidth = MediaQuery.of(context).size;
     return Container(
       color: Colors.white,
       child: Column(
         children:[
           leftSectionHeader(context),
-          Align(
-            alignment: Alignment.topLeft,
-            child: Container(
-              margin: const EdgeInsets.only(left: 8.0, top: 8.0),
-              child: CircleAvatar(
-                backgroundColor: const Color.fromARGB(255 ,87, 178, 122),
-                child: IconButton(
-                  onPressed: () =>{},
-                  icon: const Icon(Icons.add, color: Colors.white,),
-                  style: IconButton.styleFrom(
-                    shape: const CircleBorder(),
-                    padding: const EdgeInsets.all(24.0),
-                  ),
-                ),
-              ),
-            ),
-          ),
           FutureBuilder(
               future: pobierzBudynki(),
               builder: (context, snapshot) {
@@ -127,7 +110,7 @@ class _ListPageState extends State<ListPage> {
                                                                         for(var room in rooms)
                                                                           Container(
                                                                               height: 50.0,
-                                                                              width: mediaWidth*0.7,
+                                                                              width: mediaWidth.width*0.7,
                                                                               decoration: BoxDecoration(
                                                                                   borderRadius: BorderRadius.circular(50.0),
                                                                                   color: const Color.fromARGB(217, 217, 217, 217)),
@@ -162,22 +145,14 @@ class _ListPageState extends State<ListPage> {
           GestureDetector(
             onTap: () => print("tu przekierowanie"),
             child: Container(
-
-              width: mediaWidth*0.8,
+              width: mediaWidth.width*0.9,
               height: 70.0,
               margin: const EdgeInsets.all(30.0),
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255,148,175,159),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(40.0),
+              decoration: BoxDecoration(
+                color: zielonySlabaSGGW,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(20.0),
                 ),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 10.0,
-                    offset: Offset(0.0, 0.75),
-                  ),
-                ],
               ),
               child: const Center(
                 child: Text(
@@ -196,22 +171,39 @@ class _ListPageState extends State<ListPage> {
   }
 
   Wrap leftSectionHeader(BuildContext context) {
+    final mediaWidth = MediaQuery.of(context).size;
     return Wrap(
     children: <Widget>[
       TopBodySection(key: UniqueKey(),
         tekst: 'Pomieszczenia',size: MediaQuery.of(context).size, location: Location.left,),
       Container(
-      color: const Color.fromRGBO(0, 50, 39, 1),
+      color: zielonySGGW,
       child: Container(
+        alignment: Alignment.centerLeft,
         width: MediaQuery.of(context).size.width,
-        height: 50,
+        height: 80,
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft:
             Radius.circular(75),
           ),
+          border: BorderSide
         ),
+        child: Container(
+          margin: EdgeInsets.only(left: 30,top: 9),
+          child: CircleAvatar(
+            radius: 22,
+            backgroundColor: const Color.fromARGB(255 ,87, 178, 122),
+            child: IconButton(
+              onPressed: () =>{},
+              icon: const Icon(Icons.add, color: Colors.white,),
+              style: IconButton.styleFrom(
+                shape: const CircleBorder(),
+              ),
+            ),
+          ),
+        )
       ),
       ),
     ],

@@ -121,7 +121,7 @@ class _FinishReportPageState extends State<FinishReportPage> {
     }
 
     return Container(
-      height: rozmiar.height * 0.53,
+      height: rozmiar.height * 0.6,
       width: rozmiar.width * 0.9,
         decoration: BoxDecoration(
           border: Border.all(width: 4, color: zielonySGGW),
