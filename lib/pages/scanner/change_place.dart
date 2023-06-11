@@ -10,17 +10,11 @@ class ChangePlacePage extends StatefulWidget {
     required this.budynek,
     required this.pietro,
     required this.pomieszczenie,
-    required this.listaBudynkow,
-    required this.listaPieter,
-    required this.listaPomieszczen,
   }) : super(key: key);
 
   final String budynek;
   final String pietro;
   final String pomieszczenie;
-  final List<String> listaBudynkow;
-  final List<String> listaPieter;
-  final List<String> listaPomieszczen;
 
   @override
   State<ChangePlacePage> createState() => _ChangePlacePageState();
@@ -37,6 +31,10 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
   late String pietro; /// Wybrane przez użytkownika pietro
   late String pomieszczenie; /// Wybrane przez użytkownika pomieszczenie
 
+  List<String> listaBudynkow = [];
+  List<String> listaPieter = [];
+  List<String> listaPomieszczen = [];
+
   var inicjalizujDane = true; /// Utworzeni / pobranie danych do / z bazy
 
   @override
@@ -48,6 +46,7 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
       budynek = widget.budynek;
       pietro = widget.pietro;
       pomieszczenie = widget.pomieszczenie;
+
       inicjalizujDane = false;
     }
 
@@ -63,7 +62,7 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
       /// Nagłówek aplikacji
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: const Color.fromRGBO(0, 50, 39, 1),
+        backgroundColor: zielonySGGW,
         toolbarHeight: textHeighOffset * 3,
         centerTitle: true,
         title: const Text(
@@ -130,17 +129,19 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                             onPressed: () async {
                               String? wyborBudynku = await showPickerDialog(
                                 context: context,
-                                label: "budynek",
-                                items: widget.listaBudynkow,
+                                label: "Budynek",
+                                items: listaBudynkow,
                               );
                               if (wyborBudynku != null) {
                                 setState(() {
-                                  if (budynek != "value") {
+                                  // wybrano wartość inną niż wpisana => reset
+                                  if (budynek != wyborBudynku) {
                                     budynek = wyborBudynku;
                                     pietro = "";
                                     pomieszczenie = "";
                                   }
                                 });
+                                listaPieter = await pobierzPietra(budynek);
                               }
                             },
                             child: const Text(
@@ -194,16 +195,18 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                               if (budynek != "") {
                                 String? wyborPietra = await showPickerDialog(
                                   context: context,
-                                  label: "piętro",
-                                  items: widget.listaPieter,
+                                  label: "Piętro",
+                                  items: listaPieter,
                                 );
                                 if (wyborPietra != null) {
                                   setState(() {
+                                    // wybrano wartość inną niż wpisana => reset
                                     if (pietro != wyborPietra) {
                                       pietro = wyborPietra;
                                       pomieszczenie = "";
                                     }
                                   });
+                                  listaPomieszczen = await pobierzPomieszczenia(budynek, pietro);
                                 }
                               }
                             },
@@ -256,14 +259,17 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                             onPressed: () async {
                               if (pietro != "") {
                                 String? wyborPomieszczenia =
-                                    await showPickerDialog(
+                                await showPickerDialog(
                                   context: context,
-                                  label: "pomieszczenie",
-                                  items: widget.listaPomieszczen,
+                                  label: "Pomieszczenie",
+                                  items: listaPomieszczen,
                                 );
                                 if (wyborPomieszczenia != null) {
                                   setState(() {
-                                    pomieszczenie = wyborPomieszczenia;
+                                    // wybrano wartość inną niż wpisana => reset
+                                    if (pomieszczenie != wyborPomieszczenia) {
+                                      pomieszczenie = wyborPomieszczenia;
+                                    }
                                   });
                                 }
                               }
@@ -301,7 +307,7 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
                       width: rozmiar.width * 0.33,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: const Color.fromRGBO(245, 123, 107, 1),
+                        color: lososiowyCzerwony,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -359,6 +365,7 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
   void initState() {
     super.initState();
     _textEditingController = TextEditingController();
+    pobierzDane();
   }
 
   /// Usuwanie stanu ekranu po wyjściu
@@ -366,6 +373,13 @@ class _ChangePlacePageState extends State<ChangePlacePage> {
   void dispose() {
     _textEditingController.dispose();
     super.dispose();
+  }
+
+  /// Zaciąga dane z bazy nt. list dla kolejnych wyborów
+  Future pobierzDane() async {
+    listaBudynkow = await pobierzBudynki();
+    listaPieter = await pobierzPietra(widget.budynek);
+    listaPomieszczen = await pobierzPomieszczenia(widget.budynek, widget.pietro);
   }
 
   separator(value) => SizedBox( height: value, );
