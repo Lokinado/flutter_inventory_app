@@ -3,6 +3,7 @@ import 'package:inventory_app/components/color_palette.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/database/place_to_list.dart';
 import 'package:inventory_app/pages/creation_page.dart';
+import 'package:inventory_app/pages/logged_page.dart';
 
 
 class ListPage extends StatefulWidget {
@@ -198,7 +199,7 @@ class _ListPageState extends State<ListPage> {
               ),
             ),
           ),
-        )
+        ),
       ),
       ),
     ],
