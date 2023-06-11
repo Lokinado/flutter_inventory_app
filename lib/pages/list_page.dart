@@ -188,7 +188,7 @@ class _ListPageState extends State<ListPage> {
             topLeft:
             Radius.circular(75),
           ),
-          border: BorderSide
+          //border: BorderSide(color: Colors.white), // THERE IS CRITICAL BUG IN THIS LINE
         ),
         child: Container(
           margin: EdgeInsets.only(left: 30,top: 9),

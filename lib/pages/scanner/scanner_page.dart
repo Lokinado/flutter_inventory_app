@@ -101,6 +101,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
     //cameraController.resume();
 
     if (inicjalizujRaz){
+      nowyRaport = Report();
       budynek = widget.budynek;
       pietro = widget.pietro;
       pomieszczenie = widget.pomieszczenie;
@@ -122,6 +123,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
     /// -> przechowują informacje nt. stanu skonowania elementów
     if (inicjalizujDane) {
 
+      print("INITAAAA");
       pobierzPrzedmioty(budynek, pietro, pomieszczenie);
 
       inicjalizujDane = false;
@@ -507,10 +509,12 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Funkcja zaciągająca dane z naszej bazy wiedząc jakie pomieszczenie chcemy
   /// zeskanować
   Future pobierzPrzedmioty(b, pi, po) async {
+    print("I AM DOWNLOADING");
     przedmiotyWgTypu = await przedmiotyWKategoriach(b, pi, po);
 
-    nowyRaport = Report();
     await nowyRaport.nowePomieszczenie(b, pi, po);
+    print("KURWA CHUJ DUPA");
+    print(nowyRaport.doZeskanowania.keys.length);
 
     for (var k in przedmiotyWgTypu.keys){
       listaListElem[k] = await przedmiotyWgTypu[k]!.values.toList();
@@ -711,6 +715,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// zmiany pomieszczenia
   Future<String> doZakonczeniaRaportu(BuildContext context) async {
     cameraController.pause();
+    await nowyRaport.wpiszNoweZmiany(budynek, pietro, pomieszczenie, zeskanowanePrzedmioty);
     final result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => FinishReportPage(
               raport: nowyRaport,
@@ -733,6 +738,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
               pomieszczenie: pomieszczenie,
             )));
     if (wynik != null) {
+      await nowyRaport.wpiszNoweZmiany(budynek, pietro, pomieszczenie, zeskanowanePrzedmioty);
       setState(() {
         if (!((budynek == wynik[0]) &&
             (pietro == wynik[1]) &&
@@ -745,10 +751,10 @@ class _DemoCamPageState extends State<DemoCamPage> {
       setState(() {
         scannedValue = "";
       });
-      await nowyRaport.wpiszNoweZmiany(budynek, pietro, pomieszczenie, zeskanowanePrzedmioty);
+      //może by się przydało jakieś raport clear?
+      await nowyRaport.nowePomieszczenie(budynek, pietro, pomieszczenie);
       await pobierzPrzedmioty(budynek, pietro, pomieszczenie);
       await odswierzZeskanowane();
-      await Future.delayed(Duration(milliseconds: 2000));
     }
     cameraController.resume();
   }

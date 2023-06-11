@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/color_palette.dart';
 import 'package:inventory_app/pages/scanner/ready_report.dart';
 import 'package:inventory_app/components/popups.dart';
 import 'package:inventory_app/database/report_generator.dart';
-import 'package:inventory_app/database/listing_items.dart';
+import 'package:inventory_app/database/place_to_list.dart';
 
 class FinishReportPage extends StatefulWidget {
   FinishReportPage({Key? key, required this.raport}) : super(key: key);
@@ -15,7 +16,7 @@ class FinishReportPage extends StatefulWidget {
 }
 
 class _FinishReportPageState extends State<FinishReportPage> {
-
+  bool isLoading = true;
   /// Przechowuje rezultat wyskakujacych popupowych okienek
   late TextEditingController _textEditingController;
 
@@ -28,7 +29,19 @@ class _FinishReportPageState extends State<FinishReportPage> {
 
   var czyZainic = true; /// Zmienne odpowiedzialna za jednor. inicjalizację
 
-  Widget GenerateSummary(Report raport, Size rozmiar, String Floor, String Room) {
+  Widget GenerateSummary(Report raport, Size rozmiar, String Buildings, String Floor, String Room) {
+    print("GIVEMENOTEMPTY");
+    print(raport.doZeskanowania.isEmpty.toString());
+    if( raport.doZeskanowania.isEmpty ) return SizedBox.shrink();
+
+    print(raport.doZeskanowania.isEmpty.toString());
+    print("AAAAAAAAAAAAAAAAAAAAAAAA");
+    int NumberOfItems = raport.doZeskanowania[Buildings]![Floor]![Room]!.keys.length;
+    int NumberOfScannedItems = raport.skan[Buildings]![Floor]![Room]!.keys.length;
+    print(NumberOfItems);
+    print(NumberOfScannedItems);
+    print("ENDDDD");
+
     return Container(
       decoration: const BoxDecoration(
         color: Colors.green,
@@ -37,17 +50,16 @@ class _FinishReportPageState extends State<FinishReportPage> {
       alignment: Alignment.center,
       padding: EdgeInsets.only(left: 20),
       margin: EdgeInsets.only(bottom: 8),
-      child: Text("Suma: 20/20",
+      child: Text("Suma: " + NumberOfScannedItems.toString() + "/" + NumberOfItems.toString(),
           style: TextStyle(
             fontSize: 30.0,
           )),
     );
   }
 
-  List<Widget> GenerateItems( Report raport, Size rozmiar, String Floor, String Room){
+  List<Widget> GenerateItems( Report raport, Size rozmiar, String Buildings, String Floor, String Room){
     List<Widget> ret = [];
-    String Budynek = raport.skan.keys.first;
-    for( var items in raport.skan[Budynek]![Floor]![Room]!.keys ){
+    for( var items in raport.skan[Buildings]![Floor]![Room]!.keys ){
       ret.add(Container(
         decoration: const BoxDecoration(
           color: Colors.black12,
@@ -66,10 +78,9 @@ class _FinishReportPageState extends State<FinishReportPage> {
     return ret;
   }
 
-  List<Widget> GenerateRooms( Report raport, Size rozmiar, String Floor){
+  List<Widget> GenerateRooms( Report raport, Size rozmiar, String Building, String Floor){
     List<Widget> ret = [];
-    String Budynek = raport.skan.keys.first;
-    for( var room in raport.skan[Budynek]![Floor]!.keys ){
+    for( var room in raport.skan[Building]![Floor]!.keys ){
       ret.add(Container(
         margin: EdgeInsets.only(top: 10),
         padding: EdgeInsets.only(left: 20),
@@ -84,8 +95,8 @@ class _FinishReportPageState extends State<FinishReportPage> {
               margin: EdgeInsets.only(bottom: 10),
               color: Colors.black,
             ),
-            ...GenerateItems( raport, rozmiar, Floor, room),
-            GenerateSummary(raport, rozmiar, Floor, room)
+            ...GenerateItems( raport, rozmiar, Building, Floor, room),
+            GenerateSummary(raport, rozmiar, Building, Floor, room)
           ],
         ),
       ));
@@ -93,10 +104,9 @@ class _FinishReportPageState extends State<FinishReportPage> {
     return ret;
   }
 
-  List<Widget> GenerateFloors( Report raport, Size rozmiar){
+  List<Widget> GenerateFloors( Report raport, Size rozmiar, String Building){
     List<Widget> ret = [];
-    String Budynek = raport.skan.keys.first;
-    for( var floor in raport.skan[Budynek]!.keys ){
+    for( var floor in raport.skan[Building]!.keys ){
       ret.add(Container(
         margin: EdgeInsets.only(top:10),
         padding: EdgeInsets.only(left: 20),
@@ -106,7 +116,29 @@ class _FinishReportPageState extends State<FinishReportPage> {
             Text(floor, style: TextStyle(
               fontSize: 15.0,
             )),
-            ...GenerateRooms( raport, rozmiar, floor),
+            ...GenerateRooms( raport, rozmiar, Building, floor),
+          ],
+        ),
+      ));
+    }
+    return ret;
+  }
+
+  List<Widget> GenerateBuildings( Report raport, Size rozmiar){
+    List<Widget> ret = [];
+    print("GENERATE BUILDING");
+    print(raport.skan.keys.length);
+    for( var building in raport.skan.keys ){
+      ret.add(Container(
+        margin: EdgeInsets.only(top:10),
+        padding: EdgeInsets.only(left: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(building, style: TextStyle(
+              fontSize: 15.0,
+            )),
+            ...GenerateFloors( raport, rozmiar, building),
           ],
         ),
       ));
@@ -154,7 +186,7 @@ class _FinishReportPageState extends State<FinishReportPage> {
               height: 2,
               color: Colors.black,
             ),
-            ...GenerateFloors(raport, rozmiar),
+            ...GenerateBuildings(raport, rozmiar),
           ],
         ),
       )
@@ -176,6 +208,7 @@ class _FinishReportPageState extends State<FinishReportPage> {
     // Jak uzyskać dane
     //var ala = widget.raport;
 
+    /*
     Report raport = Report();
     raport.skan = {
       "Budynek 32":{
@@ -192,8 +225,8 @@ class _FinishReportPageState extends State<FinishReportPage> {
         }
       }
     };
+    */
 
-    print(raport.report_number);
     /// Pobranie informacji nt. wymiarów okna
     final Size rozmiar = MediaQuery.of(context).size;
 
@@ -244,7 +277,7 @@ class _FinishReportPageState extends State<FinishReportPage> {
               width: rozmiar.width,
               margin: EdgeInsets.only(bottom: 20),
               alignment: Alignment.center,
-              child: GenerateRaprotContainer(raport, rozmiar) as Container,
+              child: GenerateRaprotContainer(widget.raport, rozmiar) as Container,
             ),
 
             /// Guzik zmiany pomieszczenia
