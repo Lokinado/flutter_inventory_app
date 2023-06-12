@@ -126,11 +126,10 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
       inicjalizujDane = false;
     }
-
     /// Odświeżenie elementów dynamicznych, jako komentarze, czy liczniki
     /// zeskanownaych elementów
     odswierzZeskanowane();
-
+  print("tu lista $przedmiotyWgTypu");
     return Scaffold(
 
         /// Nagłówek aplikacji

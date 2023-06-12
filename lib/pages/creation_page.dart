@@ -41,10 +41,11 @@ class _CreationPageState extends State<CreationPage> with AutomaticKeepAliveClie
     double szerokoscPrzycisku = mediasize.width - 120;
     inicjalizujBudynki();
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: buildAppBar(context),
         body: 
         Column(
       children: [
+        
         TopBodySection(key: UniqueKey(), size: mediasize, tekst: "Dodawanie", location: Location.center,),
         SizedBox(
           height: mediasize.height * 0.2,
@@ -220,7 +221,7 @@ class _CreationPageState extends State<CreationPage> with AutomaticKeepAliveClie
             ),
             GestureDetector(
               onTap: () async {
-                if(pomieszczenie!="" && pietro!="" && budynek !="")
+                if(pomieszczenie!="" && pietro!="" && budynek !="")//TODO: Przypadek kiedy nie ma piętra a jest budynek etc.
                 {
                   if(listaPomieszczen.contains(pomieszczenie))
                   {
@@ -231,7 +232,12 @@ class _CreationPageState extends State<CreationPage> with AutomaticKeepAliveClie
                   else
                   {
                     createRoom(budynek, pietro, pomieszczenie);
-                    Navigator.pop(context);
+                    //Navigator.pop(context);
+                    setState(() {
+                      budynek="";
+                      pietro="";
+                      pomieszczenie="";
+                    });
                   }
                 }
                 else if(pomieszczenie=="" && pietro!="" && budynek!="")
@@ -245,7 +251,11 @@ class _CreationPageState extends State<CreationPage> with AutomaticKeepAliveClie
                   else
                   {
                     createFloor(budynek, pietro);
-                    Navigator.pop(context);
+                    //Navigator.pop(context);
+                    setState(() {
+                      budynek="";
+                      pietro="";
+                    });
                   }
                 }
                 else if(pomieszczenie=="" && pietro=="" && budynek!="")
@@ -259,7 +269,10 @@ class _CreationPageState extends State<CreationPage> with AutomaticKeepAliveClie
                   else
                   {
                     createBuilding(budynek);
-                    Navigator.pop(context);
+                    //Navigator.pop(context);
+                    setState(() {
+                      budynek="";
+                    });
                   }
                 }
                 else
@@ -308,41 +321,6 @@ class _CreationPageState extends State<CreationPage> with AutomaticKeepAliveClie
     )
     );
   }
-
-  /* Container addEntityButton (BuildContext context, EntityType atype, String building, String floor, String room) {
-    return Container(
-                margin: const EdgeInsets.only(left: 15),
-                child: CircleAvatar(
-                  radius: 22,
-                  backgroundColor: const Color.fromARGB(255, 87, 178, 122),
-                  child: IconButton(
-                    onPressed: () async{
-                      switch (atype) {
-                        case EntityType.building:
-                        showUserInputDialog(context: context, label: "Dodaj Budynek");
-                        createBuilding(building);
-                        Navigator.pop(context);
-                        break;
-                        case EntityType.floor:
-                        showUserInputDialog(context: context, label: "Dodaj piętro");
-                        break;
-                        case EntityType.room:
-                        showUserInputDialog(context: context, label: "Dodaj pomieszczenie");
-                        break;
-                        default:
-                      }
-                    },
-                    icon: const Icon(
-                      Icons.add,
-                      color: Colors.white,
-                    ),
-                    style: IconButton.styleFrom(
-                      shape: const CircleBorder(),
-                    ),
-                  ),
-                ),
-              );
-  } */
 
   Future inicjalizujBudynki() async {
     listaBudynkow = await pobierzBudynki();

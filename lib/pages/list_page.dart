@@ -21,6 +21,7 @@ class _ListPageState extends State<ListPage>
   Widget build(BuildContext context) {
     super.build(context);
     final mediaWidth = MediaQuery.of(context).size;
+
     return Container(
       color: Colors.white,
       child: Column(
@@ -133,24 +134,22 @@ class _ListPageState extends State<ListPage>
                                                                         for (var room
                                                                             in rooms)
                                                                           Container(
-                                                                              height:
-                                                                                  50.0,
-                                                                              width: mediaWidth.width *
-                                                                                  0.7,
-                                                                              decoration: BoxDecoration(
-                                                                                  borderRadius: BorderRadius.circular(
-                                                                                      50.0),
-                                                                                  color: const Color.fromARGB(217, 217, 217,
-                                                                                      217)),
-                                                                              margin: const EdgeInsets.only(
-                                                                                  left:
-                                                                                      5.0,
-                                                                                  bottom:
-                                                                                      5.0),
+                                                                              height: 50.0,
+                                                                              width: mediaWidth.width * 0.7,
+                                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(50.0), color: const Color.fromARGB(217, 217, 217, 217)),
+                                                                              margin: const EdgeInsets.only(left: 5.0, bottom: 5.0),
                                                                               child: ListTile(
-                                                                                  onTap: () => {
-                                                                                        Navigator.push(context, MaterialPageRoute(builder: (context) => ShowItemListPage(building: building, floor: floor, room: room,)))
-                                                                                      },
+                                                                                  onTap: () async {
+                                                                                    await Navigator.push(
+                                                                                        context,
+                                                                                        MaterialPageRoute(
+                                                                                            builder: (context) => ShowItemListPage(
+                                                                                                  building: building,
+                                                                                                  floor: floor,
+                                                                                                  room: room,
+                                                                                                )));
+                                                                                    setState(() {});
+                                                                                  },
                                                                                   title: Text("Sala $room"))),
                                                                       ],
                                                                     ),
@@ -228,9 +227,12 @@ class _ListPageState extends State<ListPage>
                 radius: 22,
                 backgroundColor: const Color.fromARGB(255, 87, 178, 122),
                 child: IconButton(
-                  onPressed: () => {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => CreationPage()))
+                  onPressed: () async {
+                    await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreationPage()));
+                    setState(() {});
                   },
                   icon: const Icon(
                     Icons.add,
