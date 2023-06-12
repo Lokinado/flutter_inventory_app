@@ -12,29 +12,25 @@ class ListPage extends StatefulWidget {
   State<ListPage> createState() => _ListPageState();
 }
 
-class _ListPageState extends State<ListPage>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
+class _ListPageState extends State<ListPage> {
+
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final mediaWidth = MediaQuery.of(context).size;
-
     return Container(
       color: Colors.white,
       child: Column(
-        children: [
+        children:[
           leftSectionHeader(context),
           FutureBuilder(
               future: pobierzBudynki(),
               builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case (ConnectionState.waiting):
+                switch(snapshot.connectionState){
+                  case(ConnectionState.waiting):
                     return const Text("Loading...");
                   default:
-                    if (snapshot.hasError) {
+                    if(snapshot.hasError) {
                       return const Text("Błąd Połączenia z Bazą");
                     } else {
                       var buildings = snapshot.data;
@@ -47,134 +43,103 @@ class _ListPageState extends State<ListPage>
                                 margin: const EdgeInsets.only(left: 10.0),
                                 child: Theme(
                                   data: Theme.of(context).copyWith(
-                                    unselectedWidgetColor:
-                                        Colors.black, // here for close state
-                                    colorScheme: ColorScheme.light(
-                                      primary: zielonyjasnySGGW,
+                                    unselectedWidgetColor: Colors.black, // here for close state
+                                    colorScheme: const ColorScheme.light(
+                                      primary: Colors.black,
                                     ), // here for open state in replacement of deprecated accentColor
-                                    dividerColor: Colors
-                                        .transparent, // if you want to remove the border
+                                    dividerColor: Colors.transparent, // if you want to remove the border
                                   ),
                                   child: FutureBuilder(
                                       future: pobierzPietra(building),
-                                      builder: (context, snapshot) {
-                                        switch (snapshot.connectionState) {
+                                      builder: (context,snapshot) {
+                                        switch(snapshot.connectionState)
+                                        {
                                           case (ConnectionState.waiting):
                                             return const Text("Loading...");
                                           default:
-                                            if (snapshot.hasError) {
-                                              return const Text(
-                                                  "Błąd Połączenia z Bazą");
-                                            } else {
-                                              var floors = snapshot.data;
+                                            if(snapshot.hasError)
+                                            {
+                                              return const Text("Błąd Połączenia z Bazą");
+                                            }
+                                            else
+                                            {
+                                              var floors=snapshot.data;
                                               return ExpansionTile(
-                                                title:
-                                                    Text('Budynek $building'),
+                                                title: Text('Budynek $building'),
                                                 textColor: Colors.black,
-                                                collapsedTextColor:
-                                                    Colors.black,
+                                                collapsedTextColor: Colors.black,
                                                 shape: const Border(),
                                                 children: [
-                                                  for (var floor in floors)
+                                                  for(var floor in floors)
                                                     FutureBuilder(
-                                                        future:
-                                                            pobierzPomieszczenia(
-                                                                building,
-                                                                floor),
-                                                        builder: (context,
-                                                            snapshot) {
-                                                          switch (snapshot
-                                                              .connectionState) {
-                                                            case (ConnectionState
-                                                                  .waiting):
-                                                              return const Text(
-                                                                  "Loading...");
+                                                        future: pobierzPomieszczenia(building, floor),
+                                                        builder: (context, snapshot) {
+                                                          switch(snapshot.connectionState){
+                                                            case (ConnectionState.waiting):
+                                                              return const Text("Loading...");
                                                             default:
-                                                              if (snapshot
-                                                                  .hasError) {
-                                                                return const Text(
-                                                                    "Błąd Połączenia z Bazą");
-                                                              } else {
-                                                                var rooms =
-                                                                    snapshot
-                                                                        .data;
+                                                              if(snapshot.hasError)
+                                                              {
+                                                                return const Text("Błąd Połączenia z Bazą");
+                                                              }
+                                                              else
+                                                              {
+                                                                var rooms=snapshot.data;
                                                                 return Container(
-                                                                  margin: const EdgeInsets
-                                                                          .only(
-                                                                      left:
-                                                                          12.0),
+                                                                  margin: const EdgeInsets.only(left: 12.0),
                                                                   child: Theme(
-                                                                    data: Theme.of(
-                                                                            context)
-                                                                        .copyWith(
-                                                                      unselectedWidgetColor:
-                                                                          Colors
-                                                                              .black, // here for close state
-                                                                      colorScheme:
-                                                                          const ColorScheme
-                                                                              .light(
-                                                                        primary:
-                                                                            Colors.black,
+                                                                    data: Theme.of(context).copyWith(
+                                                                      unselectedWidgetColor: Colors.black, // here for close state
+                                                                      colorScheme: const ColorScheme.light(
+                                                                        primary: Colors.black,
                                                                       ), // here for open state in replacement of deprecated accentColor
-                                                                      dividerColor:
-                                                                          Colors
-                                                                              .transparent, // if you want to remove the border
+                                                                      dividerColor: Colors.transparent, // if you want to remove the border
                                                                     ),
-                                                                    child:
-                                                                        ExpansionTile(
-                                                                      title: Text(
-                                                                          "Piętro $floor"),
-                                                                      textColor:
-                                                                          Colors
-                                                                              .black,
-                                                                      collapsedTextColor:
-                                                                          Colors
-                                                                              .black,
+                                                                    child: ExpansionTile
+                                                                      (
+                                                                      title: Text("Piętro $floor"),
+                                                                      textColor: Colors.black,
+                                                                      collapsedTextColor: Colors.black,
                                                                       children: [
-                                                                        for (var room
-                                                                            in rooms)
+                                                                        for(var room in rooms)
                                                                           Container(
                                                                               height: 50.0,
-                                                                              width: mediaWidth.width * 0.7,
-                                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(50.0), color: const Color.fromARGB(217, 217, 217, 217)),
+                                                                              width: mediaWidth.width*0.7,
+                                                                              decoration: BoxDecoration(
+                                                                                  borderRadius: BorderRadius.circular(50.0),
+                                                                                  color: const Color.fromARGB(217, 217, 217, 217)),
                                                                               margin: const EdgeInsets.only(left: 5.0, bottom: 5.0),
-                                                                              child: ListTile(
-                                                                                  onTap: () async {
-                                                                                    await Navigator.push(
-                                                                                        context,
-                                                                                        MaterialPageRoute(
-                                                                                            builder: (context) => ShowItemListPage(
-                                                                                                  building: building,
-                                                                                                  floor: floor,
-                                                                                                  room: room,
-                                                                                                )));
-                                                                                    setState(() {});
-                                                                                  },
-                                                                                  title: Text("Sala $room"))),
+                                                                              child: ListTile(title: Text("Sala $room"))
+                                                                          ),
+
                                                                       ],
                                                                     ),
                                                                   ),
                                                                 );
                                                               }
                                                           }
-                                                        }),
+                                                        }
+                                                    ),
                                                 ],
                                               );
                                             }
                                         }
-                                      }),
+                                      }
+                                  ),
                                 ),
                               ),
+
                           ],
                         ),
                       );
                     }
                 }
-              }),
+              }
+          ),
           GestureDetector(
             onTap: () => print("tu przekierowanie"),
             child: Container(
-              width: mediaWidth.width * 0.9,
+              width: mediaWidth.width*0.9,
               height: 70.0,
               margin: const EdgeInsets.all(30.0),
               decoration: BoxDecoration(
@@ -200,53 +165,42 @@ class _ListPageState extends State<ListPage>
   }
 
   Wrap leftSectionHeader(BuildContext context) {
+    final mediaWidth = MediaQuery.of(context).size;
     return Wrap(
-      children: <Widget>[
-        TopBodySection(
-          key: UniqueKey(),
-          tekst: 'Pomieszczenia',
-          size: MediaQuery.of(context).size,
-          location: Location.left,
+    children: <Widget>[
+      TopBodySection(key: UniqueKey(),
+        tekst: 'Pomieszczenia',size: MediaQuery.of(context).size, location: Location.left,),
+      Container(
+      color: zielonySGGW,
+      child: Container(
+        alignment: Alignment.centerLeft,
+        width: MediaQuery.of(context).size.width,
+        height: 80,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft:
+            Radius.circular(75),
+          ),
+          //border: BorderSide(color: Colors.white), // THERE IS CRITICAL BUG IN THIS LINE
         ),
-        Container(
-          color: zielonySGGW,
-          child: Container(
-            alignment: Alignment.centerLeft,
-            width: MediaQuery.of(context).size.width,
-            height: 80,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(75),
-              ),
-              //border: BorderSide
-            ),
-            child: Container(
-              margin: const EdgeInsets.only(left: 30, top: 9),
-              child: CircleAvatar(
-                radius: 22,
-                backgroundColor: const Color.fromARGB(255, 87, 178, 122),
-                child: IconButton(
-                  onPressed: () async {
-                    await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CreationPage()));
-                    setState(() {});
-                  },
-                  icon: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                  style: IconButton.styleFrom(
-                    shape: const CircleBorder(),
-                  ),
-                ),
+        child: Container(
+          margin: EdgeInsets.only(left: 30,top: 9),
+          child: CircleAvatar(
+            radius: 22,
+            backgroundColor: const Color.fromARGB(255 ,87, 178, 122),
+            child: IconButton(
+              onPressed: () =>{},
+              icon: const Icon(Icons.add, color: Colors.white,),
+              style: IconButton.styleFrom(
+                shape: const CircleBorder(),
               ),
             ),
           ),
-        ),
-      ],
-    );
+        )
+      ),
+      ),
+    ],
+  );
   }
 }

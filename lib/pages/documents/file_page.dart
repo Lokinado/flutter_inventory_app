@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/database/list_Buildings.dart';
 import 'package:inventory_app/components/color_palette.dart';
+import 'package:inventory_app/database/list_raports.dart';
 
 class FilePage extends StatefulWidget {
   @override
@@ -13,7 +14,6 @@ class _FilePageState extends State<FilePage> {
   Widget build(BuildContext context) {
     final Size rozmiar = MediaQuery.of(context).size;
     return Container(
-      //color: const Color.fromRGBO(0, 50, 39, 1),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -23,7 +23,7 @@ class _FilePageState extends State<FilePage> {
             size: rozmiar,
             location: Location.right,
           ),
-          const Expanded(
+          Expanded(
             child: MainPage(),
           ),
         ],
@@ -31,8 +31,6 @@ class _FilePageState extends State<FilePage> {
     );
   }
 }
-
-
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key});
@@ -43,14 +41,14 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage>
     with AutomaticKeepAliveClientMixin<MainPage> {
-  String _selectedList = '';
+  int _selectedIndex = -1;
 
   @override
   bool get wantKeepAlive => true;
 
-  void _showList(String listName) {
+  void _selectIndex(int index) {
     setState(() {
-      _selectedList = listName;
+      _selectedIndex = index;
     });
   }
 
@@ -61,29 +59,25 @@ class _MainPageState extends State<MainPage>
       color: const Color.fromRGBO(0, 50, 39, 1),
       child: Container(
         decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(75),
-            )),
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(75),
+          ),
+        ),
         child: Container(
           margin: const EdgeInsets.fromLTRB(0, 30, 00, 0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ListBuildings(),
-                      ),
-                    ),
+                    onPressed: () => _selectIndex(0),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(100, 50),
-                      backgroundColor: zielonySGGW,
+                      backgroundColor:
+                          _selectedIndex == 0 ? zielonySGGW : Colors.grey,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -97,12 +91,11 @@ class _MainPageState extends State<MainPage>
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () => _selectedList != "Raporty"
-                        ? _showList('Raporty')
-                        : _showList(""),
+                    onPressed: () => _selectIndex(1),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(80, 50),
-                      backgroundColor: zielonySGGW,
+                      backgroundColor:
+                          _selectedIndex == 1 ? zielonySGGW : Colors.grey,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -120,12 +113,15 @@ class _MainPageState extends State<MainPage>
               Container(
                 margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
               ),
-              _selectedList == ''
-                  ? Container()
-                  : Expanded(
-                child: ListBuildings(),
-                // Wyświetlanie listy budynków
-              ),
+              _selectedIndex >= 0
+                  ? _selectedIndex == 0
+                      ? Expanded(
+                          child: ListRaportsClass(),
+                        )
+                      : Expanded(
+                          child: ListBuildingsClass(),
+                        )
+                  : Container(),
             ],
           ),
         ),
@@ -134,8 +130,23 @@ class _MainPageState extends State<MainPage>
   }
 }
 
+class ListBuildingsClass extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: ListBuildings(),
+    );
+  }
+}
 
-
+class ListRaportsClass extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: ListRaports()
+    );
+  }
+}
 
 class DetailsPage extends StatelessWidget {
   final String title;

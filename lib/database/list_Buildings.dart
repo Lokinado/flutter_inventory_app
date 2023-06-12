@@ -81,6 +81,15 @@ class _ListBuildingsState extends State<ListBuildings> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            selectedBuildingId = null;
+          });
+        },
+        child: Icon(Icons.home_filled),
+        backgroundColor: Colors.green,
+      ),
     );
   }
 }

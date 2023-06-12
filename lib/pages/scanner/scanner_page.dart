@@ -1,17 +1,17 @@
 // Elementy systemowe
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'package:inventory_app/components/color_palette.dart';
 import 'package:list_picker/list_picker.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import 'package:scan/scan.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart'; // komunikaty
+import 'package:top_snackbar_flutter/top_snack_bar.dart'; // nagłowek
+import 'package:scan/scan.dart'; // skaner
 
 // Linki do innych plików projekcie
-import 'package:inventory_app/components/element_styling.dart';
-import 'package:inventory_app/pages/scanner/finish_report.dart';
-import 'package:inventory_app/pages/scanner/change_place.dart';
-import 'package:inventory_app/database/place_to_list.dart';
-import 'package:inventory_app/database/report_generator.dart';
+import 'package:inventory_app/components/element_styling.dart'; // kolory
+import 'package:inventory_app/pages/scanner/finish_report.dart'; // strona zakończ
+import 'package:inventory_app/pages/scanner/change_place.dart'; // strona zmień
+import 'package:inventory_app/database/place_to_list.dart'; // pobieranie danych
+import 'package:inventory_app/database/report_generator.dart'; // obsł. raportu
 
 class DemoCamPage extends StatefulWidget {
   const DemoCamPage({
@@ -52,7 +52,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   // Zmienne przechowywujące informacje nt. przedmiotów do skanownaia
 
-  ///
+  /// Lista przechowująca listy kodów kategorii do wyświetlania w dymkach
   Map<String, List<String>> listaListElem = {};
 
   /// Przechowuje rezultat wyskakujacych popupowych okienek
@@ -61,6 +61,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Kontroluje działanie kamery
   ScanController cameraController = ScanController();
 
+  /// Zmienna przechowywujaca info ile kodów już zeskanowano
   Map<String, int> zeskanowaneLiczba = {};
 
   // TE ZMIENNE MUSZĄ BYĆ, BO TYCH PRZEKAZYWNAYCH PRZY WYWOŁANIU STRONY
@@ -76,8 +77,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Wybrane przez użytkownika pomieszczenie
   late String pomieszczenie;
 
-
-
   /// Zeskanowan wartość
   String scannedValue = "";
 
@@ -87,7 +86,10 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Grubość offsetu na jakiś element - stylistyczna zmienna pomocnicza
   late double elementsOffset;
 
+  /// Zmienna przechowyująca rozmiary wyświetlanego okna
   late Size rozmiar;
+
+  /// Zmienna przechowyująca nowy raport
   late Report nowyRaport;
 
   //
@@ -96,6 +98,16 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
   @override
   Widget build(BuildContext context) {
+    //cameraController.pause();
+    //cameraController.resume();
+
+    if (inicjalizujRaz) {
+      nowyRaport = Report();
+      budynek = widget.budynek;
+      pietro = widget.pietro;
+      pomieszczenie = widget.pomieszczenie;
+      inicjalizujRaz = false;
+    }
 
     //cameraController.pause();
     //cameraController.resume();
@@ -121,7 +133,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
     /// Inicjalizacja zmienneych i dynamiczne zmiany ich wartości
     /// -> przechowują informacje nt. stanu skonowania elementów
     if (inicjalizujDane) {
-
       pobierzPrzedmioty(budynek, pietro, pomieszczenie);
 
       inicjalizujDane = false;
@@ -132,10 +143,10 @@ class _DemoCamPageState extends State<DemoCamPage> {
   print("tu lista $przedmiotyWgTypu");
     return Scaffold(
 
-        /// Nagłówek aplikacji
+        // Nagłówek aplikacji
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: const Color.fromRGBO(0, 50, 39, 1),
+          backgroundColor: zielonySGGW,
           toolbarHeight: textHeighOffset * 3,
           centerTitle: true,
           title: const Text(
@@ -151,22 +162,23 @@ class _DemoCamPageState extends State<DemoCamPage> {
           ),
         ),
 
-        /// Zawartość ciała
+        // Zawartość ciała
         body: Column(
           children: [
-            /// Separator oddzielający szare pole z kamerą od nagłówka
+            // Separator oddzielający szare pole z kamerą od nagłówka
             SizedBox(
               height: elementsOffset,
             ),
 
+            // Dynamicznie wygeneorana lista przycisków do skanowania kateroii
             listaElem(),
 
-            /// Separator oddzielający przyciski dolne
+            // Separator oddzielający przyciski dolne
             SizedBox(
               height: elementsOffset,
             ),
 
-            /// Kamera razem z polem komentarz
+            // Kamera razem z polem komentarz
             Stack(
               children: [
                 Container(
@@ -202,7 +214,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
               ],
             ),
 
-            /// Separator oddzielające pole z kamerą od zeskanowanej wartości
+            // Separator oddzielające pole z kamerą od zeskanowanej wartości
             SizedBox(
               height: elementsOffset * 1.5,
             ),
@@ -264,11 +276,11 @@ class _DemoCamPageState extends State<DemoCamPage> {
               height: elementsOffset * 1.5,
             ),
 
-            /// Przyciski dolne na stronie
+            // Przyciski dolne na stronie
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                /// Przycisk zakończenia raportu
+                // Przycisk zakończenia raportu
                 GestureDetector(
                   onTap: () async {
                     var wynik = await doZakonczeniaRaportu(context);
@@ -307,7 +319,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
                   ),
                 ),
 
-                /// Przycisk zmiany pomieszczenia
+                // Przycisk zmiany pomieszczenia
                 GestureDetector(
                   onTap: () async {
                     await doZmianyPomieszczenia(context);
@@ -343,7 +355,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
 
   /// Widget wyświetlający działąjący skanner
-  Widget camera() => Container(
+  Widget camera() => SizedBox(
         height: rozmiar.height * 0.3 - 6,
         width: rozmiar.width * 0.8,
         child: ClipRRect(
@@ -396,24 +408,32 @@ class _DemoCamPageState extends State<DemoCamPage> {
         children: przedmiotyWgTypu.keys.map((item) {
           return Container(
             height: 2.5 * elementsOffset,
-            margin: EdgeInsets.only(bottom: elementsOffset*0.2),
+            margin: EdgeInsets.only(bottom: elementsOffset * 0.2),
             child: ElevatedButton(
               onPressed: () async {
-                //await AddNestedComment(item, listaListElem[item]);
-                while (true){
-                  String? wynik = await showPickerDialog(
-                      context: context,
-                      label: item,
-                      items: przedmiotyWgTypu[item]!.keys.toList());
-                  if (wynik == null){
-                    break;
+                if (przedmiotyWgTypu[item]!.keys.length > 0 || zeskanowanePrzedmioty[item]!.keys.length > 0)
+                  {
+                    while (true) {
+                      String? wynik = await showPickerDialog(
+                        context: context,
+                        label: item,
+                        items: zeskanowanePrzedmioty[item]!
+                            .keys
+                            .map((elem) => zeskanowanePrzedmioty[item]![elem] != ""
+                            ? "$elem : ${zeskanowanePrzedmioty[item]![elem]}"
+                            : elem)
+                            .toList()
+                            .map((item) => item.toString())
+                            .toList(),
+                      );
+                      if (wynik == null) {
+                        break;
+                      } else {
+                        var kom = await commentDialog("$item: $wynik");
+                        await dodajKomentarz(wynik, kom);
+                      }
+                    }
                   }
-                  else{
-                    var Komentarz = await commentDialog("$item: $wynik");
-                    await dodajKomentarz(item, Komentarz);
-                  }
-                }
-
               },
               style: zeskanowaneLiczba[item] == przedmiotyWgTypu[item]!.length
                   ? spacedGreenButtonActive
@@ -446,41 +466,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
     );
   }
 
-  Widget AddNestedComment(String title, items) {
-    return Dialog(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              title,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-          ),
-          Divider(),
-          Container(
-            height: 200, // Set the desired height for the list
-            child: ListView(
-              children: items.map((item) {
-                return ElevatedButton(
-                  onPressed: () {
-                    // Handle button press
-                  },
-                  child: Text(item),
-                );
-              }).toList(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-
   /// Początkowa inicjalizacja ekranu
   @override
   void initState() {
@@ -498,7 +483,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Po zeksnaowaniu należy odświerżyć wyświetlane dane w popupach, między
   /// innymi komentarze, i zeskanowane przedmoty
   Future odswierzZeskanowane() async {
-    for (var k in zeskanowanePrzedmioty.keys){
+    for (var k in zeskanowanePrzedmioty.keys) {
       zeskanowaneLiczba[k] = zeskanowanePrzedmioty[k]!.length;
     }
   }
@@ -506,12 +491,14 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Funkcja zaciągająca dane z naszej bazy wiedząc jakie pomieszczenie chcemy
   /// zeskanować
   Future pobierzPrzedmioty(b, pi, po) async {
+    print("I AM DOWNLOADING");
     przedmiotyWgTypu = await przedmiotyWKategoriach(b, pi, po);
 
-    nowyRaport = Report();
     await nowyRaport.nowePomieszczenie(b, pi, po);
+    print("KURWA CHUJ DUPA");
+    print(nowyRaport.doZeskanowania.keys.length);
 
-    for (var k in przedmiotyWgTypu.keys){
+    for (var k in przedmiotyWgTypu.keys) {
       listaListElem[k] = await przedmiotyWgTypu[k]!.values.toList();
       zeskanowaneLiczba[k] = 0;
       zeskanowanePrzedmioty[k] = {};
@@ -519,7 +506,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
     setState(() {
       przedmiotyWgTypu = przedmiotyWgTypu;
     });
-
   }
 
   /// Okienko do wyświetlania popupu do dodania komentarza
@@ -570,7 +556,23 @@ class _DemoCamPageState extends State<DemoCamPage> {
       final wynik = await showPickerDialog(
         context: context,
         label: naglowek,
-        items: listaListElem[lista]!,
+        items: listaListElem[lista]!
+            .map((item) => zeskanowanePrzedmioty[lista]![item] != ""
+                ? "$item : ${zeskanowanePrzedmioty[lista]![item]}"
+                : "$item")
+            .toList()
+            .map((item) => item.toString())
+            .toList(),
+      );
+
+      print(
+        listaListElem[lista]!
+            .map((item) => zeskanowanePrzedmioty[lista]![item] != ""
+                ? "$item : ${zeskanowanePrzedmioty[lista]![item]}"
+                : "$item")
+            .toList()
+            .map((item) => item.toString())
+            .toList(),
       );
 
       if (wynik == null) {
@@ -648,8 +650,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
     /// O ile wpisano jakiś kod to:
     if (_textEditingController.text != "") {
       /// ... sprawdź czy element jest w bazie i ...
-      var czyWBazie =
-          await checkItemsInRoom(_textEditingController.text);
+      var czyWBazie = await checkItemsInRoom(_textEditingController.text);
 
       /// ... w zależności od odopowiedzi odznacz i pokaż odpowiedni komunikat
       if (czyWBazie) {
@@ -680,9 +681,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// Rekurancyjne przeszukanie danych w celu odnalezienia i odznaczenia kodu
   /// wśród elementów w naszym pomieszczeniu
   Future<bool> checkItemsInRoom(barcode) async {
-    for (var kategoria in przedmiotyWgTypu.keys){
-      for (var elem in przedmiotyWgTypu[kategoria]!.keys){
-        if (elem == barcode){
+    for (var kategoria in przedmiotyWgTypu.keys) {
+      for (var elem in przedmiotyWgTypu[kategoria]!.keys) {
+        if (elem == barcode) {
           zeskanowanePrzedmioty[kategoria]![barcode] = "";
           return true;
         }
@@ -695,10 +696,10 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// dodaje do niego przekazany komentarz
   /// zwraca true / false, w zależności od tego czy element jest w tym pomiedzczeniu
   Future<bool> dodajKomentarz(barcode, komentarz) async {
-    for (var kategoria in przedmiotyWgTypu.keys){
-      for (var elem in przedmiotyWgTypu[kategoria]!.keys){
-        if (elem == barcode){
-          przedmiotyWgTypu[kategoria]![barcode] = komentarz;
+    for (var kategoria in przedmiotyWgTypu.keys) {
+      for (var elem in przedmiotyWgTypu[kategoria]!.keys) {
+        if (elem == barcode) {
+          zeskanowanePrzedmioty[kategoria]![barcode] = komentarz;
           return true;
         }
       }
@@ -711,6 +712,8 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// zmiany pomieszczenia
   Future<String> doZakonczeniaRaportu(BuildContext context) async {
     cameraController.pause();
+    await nowyRaport.wpiszNoweZmiany(
+        budynek, pietro, pomieszczenie, zeskanowanePrzedmioty);
     final result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => FinishReportPage(
               raport: nowyRaport,
@@ -733,22 +736,24 @@ class _DemoCamPageState extends State<DemoCamPage> {
               pomieszczenie: pomieszczenie,
             )));
     if (wynik != null) {
+      await nowyRaport.wpiszNoweZmiany(
+          budynek, pietro, pomieszczenie, zeskanowanePrzedmioty);
       setState(() {
         if (!((budynek == wynik[0]) &&
             (pietro == wynik[1]) &&
             (pomieszczenie == wynik[2]))) {
-          budynek = wynik[0].toString();
-          pietro = wynik[1].toString();
-          pomieszczenie = wynik[2].toString();
+          budynek = wynik[0];
+          pietro = wynik[1];
+          pomieszczenie = wynik[2];
         }
       });
       setState(() {
         scannedValue = "";
       });
-      await nowyRaport.wpiszNoweZmiany(budynek, pietro, pomieszczenie, zeskanowanePrzedmioty);
+      //może by się przydało jakieś raport clear?
+      await nowyRaport.nowePomieszczenie(budynek, pietro, pomieszczenie);
       await pobierzPrzedmioty(budynek, pietro, pomieszczenie);
       await odswierzZeskanowane();
-      await Future.delayed(Duration(milliseconds: 2000));
     }
     cameraController.resume();
   }
