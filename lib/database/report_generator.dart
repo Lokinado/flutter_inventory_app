@@ -25,6 +25,12 @@ class Report {
     report_number = next(100000, 999999);
   }
 
+  Report.fromData(inskan, indoZeskanowania, indate_created, inreport_number)
+      : date_created = indate_created,
+        skan = inskan,
+        doZeskanowania = indoZeskanowania,
+        report_number = int.parse(inreport_number) ;
+
   int next(int min, int max) => min + _random.nextInt(max - min);
 
 // funkcja to json

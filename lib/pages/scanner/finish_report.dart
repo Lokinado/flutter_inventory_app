@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/color_palette.dart';
 import 'package:inventory_app/pages/scanner/ready_report.dart';
 import 'package:inventory_app/components/popups.dart';
 import 'package:inventory_app/database/report_generator.dart';
-import 'package:inventory_app/database/place_to_list.dart';
 import 'package:inventory_app/database/report_to_db.dart';
 
 class FinishReportPage extends StatefulWidget {
@@ -36,19 +34,12 @@ class _FinishReportPageState extends State<FinishReportPage> {
 
   Widget GenerateSummary(Report raport, Size rozmiar, String Buildings,
       String Floor, String Room) {
-    print("GIVEMENOTEMPTY");
-    print(raport.doZeskanowania.isEmpty.toString());
     if (raport.doZeskanowania.isEmpty) return SizedBox.shrink();
 
-    print(raport.doZeskanowania.isEmpty.toString());
-    print("AAAAAAAAAAAAAAAAAAAAAAAA");
     int NumberOfItems =
         raport.doZeskanowania[Buildings]![Floor]![Room]!.keys.length;
     int NumberOfScannedItems =
         raport.skan[Buildings]![Floor]![Room]!.keys.length;
-    print(NumberOfItems);
-    print(NumberOfScannedItems);
-    print("ENDDDD");
 
     return Container(
       decoration: const BoxDecoration(
@@ -59,11 +50,8 @@ class _FinishReportPageState extends State<FinishReportPage> {
       padding: EdgeInsets.only(left: 20),
       margin: EdgeInsets.only(bottom: 8),
       child: Text(
-          "Suma: " +
-              NumberOfScannedItems.toString() +
-              "/" +
-              NumberOfItems.toString(),
-          style: TextStyle(
+          "Suma: ${NumberOfScannedItems.toString()}/${NumberOfItems.toString()}",
+          style: const TextStyle(
             fontSize: 30.0,
           )),
     );
@@ -252,7 +240,7 @@ class _FinishReportPageState extends State<FinishReportPage> {
     if (czyZainic) {
       czanyGrubyTekst = TextStyle(
           fontSize: elementsOffset,
-          color: Colors.black,
+          color: Colors.white,
           fontWeight: FontWeight.w500);
       czyZainic = false;
     }
@@ -349,8 +337,11 @@ class _FinishReportPageState extends State<FinishReportPage> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      "Porzuć zmiany",
-                      style: czanyGrubyTekst,
+                      "Porzuć     zmiany",
+                      style: TextStyle(
+                          fontSize: elementsOffset,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -398,7 +389,7 @@ class _FinishReportPageState extends State<FinishReportPage> {
                       "Zatwierdź raport",
                       style: TextStyle(
                           fontSize: elementsOffset,
-                          color: Colors.black,
+                          color: Colors.white,
                           fontWeight: FontWeight.w500),
                       textAlign: TextAlign.center,
                     ),
