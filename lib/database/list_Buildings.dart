@@ -81,7 +81,7 @@ class _ListBuildingsState extends State<ListBuildings> {
           ),
         ),
       ),
-       floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
             selectedBuildingId = null;

@@ -26,7 +26,6 @@ Future pobierzRaporty() async {
   for (var doc in listaRaportow.docs) {
     lisrap.add(doc.id.toString());
   }
-  print(lisrap);
   return lisrap;
 }
 
