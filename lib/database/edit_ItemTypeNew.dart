@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+/* import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_app/database/list_SpecificItemTypes.dart';
 
@@ -108,3 +108,4 @@ class EditItemType extends StatelessWidget {
         ),
       );
 }
+ */
