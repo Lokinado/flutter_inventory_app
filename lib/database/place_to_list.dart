@@ -16,6 +16,108 @@ Future pobierzBudynki() async {
   return lisbud;
 }
 
+Future pobierzRaporty() async {
+  var listaRaportow =
+      await FirebaseFirestore.instance.collection('ReportsData').get();
+
+  List<String> lisrap = [];
+
+  for (var doc in listaRaportow.docs) {
+    lisrap.add(doc.id.toString());
+  }
+  print(lisrap);
+  return lisrap;
+}
+
+// Future<List<dynamic>> pobieranieRaportow() async {
+//   var collection =
+//       await FirebaseFirestore.instance.collection('ReportsData').get();
+
+//   List<dynamic> rzeczy = [];
+
+//   for (var doc in collection.docs) {
+//     rzeczy.add(doc.data());
+//   }
+//   print(rzeczy);
+//   print(rzeczy[0]);
+//   print(rzeczy[1]);
+//   return rzeczy;
+// }
+
+class DaneRaportu {
+  String dateCreated;
+  Map<String, Map<String, Map<String, Map<String, String>>>> oczekiwane;
+  String reportNumber;
+  Map<String, Map<String, Map<String, Map<String, String>>>> zeskanowane;
+
+  DaneRaportu({
+    required this.dateCreated,
+    required this.oczekiwane,
+    required this.reportNumber,
+    required this.zeskanowane,
+  });
+  @override
+  String toString() {
+    return reportNumber;
+  }
+}
+
+Future<DaneRaportu> pobierzRaport(String raportID) async {
+  DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+      .instance
+      .collection('ReportsData')
+      .doc(raportID)
+      .get();
+  Map<String, dynamic> dane = snapshot.data() as Map<String, dynamic>;
+  print("pierwsze");
+  print(dane);
+  DaneRaportu raport = await konwertujNaDaneRaportu(dane);
+  return raport;
+}
+
+Future<DaneRaportu> konwertujNaDaneRaportu(Map<String, dynamic> dane) async {
+  String dateCreated = dane['date_created'];
+  String reportNumber = dane['report_number'];
+
+  Map<String, dynamic> oczekiwane = dane['oczekiwane'];
+  Map<String, dynamic> zeskanowane = dane['zeskanowane'];
+
+  DaneRaportu raport = DaneRaportu(
+    dateCreated: dateCreated,
+    oczekiwane: oczekiwane
+        .cast<String, Map<String, Map<String, Map<String, String>>>>(),
+    reportNumber: reportNumber,
+    zeskanowane: zeskanowane
+        .cast<String, Map<String, Map<String, Map<String, String>>>>(),
+  );
+  print(raport);
+  return raport;
+}
+
+// Future PobieranieDanychzRaportu(RaportID) async {
+// // Pobranie danych z bazy danych
+//   DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+//       .instance
+//       .collection('ReportsData')
+//       .doc('$RaportID')
+//       .get();
+//   print(snapshot);
+// // Mapowanie danych na instancję klasy modelu
+//   DaneRaportu daneRaportu = DaneRaportu(
+//     dateCreated: snapshot['date_created'],
+//     oczekiwane: snapshot['oczekiwane'],
+//     reportNumber: snapshot['report_number'],
+//     zeskanowane: snapshot['zeskanowane'],
+//   );
+
+// // Teraz możesz uzyskać dostęp do pól obiektu tak jak do innych obiektów
+//   print(daneRaportu.dateCreated);
+//   print(daneRaportu.oczekiwane);
+//   print(daneRaportu.reportNumber);
+//   print(daneRaportu.zeskanowane);
+//   return daneRaportu;
+// }
+
 /// Funkcja pobierająca informację o wybranym budynku, i zwracająca tablicę
 /// napisów reprezentujących numerów pięter (przygotowanie na nr. piętra z lierą)
 Future pobierzPietra(wybranyBudynekId) async {
@@ -98,16 +200,17 @@ Future<Map<String, Map<String, String>>> przedmiotyWKategoriach(
   Map<String, Map<String, String>> przedmiotyWgKat = {};
 
   // Utworzenie gotowych kategorii
-  for (var k in typy.values){
+  for (var k in typy.values) {
     przedmiotyWgKat[k] = {};
   }
 
   // Przydzialanie przedmiotów do kategorii
-  for (var p in przedmioty.keys){
+  for (var p in przedmioty.keys) {
     var item = przedmioty[p];
     var indexKat = item!["typ"].toString().split("/").length;
-    var kat = item!["typ"].toString().split("/")[indexKat-1];
-    przedmiotyWgKat[typy![kat].toString()]![p] = przedmioty[p]!["comment"].toString();
+    var kat = item!["typ"].toString().split("/")[indexKat - 1];
+    przedmiotyWgKat[typy![kat].toString()]![p] =
+        przedmioty[p]!["comment"].toString();
   }
 
   return przedmiotyWgKat;
