@@ -8,9 +8,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
 import 'package:barcode/barcode.dart';
 import 'package:barcode_widget/barcode_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ShowItem extends StatelessWidget {
   final String name;
+  final String buildingId;
   final String roomId;
   final String floorId;
   final String itemtype;
@@ -19,6 +21,7 @@ class ShowItem extends StatelessWidget {
   ShowItem({
     Key? key,
     required this.name,
+    required this.buildingId,
     required this.roomId,
     required this.floorId,
     required this.itemtype,
@@ -36,10 +39,10 @@ class ShowItem extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.only(bottom: 16),
             child: Column(
               children: [
-                Text(
+                const Text(
                   'Barcode',
                   style: TextStyle(
                     color: Colors.black,
@@ -47,7 +50,7 @@ class ShowItem extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Container(
                   width: 300,
                   decoration: BoxDecoration(
@@ -59,18 +62,18 @@ class ShowItem extends StatelessWidget {
                     ),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: Text(
                       name,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 BarcodeWidget(
                   barcode: Barcode
                       .code128(), // Wybierz rodzaj kodu kreskowego, np. Code128
@@ -78,7 +81,7 @@ class ShowItem extends StatelessWidget {
                   width: 200,
                   height: 100,
                   drawText:
-                  false, // Ustawienie na true, jeśli chcesz wyświetlić tekst obok kodu kreskowego
+                      false, // Ustawienie na true, jeśli chcesz wyświetlić tekst obok kodu kreskowego
                 ),
               ],
             ),
@@ -88,8 +91,57 @@ class ShowItem extends StatelessWidget {
           ShowDetails(comment: comment)
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.red,
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Usuń przedmiot'),
+                content: const Text('Czy na pewno chcesz usunąć przedmiot?'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Anuluj'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      /// evaluate the function to remove such item
+                      RemoveItem(buildingId, floorId, roomId, name);
+                      //
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Usuń'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        child: const Icon(Icons.remove),
+      ),
     );
   }
+}
+
+void RemoveItem(
+    String buildingId, String floorId, String roomId, String itemId) async {
+  final docItem = FirebaseFirestore.instance
+      .collection('Building')
+      .doc(buildingId)
+      .collection('Floors')
+      .doc(floorId)
+      .collection('Rooms')
+      .doc(roomId)
+      .collection('Items')
+      .doc(itemId);
+
+  docItem.delete();
 }
 
 class PdfGenerator extends StatelessWidget {
@@ -149,8 +201,8 @@ class PdfGenerator extends StatelessWidget {
         onPressed: () async {
           await generatePdf();
         },
-        icon: Icon(Icons.picture_as_pdf),
-        label: Text(
+        icon: const Icon(Icons.picture_as_pdf),
+        label: const Text(
           'Wygeneruj plik PDF',
           style: TextStyle(
             color: Colors.white,
@@ -230,8 +282,8 @@ class PrintPdf extends StatelessWidget {
         onPressed: () async {
           await printPdf();
         },
-        icon: Icon(Icons.print),
-        label: Text(
+        icon: const Icon(Icons.print),
+        label: const Text(
           'Drukuj ',
           style: TextStyle(
             color: Colors.white,
@@ -270,11 +322,11 @@ class ShowDetails extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
+          const Padding(
             padding: EdgeInsets.only(top: 8),
             child: Icon(Icons.info_rounded, color: Colors.white),
           ),
-          Text(
+          const Text(
             "Komentarz",
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -289,7 +341,7 @@ class ShowDetails extends StatelessWidget {
               child: Text(
                 CheckComment(comment),
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
                 ),
