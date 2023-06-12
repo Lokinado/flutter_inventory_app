@@ -49,8 +49,8 @@ class _ListPageState extends State<ListPage>
                                   data: Theme.of(context).copyWith(
                                     unselectedWidgetColor:
                                         Colors.black, // here for close state
-                                    colorScheme: const ColorScheme.light(
-                                      primary: Colors.black,
+                                    colorScheme: ColorScheme.light(
+                                      primary: zielonyjasnySGGW,
                                     ), // here for open state in replacement of deprecated accentColor
                                     dividerColor: Colors
                                         .transparent, // if you want to remove the border

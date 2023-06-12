@@ -277,7 +277,7 @@ class _CreationPageState extends State<CreationPage> with AutomaticKeepAliveClie
                 }
                 else
                 {
-                  exists=true;//TODO:z braku czasu jest to rozwiązanie tymczasowe
+                  exists=true;
                 }
               },
               child: Container(
@@ -292,7 +292,7 @@ class _CreationPageState extends State<CreationPage> with AutomaticKeepAliveClie
                 ),
                 child: const Center(
                   child: Text(
-                    "Dodaj", //TODO: przekierowanie na stronę z dodawaniem przedmiotów
+                    "Dodaj", 
                     style: TextStyle(
                       fontSize: 22.0,
                       color: Colors.black,

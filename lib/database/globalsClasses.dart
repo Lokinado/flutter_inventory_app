@@ -80,7 +80,8 @@ class Item {
   String id;
   final String name;
   final String comment;
-  final String barcode; // id.floor + id.room + id.item i style
+  final String barcode;
+  final String type;
   final Timestamp datecreated;
   Item({
     this.id = '',
@@ -88,6 +89,7 @@ class Item {
     required this.comment,
     required this.barcode,
     required this.datecreated,
+    required this.type,
   });
 
   Map<String, dynamic> toJson() => {
@@ -96,6 +98,7 @@ class Item {
         'comment': comment,
         'barcode': barcode,
         'datecreated': datecreated,
+        'type': type,
       };
 
   static Item fromJson(Map<String, dynamic> json) => Item(
@@ -104,5 +107,29 @@ class Item {
         comment: json['comment'],
         barcode: json['barcode'],
         datecreated: json['datecreated'],
+        type: json['type'],
+      );
+}
+
+class ItemTypeSpecific {
+  String opis;
+  final String producent;
+
+  ItemTypeSpecific({
+    this.opis = '',
+    required this.producent,
+
+  });
+
+  Map<String, dynamic> toJson() => {
+        'opis': opis,
+        'producent': producent,
+
+      };
+
+  static ItemTypeSpecific fromJson(Map<String, dynamic> json) => ItemTypeSpecific(
+        opis: json['opis'],
+        producent: json['producent'],
+
       );
 }

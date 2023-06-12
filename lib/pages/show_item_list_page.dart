@@ -26,7 +26,7 @@ class _ShowItemListPageState extends State<ShowItemListPage> {
   Map<String, Map<String,String>> itemTypesList = {};
   @override
    Widget build(BuildContext context) {
-    final mediasize=MediaQuery.of(context).size;
+    final mediaSize=MediaQuery.of(context).size;
     if(!initalized){
     getItemTypes();//pobiera dane o przedmiotach w pomieszczeniu, jeśli jeszcze tego nie zrobił
     }
@@ -35,27 +35,38 @@ class _ShowItemListPageState extends State<ShowItemListPage> {
       
       body: Column(
         children: [
-          TopBodySection(key: UniqueKey(), size: mediasize, tekst: "Pomieszczenie ${widget.room}", location: Location.center),
+          TopBodySection(key: UniqueKey(), size: mediaSize, tekst: "Pomieszczenie ${widget.room}", location: Location.center),
           //biggest Container, list of items inside
           Container(
-            width: mediasize.width*0.9,
-            height: mediasize.height*0.6,
+            width: mediaSize.width*0.9,
+            height: mediaSize.height*0.6,
             margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
             child: ListView(
               children: itemTypesList.keys.map((item) {
                 return Container(
-                  child: ExpansionTile(
-                    title: Text(item),
-                    children:[
-                      for(var code in itemTypesList[item]!.keys.toList())
-                     Container(
-                      margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                       child: ListTile(title: Text(code),
-                       //onTap: , TODO:wyświetlanie komentarza w formie alertu
+                  child: Theme(
+                    data: Theme.of(context).copyWith(
+                                    unselectedWidgetColor:
+                                        zielonySGGW, // here for close state
+                                    colorScheme: const ColorScheme.light(
+                                      primary: Colors.black,
+                                    ), // here for open state in replacement of deprecated accentColor
+                                    dividerColor: Colors
+                                        .transparent, // if you want to remove the border
+                                  ),
+                    child: ExpansionTile(
+                      title: Text(item),
+                      children:[
+                        for(var code in itemTypesList[item]!.keys.toList())
+                       Container(
+                        margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                         child: ListTile(title: Text(code),
+                         //onTap: , TODO:wyświetlanie komentarza w formie alertu
+                         ),
                        ),
-                     ),
-                    ]
-                    ),
+                      ]
+                      ),
+                  ),
                 );
               }).toList()
             ),
@@ -65,11 +76,11 @@ class _ShowItemListPageState extends State<ShowItemListPage> {
                     await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AddItemPage()));
-                    setState(() {});
+                            builder: (context) => AddItemPage(building: widget.building, floor: widget.floor, room: widget.room,)));
+                    setState(() {initalized=false;});
                   },
                 child: Container(
-                width: mediasize.width * 0.9,
+                width: mediaSize.width * 0.9,
                 height: 70.0,
                 margin: const EdgeInsets.all(30.0),
                 decoration: BoxDecoration(
