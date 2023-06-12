@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/database/list_Buildings.dart';
 import 'package:inventory_app/components/color_palette.dart';
+import 'package:inventory_app/database/list_raports.dart';
 
 class FilePage extends StatefulWidget {
   @override
@@ -142,7 +143,7 @@ class ListRaportsClass extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text('ListRaports'),
+      child: ListRaports()
     );
   }
 }
