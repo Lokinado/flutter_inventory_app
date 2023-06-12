@@ -106,3 +106,13 @@ class DisplayItems extends StatelessWidget {
     );
   }
 }
+
+String BetterText(String input) {
+  List<String> NoSlashes = input.split('/');
+  int textlen = NoSlashes.length;
+  String rettext = "";
+  for (int i = 2; i < textlen; i++) {
+    rettext = rettext + NoSlashes[i] + " ";
+  }
+  return rettext;
+}

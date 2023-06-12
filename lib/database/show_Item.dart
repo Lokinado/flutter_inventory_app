@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:inventory_app/components/color_palette.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
 import 'package:path_provider/path_provider.dart';
@@ -71,17 +72,20 @@ class ShowItem extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 BarcodeWidget(
-                  barcode: Barcode.code128(), // Wybierz rodzaj kodu kreskowego, np. Code128
+                  barcode: Barcode
+                      .code128(), // Wybierz rodzaj kodu kreskowego, np. Code128
                   data: name, // Dane do wygenerowania kodu kreskowego
                   width: 200,
                   height: 100,
-                  drawText: false, // Ustawienie na true, jeśli chcesz wyświetlić tekst obok kodu kreskowego
+                  drawText:
+                      false, // Ustawienie na true, jeśli chcesz wyświetlić tekst obok kodu kreskowego
                 ),
               ],
             ),
           ),
           PdfGenerator(name: name, barcode: name),
           PrintPdf(name: name, barcode: name),
+          ShowDetails(comment: comment)
         ],
       ),
     );
@@ -131,12 +135,15 @@ class PdfGenerator extends StatelessWidget {
     await file.writeAsBytes(await pdf.save());
 
     // Open the PDF file with the default PDF viewer
-    await Printing.sharePdf(bytes: await file.readAsBytes(), filename: 'kod' +name+'.pdf');
+    await Printing.sharePdf(
+        bytes: await file.readAsBytes(), filename: 'kod' + name + '.pdf');
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 150,
+      height: 50,
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: ElevatedButton.icon(
         onPressed: () async {
@@ -147,7 +154,7 @@ class PdfGenerator extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           primary: Colors.green,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
+            borderRadius: BorderRadius.circular(15.0),
           ),
         ),
       ),
@@ -209,6 +216,8 @@ class PrintPdf extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 150,
+      height: 50,
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: ElevatedButton.icon(
         onPressed: () async {
@@ -219,10 +228,69 @@ class PrintPdf extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           primary: Colors.green,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
+            borderRadius: BorderRadius.circular(15.0),
           ),
         ),
       ),
     );
   }
+}
+
+class ShowDetails extends StatelessWidget {
+  final String comment;
+
+  const ShowDetails({
+    Key? key,
+    required this.comment,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 200,
+      height: 150,
+      decoration: BoxDecoration(
+        color: Colors.green,
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 8),
+            child: Icon(Icons.info_rounded, color: Colors.white),
+          ),
+          Text(
+            "Komentarz",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Flexible(
+            // Zmiana na Flexible dla treści komentarza
+            child: Center(
+              child: Text(
+                CheckComment(comment),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+String CheckComment(String comment) {
+  if (comment.length < 1) {
+    return "Brak komentarza";
+  }
+  return comment;
 }
