@@ -42,16 +42,32 @@ class Report {
   //         };
 
   Map<String, dynamic> toJson() => {
-        "value": skan,
+        "zeskanowane": skan,
+        "oczekiwane": doZeskanowania,
         "report_number": report_number.toString(),
         "date_created": date_created,
       };
 
-  fromJson(Map<String, dynamic> json) => {
-        skan = json['value'],
-        report_number = int.parse(json['report_number']),
-        date_created = json['date_created'],
-      };
+  void fromJson(Map<String, dynamic> json) {
+  if (json.containsKey('zeskanowane')) {
+    skan = parseMap((json['zeskanowane']));
+  }
+  if (json.containsKey('oczekiwane')) {
+    doZeskanowania = parseMap(json['oczekiwane']);
+  }
+  if (json.containsKey('date_created')) {
+    date_created = json['date_created'].toString();
+  }
+  if (json.containsKey('report_number')) {
+    report_number = int.parse(json['report_number'].toString());
+  }
+}
+
+
+
+
+
+
 
   /// Funkcja służąca do dodawania nowego pomieszczenie do listy zeskanowanych
   /// przyjmuje ona nową lokalizację do dodania i umieszcza ją w zmiennej skan

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:inventory_app/database/report_generator.dart';
 
 /// Funkcja zwracająca dwie listy, budynków i numerów budynków;
 /// pierwsza zwraca listę list, gdzie każdy element to lista skłądająca się
@@ -44,25 +45,76 @@ Future pobierzRaporty() async {
 //   return rzeczy;
 // }
 
-class DaneRaportu {
-  String dateCreated;
-  Map<String, Map<String, Map<String, Map<String, String>>>> oczekiwane;
-  String reportNumber;
-  Map<String, Map<String, Map<String, Map<String, String>>>> zeskanowane;
+// class DaneRaportu {
+//   String dateCreated;
+//   Map<String, Map<String, Map<String, Map<String, String>>>> oczekiwane;
+//   String reportNumber;
+//   Map<String, Map<String, Map<String, Map<String, String>>>> zeskanowane;
 
-  DaneRaportu({
-    required this.dateCreated,
-    required this.oczekiwane,
-    required this.reportNumber,
-    required this.zeskanowane,
+//   DaneRaportu({
+//     required this.dateCreated,
+//     required this.oczekiwane,
+//     required this.reportNumber,
+//     required this.zeskanowane,
+//   });
+//   @override
+//   String toString() {
+//     return reportNumber;
+//   }
+// }
+
+// Future<DaneRaportu> pobierzRaport(String raportID) async {
+//   DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+//       .instance
+//       .collection('ReportsData')
+//       .doc(raportID)
+//       .get();
+//   Map<String, dynamic> dane = snapshot.data() as Map<String, dynamic>;
+//   print("pierwsze");
+//   print(dane);
+//   DaneRaportu raport = await konwertujNaDaneRaportu(dane);
+//   return raport;
+// }
+
+
+Map<String, Map<String, Map<String, Map<String, String>>>> parseMap(Map<String, dynamic> data) {
+  Map<String, Map<String, Map<String, Map<String, String>>>> result = {};
+
+  data.forEach((outerKey, outerValue) {
+    if (outerValue is Map<String, dynamic>) {
+      Map<String, Map<String, Map<String, String>>> innerMap = {};
+
+      outerValue.forEach((innerKey, innerValue) {
+        if (innerValue is Map<String, dynamic>) {
+          Map<String, Map<String, String>> innermostMap = {};
+
+          innerValue.forEach((innermostKey, innermostValue) {
+            if (innermostValue is Map<String, dynamic>) {
+              Map<String, String> innermostmostMap = {};
+
+              innermostValue.forEach((innermostmostKey, innermostmostValue) {
+                if (innermostmostValue is String) {
+                  innermostmostMap[innermostmostKey] = innermostmostValue;
+                }
+              });
+
+              innermostMap[innermostKey] = innermostmostMap;
+            }
+          });
+
+          innerMap[innerKey] = innermostMap;
+        }
+      });
+
+      result[outerKey] = innerMap;
+    }
   });
-  @override
-  String toString() {
-    return reportNumber;
-  }
+
+  return result;
 }
 
-Future<DaneRaportu> pobierzRaport(String raportID) async {
+
+Future<Report> pobierzRaportjson(String raportID) async {
   DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
       .instance
       .collection('ReportsData')
@@ -71,28 +123,39 @@ Future<DaneRaportu> pobierzRaport(String raportID) async {
   Map<String, dynamic> dane = snapshot.data() as Map<String, dynamic>;
   print("pierwsze");
   print(dane);
-  DaneRaportu raport = await konwertujNaDaneRaportu(dane);
-  return raport;
-}
-
-Future<DaneRaportu> konwertujNaDaneRaportu(Map<String, dynamic> dane) async {
-  String dateCreated = dane['date_created'];
-  String reportNumber = dane['report_number'];
-
-  Map<String, dynamic> oczekiwane = dane['oczekiwane'];
-  Map<String, dynamic> zeskanowane = dane['zeskanowane'];
-
-  DaneRaportu raport = DaneRaportu(
-    dateCreated: dateCreated,
-    oczekiwane: oczekiwane
-        .cast<String, Map<String, Map<String, Map<String, String>>>>(),
-    reportNumber: reportNumber,
-    zeskanowane: zeskanowane
-        .cast<String, Map<String, Map<String, Map<String, String>>>>(),
-  );
+  Report raport = new Report();
   print(raport);
+  raport.fromJson(dane);
+  print(raport);
+  print("pobrane z bazy");
+  print(raport.date_created);
+  print(raport.report_number);
+  print(raport.doZeskanowania);
+  print("po pobraniu");
   return raport;
 }
+
+// Future<DaneRaportu> konwertujNaDaneRaportu(Map<String, dynamic> dane) async {
+//   String dateCreated = dane['date_created'];
+//   String reportNumber = dane['report_number'];
+
+//   Map<String, dynamic> oczekiwane = dane['oczekiwane'];
+//   print("danejebane");
+//   print(dane['oczekiwane'].toString());
+
+//   Map<String, dynamic> zeskanowane = dane['zeskanowane'];
+
+//   DaneRaportu raport = DaneRaportu(
+//     dateCreated: dateCreated,
+//     oczekiwane: oczekiwane
+//         .cast<String, Map<String, Map<String, Map<String, String>>>>(),
+//     reportNumber: reportNumber,
+//     zeskanowane: zeskanowane
+//         .cast<String, Map<String, Map<String, Map<String, String>>>>(),
+//   );
+//   print(raport);
+//   return raport;
+// }
 
 // Future PobieranieDanychzRaportu(RaportID) async {
 // // Pobranie danych z bazy danych

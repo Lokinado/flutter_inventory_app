@@ -97,27 +97,34 @@ class RaportDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Raport Details'),
-      ),
-      body: FutureBuilder<DaneRaportu>(
-        future: pobierzRaport(raportId),
+          title: Text('Szczegóły Raport $raportId'),
+          backgroundColor: zielonySGGW, // Zmiana koloru na zielony
+          leading: IconButton( // Dodanie strzałki powrotnej
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context); // Powrót do poprzedniego ekranu
+            },
+          ),
+        ),
+      body: FutureBuilder<Report>(
+        future: pobierzRaportjson(raportId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
           } else if (snapshot.hasError) {
             return Text('Something went wrong: ${snapshot.error}');
           } else if (snapshot.hasData) {
-            final daneRaportu = snapshot.data!;
-            
-            Report reportFromData = Report.fromData(
-                daneRaportu.zeskanowane,
-                daneRaportu.oczekiwane,
-                daneRaportu.dateCreated,
-                daneRaportu.reportNumber);
+            final raport = snapshot.data!;
+            print("raport do zeskanowania");
+            print(raport.doZeskanowania);
 
-             return Column(
+            return Column(
               children: [
-                GenerateRaprotContainer(reportFromData,MediaQuery.of(context).size), // Wywołanie metody _buildReportDetails
+                GenerateRaprotContainer(
+                  raport,
+                  MediaQuery.of(context).size,
+                ),
+                
               ],
             );
           } else {
@@ -129,142 +136,141 @@ class RaportDetailsPage extends StatelessWidget {
   }
 }
 
+List<Widget> GenerateItems(
+    Report raport, Size rozmiar, String Buildings, String Floor, String Room) {
+  List<Widget> ret = [];
+  for (var items in raport.skan[Buildings]![Floor]![Room]!.keys) {
+    ret.add(
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.black12,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        alignment: Alignment.centerLeft,
+        padding: EdgeInsets.only(left: 20),
+        margin: EdgeInsets.only(bottom: 8),
+        child: Text(items,
+            style: TextStyle(
+              fontSize: 20.0,
+            )),
+      ),
+    );
+  }
+  return ret;
+}
 
-List<Widget> GenerateItems(Report raport, Size rozmiar, String Buildings,
-      String Floor, String Room) {
-    List<Widget> ret = [];
-    for (var items in raport.skan[Buildings]![Floor]![Room]!.keys) {
-      ret.add(
-        Container(
-          decoration: const BoxDecoration(
-            color: Colors.black12,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.only(left: 20),
-          margin: EdgeInsets.only(bottom: 8),
-          child: Text(items,
+List<Widget> GenerateRooms(
+    Report raport, Size rozmiar, String Building, String Floor) {
+  List<Widget> ret = [];
+  for (var room in raport.skan[Building]![Floor]!.keys) {
+    ret.add(Container(
+      margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(left: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(room,
               style: TextStyle(
                 fontSize: 20.0,
               )),
-        ),
-      );
-    }
-    return ret;
+          Container(
+            height: 2,
+            margin: EdgeInsets.only(bottom: 10),
+            color: Colors.black,
+          ),
+          ...GenerateItems(raport, rozmiar, Building, Floor, room),
+        ],
+      ),
+    ));
+  }
+  return ret;
+}
+
+List<Widget> GenerateFloors(Report raport, Size rozmiar, String Building) {
+  List<Widget> ret = [];
+  for (var floor in raport.skan[Building]!.keys) {
+    ret.add(Container(
+      margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(left: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(floor,
+              style: TextStyle(
+                fontSize: 15.0,
+              )),
+           ...GenerateRooms(raport, rozmiar, Building, floor),
+        ],
+      ),
+    ));
+  }
+  return ret;
+}
+
+List<Widget> GenerateBuildings(Report raport, Size rozmiar) {
+  List<Widget> ret = [];
+  print("GENERATE BUILDING");
+  print(raport.skan.keys.length);
+  for (var building in raport.skan.keys) {
+    ret.add(Container(
+      margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(left: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(building,
+              style: TextStyle(
+                fontSize: 15.0,
+              )),
+          ...GenerateFloors(raport, rozmiar, building),
+        ],
+      ),
+    ));
+  }
+  return ret;
+}
+
+Widget GenerateRaprotContainer(Report raport, Size rozmiar) {
+  for (var budynek in raport.skan.keys) {
+    print(budynek);
   }
 
-  List<Widget> GenerateRooms(
-      Report raport, Size rozmiar, String Building, String Floor) {
-    List<Widget> ret = [];
-    for (var room in raport.skan[Building]![Floor]!.keys) {
-      ret.add(Container(
-        margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.only(left: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(room,
-                style: TextStyle(
-                  fontSize: 20.0,
-                )),
+  return Container(
+  
+      height: rozmiar.height *0.8, 
+      width: rozmiar.width*1, 
+      decoration: BoxDecoration(
+        border: Border.all(width: 4, color: zielonySGGW),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+      ),
+      //color: Colors.yellow,
+      padding: EdgeInsets.all(10.0),
+      margin: EdgeInsets.all(6),
+      child: Scrollbar(
+        thumbVisibility: true,
+        child: ListView(
+          padding: const EdgeInsets.all(20),
+          children: <Widget>[
             Container(
-              height: 2,
-              margin: EdgeInsets.only(bottom: 10),
-              color: Colors.black,
-            ),
-            ...GenerateItems(raport, rozmiar, Building, Floor, room),
-           
-          ],
-        ),
-      ));
-    }
-    return ret;
-  }
-
-  List<Widget> GenerateFloors(Report raport, Size rozmiar, String Building) {
-    List<Widget> ret = [];
-    for (var floor in raport.skan[Building]!.keys) {
-      ret.add(Container(
-        margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.only(left: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(floor,
+              padding: EdgeInsets.only(bottom: 10),
+              child: Text(
+                "Raport #" + raport.report_number.toString(),
                 style: TextStyle(
-                  fontSize: 15.0,
-                )),
-            ...GenerateRooms(raport, rozmiar, Building, floor),
-          ],
-        ),
-      ));
-    }
-    return ret;
-  }
-
-  List<Widget> GenerateBuildings(Report raport, Size rozmiar) {
-    List<Widget> ret = [];
-    print("GENERATE BUILDING");
-    print(raport.skan.keys.length);
-    for (var building in raport.skan.keys) {
-      ret.add(Container(
-        margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.only(left: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(building,
-                style: TextStyle(
-                  fontSize: 15.0,
-                )),
-            ...GenerateFloors(raport, rozmiar, building),
-          ],
-        ),
-      ));
-    }
-    return ret;
-  }
-
-  Widget GenerateRaprotContainer(Report raport, Size rozmiar) {
-    for (var budynek in raport.skan.keys) {
-      print(budynek);
-    }
-
-    return Container(
-        height: rozmiar.height * 0.6,
-        width: rozmiar.width * 0.9,
-        decoration: BoxDecoration(
-          border: Border.all(width: 4, color: zielonySGGW),
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-        //color: Colors.yellow,
-        padding: EdgeInsets.all(10.0),
-        child: Scrollbar(
-          thumbVisibility: true,
-          child: ListView(
-            padding: const EdgeInsets.all(20),
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(bottom: 10),
-                child: Text(
-                  "Raport #" + raport.report_number.toString(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30.0,
-                  ),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30.0,
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.only(bottom: 5),
-                child:
-                    Text(raport.date_created + " | " + raport.skan.keys.first),
-              ),
-              Container(
-                height: 2,
-                color: Colors.black,
-              ),
-              ...GenerateBuildings(raport, rozmiar),
-            ],
-          ),
-        ));
-  }
+            ),
+            Container(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Text(raport.date_created + " | " + raport.skan.keys.first),
+            ),
+            Container(
+              height: 2,
+              color: Colors.black,
+            ),
+            ...GenerateBuildings(raport, rozmiar),
+          ],
+        ),
+      ));
+}
