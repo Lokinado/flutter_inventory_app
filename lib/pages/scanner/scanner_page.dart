@@ -38,10 +38,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
   /// inicjalizacji naszego elementu
   var inicjalizujRaz = true;
 
-  /// Zmienna która ogranicza wykonanie części instrukcji tylko przy pierwszej
-  /// inicjalizacji naszego elementu
-  var inicjalizujRaz = true;
-
   /// Zmienna która odpowiada za odświerzenie zmiennych po pojawieniu się popupu
   var inicjalizujDane = true;
 
@@ -106,17 +102,6 @@ class _DemoCamPageState extends State<DemoCamPage> {
     //cameraController.resume();
 
     if (inicjalizujRaz) {
-      nowyRaport = Report();
-      budynek = widget.budynek;
-      pietro = widget.pietro;
-      pomieszczenie = widget.pomieszczenie;
-      inicjalizujRaz = false;
-    }
-
-    //cameraController.pause();
-    //cameraController.resume();
-
-    if (inicjalizujRaz){
       nowyRaport = Report();
       budynek = widget.budynek;
       pietro = widget.pietro;
