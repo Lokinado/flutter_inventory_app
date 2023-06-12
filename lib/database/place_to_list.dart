@@ -25,7 +25,6 @@ Future pobierzRaporty() async {
   for (var doc in listaRaportow.docs) {
     lisrap.add(doc.id.toString());
   }
-  print(lisrap);
   return lisrap;
 }
 
@@ -68,10 +67,15 @@ Future<DaneRaportu> pobierzRaport(String raportID) async {
       .collection('ReportsData')
       .doc(raportID)
       .get();
-  Map<String, dynamic> dane = snapshot.data() as Map<String, dynamic>;
-  print("pierwsze");
-  print(dane);
+  Map<String, dynamic> dane = snapshot["zeskanowane"] as Map<String, dynamic>;
+
+  for (var k in dane.keys){
+    
+  }
+
   DaneRaportu raport = await konwertujNaDaneRaportu(dane);
+  print("TO JEst RAPORT");
+  print(raport);
   return raport;
 }
 
@@ -82,6 +86,9 @@ Future<DaneRaportu> konwertujNaDaneRaportu(Map<String, dynamic> dane) async {
   Map<String, dynamic> oczekiwane = dane['oczekiwane'];
   Map<String, dynamic> zeskanowane = dane['zeskanowane'];
 
+  print("To są dane:");
+  print(dane);
+
   DaneRaportu raport = DaneRaportu(
     dateCreated: dateCreated,
     oczekiwane: oczekiwane
@@ -90,6 +97,7 @@ Future<DaneRaportu> konwertujNaDaneRaportu(Map<String, dynamic> dane) async {
     zeskanowane: zeskanowane
         .cast<String, Map<String, Map<String, Map<String, String>>>>(),
   );
+  print("To jest raport");
   print(raport);
   return raport;
 }
