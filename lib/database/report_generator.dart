@@ -36,7 +36,8 @@ class Report {
   //         };
 
   Map<String, dynamic> toJson() => {
-        "value": skan,
+        "zeskanowane": skan,
+        "oczekiwane": doZeskanowania,
         "report_number": report_number.toString(),
         "date_created": date_created,
       };
