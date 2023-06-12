@@ -69,14 +69,29 @@ Future<DaneRaportu> pobierzRaport(String raportID) async {
       .get();
   Map<String, dynamic> dane = snapshot["zeskanowane"] as Map<String, dynamic>;
 
-  for (var k in dane.keys){
-    
-  }
-
   DaneRaportu raport = await konwertujNaDaneRaportu(dane);
   print("TO JEst RAPORT");
   print(raport);
   return raport;
+}
+
+Future zapiszNoweKomentarzeWBazie(Map<String, dynamic> dane) async {
+  // Dla każdego budynku ...
+  for (var budynek in dane.keys) {
+    // ... dla każdego piętra ...
+    for (var pietro in dane[budynek]!.keys) {
+      // ... dla każdego pomieszczenia ...
+      for (var pomieszczenie in dane[budynek]![pietro]!.keys) {
+        // ... dla każdego przedmiotu ...
+        for (var przedmiot in dane[budynek]![pietro]![pomieszczenie]!.keys) {
+          // ... zapisz w bazie jego nowy komentarz
+
+          
+
+        }
+      }
+    }
+  }
 }
 
 Future<DaneRaportu> konwertujNaDaneRaportu(Map<String, dynamic> dane) async {
