@@ -36,10 +36,10 @@ class ShowItem extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 16),
+            padding: EdgeInsets.only(bottom: 16),
             child: Column(
               children: [
-                const Text(
+                Text(
                   'Barcode',
                   style: TextStyle(
                     color: Colors.black,
@@ -47,7 +47,7 @@ class ShowItem extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 Container(
                   width: 300,
                   decoration: BoxDecoration(
@@ -58,19 +58,19 @@ class ShowItem extends StatelessWidget {
                       width: 2,
                     ),
                   ),
-                    child: Padding(
-                    padding: const EdgeInsets.all(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
                     child: Text(
                       name,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 BarcodeWidget(
                   barcode: Barcode
                       .code128(), // Wybierz rodzaj kodu kreskowego, np. Code128
@@ -78,7 +78,7 @@ class ShowItem extends StatelessWidget {
                   width: 200,
                   height: 100,
                   drawText:
-                      false, // Ustawienie na true, jeśli chcesz wyświetlić tekst obok kodu kreskowego
+                  false, // Ustawienie na true, jeśli chcesz wyświetlić tekst obok kodu kreskowego
                 ),
               ],
             ),
@@ -149,8 +149,15 @@ class PdfGenerator extends StatelessWidget {
         onPressed: () async {
           await generatePdf();
         },
-        icon: const Icon(Icons.picture_as_pdf),
-        label: const Text('Wygeneruj plik PDF'),
+        icon: Icon(Icons.picture_as_pdf),
+        label: Text(
+          'Wygeneruj plik PDF',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         style: ElevatedButton.styleFrom(
           primary: Colors.green,
           shape: RoundedRectangleBorder(
@@ -223,8 +230,15 @@ class PrintPdf extends StatelessWidget {
         onPressed: () async {
           await printPdf();
         },
-        icon: const Icon(Icons.print),
-        label: const Text('Drukuj jako plik PDF'),
+        icon: Icon(Icons.print),
+        label: Text(
+          'Drukuj ',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         style: ElevatedButton.styleFrom(
           primary: Colors.green,
           shape: RoundedRectangleBorder(

@@ -23,7 +23,7 @@ class DisplayItems extends StatelessWidget {
         backgroundColor: const Color.fromRGBO(0, 50, 39, 1),
         title: Text(
           'Przedmioty z pomieszczenia $roomId',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -36,7 +36,7 @@ class DisplayItems extends StatelessWidget {
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -48,7 +48,7 @@ class DisplayItems extends StatelessWidget {
           future: pobieraniePrzedmiotow(buildingId, floorId, roomId),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return const Text('Something went wrong');
+              return Text('Something went wrong');
             } else if (snapshot.hasData) {
               final items = snapshot.data!;
 
@@ -56,49 +56,49 @@ class DisplayItems extends StatelessWidget {
                 children: items
                     .map(
                       (item) => Card(
-                        color: Colors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 20.0),
-                          title: Text(
-                            '${item[2].toString().substring(50).substring(0, item[2].toString().substring(50).length - 1)}\nbarcode: ${item[0]}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              shadows: [
-                                Shadow(
-                                  color: Colors.grey,
-                                  blurRadius: 0.1,
-                                ),
-                              ],
+                    color: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 20.0),
+                      title: Text(
+                        '${BetterText(item[2])}\nbarcode: ${item[0]}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          shadows: [
+                            Shadow(
+                              color: Colors.grey,
+                              blurRadius: 0.1,
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ShowItem(
-                                  name: item[0],
-                                  roomId: roomId,
-                                  floorId: floorId,
-                                  itemtype: item[2].toString(),
-                                  comment: item[1],
-                                ),
-                              ),
-                            );
-                          },
+                          ],
                         ),
+                        textAlign: TextAlign.center,
                       ),
-                    )
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ShowItem(
+                              name: item[0],
+                              roomId: roomId,
+                              floorId: floorId,
+                              itemtype: item[2].toString(),
+                              comment: item[1],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                )
                     .toList(),
               );
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator());
             }
           },
         ),

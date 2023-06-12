@@ -63,26 +63,6 @@ class Report {
   }
 }
 
-
-
-
-
-
-
-  String date_created;
-  int report_number;
-
-  final _random = new Random();
-
-  Report()
-    :date_created = '${DateTime.now().day}.${DateTime.now().month}.${DateTime.now().year}',
-    report_number = 0 {
-    report_number = next(100000, 999999);
-  }
-
-  int next(int min, int max) => min + _random.nextInt(max - min);
-
-
   /// Funkcja służąca do dodawania nowego pomieszczenie do listy zeskanowanych
   /// przyjmuje ona nową lokalizację do dodania i umieszcza ją w zmiennej skan
   Future nowePomieszczenie(budynek, pietro, pomieszczenie) async {
