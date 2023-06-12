@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/pages/documents/file_page.dart';
 import 'package:inventory_app/pages/scanner/pick_place_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:inventory_app/pages/adding/add_page.dart';
+import 'package:inventory_app/pages/list_page.dart';
 
 class LoggedMainPage extends StatefulWidget {
   const LoggedMainPage({Key? key, required this.size}) : super(key: key);
@@ -15,13 +15,16 @@ class LoggedMainPage extends StatefulWidget {
 
 class _LoggedMainPageState extends State<LoggedMainPage>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+      
   var _selectedPageIndex = 1;
+
   late PageController _pageController;
-  final List<Widget> _pages = [AddPage(), PickPlace(), FilePage()];
+  final List<Widget> _pages = [ListPage(), PickPlace(), FilePage()];
 
   void signUserOut() async {
     await FirebaseAuth.instance.signOut();
   }
+  
 
   @override
   bool get wantKeepAlive => true;
@@ -40,6 +43,7 @@ class _LoggedMainPageState extends State<LoggedMainPage>
 
   @override
   Widget build(BuildContext context) {
+     
     super.build(context); // Ensure the super build method is called
     return Scaffold(
       appBar: buildAppBar(),
@@ -96,9 +100,12 @@ class _LoggedMainPageState extends State<LoggedMainPage>
                 label: "Files",
               ),
             ],
+            
           ),
+          
         ),
       ),
+      
     );
   }
 

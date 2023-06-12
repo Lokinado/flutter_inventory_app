@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/database/readJSON.dart';
 import 'package:inventory_app/pages/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:inventory_app/pages/creation_page.dart';
 import 'package:inventory_app/pages/documents/file_page.dart';
 import 'firebase_options.dart';
 
@@ -25,6 +26,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const AuthPage(),
         '/details': (context) => DetailsPage(title: context.toString(),),
+
+        '/page4': (context) => CreationPage(),//experimental
       },
     );
   }

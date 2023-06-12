@@ -1,0 +1,625 @@
+[33mcommit ea7817db8543a567de65ef859e2215177efa055d[m[33m ([m[1;36mHEAD -> [m[1;32msuma[m[33m)[m
+Author: dawid <dawid.steciuk@gmail.com>
+Date:   Mon Jun 12 00:30:35 2023 +0200
+
+    Added CreationPage, it is used to add buildings,
+    floors, or rooms to database. atm page is
+    fully functional but ugly.
+
+[33mcommit dd35ab8ea65c8c9de9160d39c9bbbf503f5e59a5[m[33m ([m[1;31morigin/creation_page[m[33m, [m[1;32mcreation_page[m[33m)[m
+Author: dawid <dawid.steciuk@gmail.com>
+Date:   Sun Jun 11 17:02:01 2023 +0200
+
+    made page for adding rooms, floors and buildings,
+    curentlly not functional
+
+[33mcommit 3ed3131f4eaa2406e739b5ff9e634bd049d33ac5[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sun Jun 11 11:37:29 2023 +0200
+
+    Poprawki stylistyczne przycisku dodaj na pomieszczeniach
+
+[33mcommit 4c724aff0b66176034bf7e9756dc90d295d11922[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sun Jun 11 10:54:17 2023 +0200
+
+    poprawki stylistyczne generowanego raportu
+
+[33mcommit f86ba59186e57b18fd615b60f3c56d9730636b41[m
+Merge: efa045d 317db88
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sun Jun 11 10:27:39 2023 +0200
+
+    Merge branch 'Raport-Display' into suma
+
+[33mcommit efa045d21d91bf77692bd33f7f03040bdb73a964[m[33m ([m[1;31morigin/customPopup[m[33m)[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sun Jun 11 10:24:27 2023 +0200
+
+    Poprawki błędów asynchronicznych
+
+[33mcommit 317db88609505a39e6bb1661852462bf7327bdb3[m[33m ([m[1;31morigin/Raport-Display[m[33m)[m
+Author: Krzysztof <hisboak@gmail.com>
+Date:   Sun Jun 11 05:37:50 2023 +0200
+
+    Added basic UI
+
+[33mcommit 9757e89da9f3ba4399cf940cc77bec2d97f8f4d5[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sun Jun 11 02:30:09 2023 +0200
+
+    wersja alpha dzialającego skanera z baza
+
+[33mcommit 19e6b4e750c2ca8bfeda9f89b63e91c7a0862fd0[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sun Jun 11 00:34:48 2023 +0200
+
+    czystki kodu
+
+[33mcommit b6d5559d300ebf27e48be866dedfb2228477d126[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sun Jun 11 00:33:11 2023 +0200
+
+    poprawka w raporcie i drobne zmiany na stronie dodawania
+    
+    Usunięcie zbędnego kodu w pliku raportu i poprawki na stronie przygotowywania dodawania pomieszczeń
+
+[33mcommit dcf7bb412524f8d4d65bf4a1372c78df6b5a8a0f[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sat Jun 10 23:58:21 2023 +0200
+
+    Czystki
+
+[33mcommit 546cab2f312b8b8ac78d6b020b32ec18d600b084[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sat Jun 10 23:35:56 2023 +0200
+
+    k
+
+[33mcommit a8ca10d42aa28deb0410b6a41779789bab2447e0[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sat Jun 10 23:14:00 2023 +0200
+
+    Aktywnie generowane przyciski
+    
+    Teraz, lista zeskanowanych elementów nie jest generowana rędznie, ale aktywnie na podstawie istniejących typow przedmiotów wpisanych do naszej bazy
+
+[33mcommit 6ca30ae4c19f0099a063a6394e28d580e703a66f[m[33m ([m[1;31morigin/Test_Litke[m[33m, [m[1;32mmain[m[33m)[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sat Jun 10 23:15:28 2023 +0200
+
+    Dodanie podstawowej implementacji raportu (#27)
+    
+    * Testowy szkielet pliku
+    
+    Plus test odnośników
+    
+    * Dokładniejszy testowy szkielet pliku
+    
+    * Pierwsze informacje
+    
+    Odnośniki funkcjonują na poziomie gałęzi
+    
+    * Drobne zmiany
+    
+    * usunięcie śmieci z pubspeck.lock
+    
+    Zduplikowany permission_handler i top_snack_bar
+    
+    * zmiana pomieszczenia zaciąga dane z bazy
+    
+    Od teraz, strona zmiany pomieszczenia działa tak jak strona wyboru pomieszczenia na początku - aktywnie pobiera ona dane z bazy danych i resetuje się przy wyborze innych pól
+    
+    * Dodanie pobierania przedmiotów wg kategorii
+    
+    Od teraz, strona skanera ma możliwość pobierania informacji nt. tego jakie są konkretne przedmioty wg kategorii. Umożliwia to zobaczenie wszystkich par {barcode : comentarz} podzielnoych wgl kategorii w ktorej znajduje się dany przedmiot
+    
+    * wstępna wersja dodawania komentarzy do przedmiotow
+    
+    * Przygotowanie struktury danych raportu
+    
+    Przygotowałem strukturę do kórej powinniśmy zapisywać dane wraz z podstawowymi funkcjami do ich modyfikacji i obsługi
+    
+    * Dodanie użycia raportu do skanera
+    
+    * Naprawienie zwracanych danych
+    
+    * Działa pobieranie elementu i tworzenie raportu
+    
+    Nadal pozostaje dodanie możliwości uzupełniania komentarzy do naszego raportu, i połączenie skanowania do uzupełniania przedmitow  - niedługo to dodam
+    
+    ---------
+    
+    Co-authored-by: Jozef <jozef@gorowo.pl>
+    Co-authored-by: Krzysztof Borowski <30807244+Lokinado@users.noreply.github.com>
+
+[33mcommit dc3ecbbf5610f7497bbbefb72f9d6ed95a6b5138[m
+Merge: b730c30 4cb8c33
+Author: Krzysztof Borowski <30807244+Lokinado@users.noreply.github.com>
+Date:   Sat Jun 10 23:13:57 2023 +0200
+
+    Merge branch 'main' into customPopup
+
+[33mcommit b730c3091a0dc577b6e6693d2b22d7bb6902d789[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sat Jun 10 22:32:29 2023 +0200
+
+    Działa pobieranie elementu i tworzenie raportu
+    
+    Nadal pozostaje dodanie możliwości uzupełniania komentarzy do naszego raportu, i połączenie skanowania do uzupełniania przedmitow  - niedługo to dodam
+
+[33mcommit 6d1a76f28e8e5518e3f34fb50fa9ef0fa489744c[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sat Jun 10 22:03:06 2023 +0200
+
+    Naprawienie zwracanych danych
+
+[33mcommit e31149cec881d57597de4f074ad0d92ce0553c4c[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sat Jun 10 20:48:39 2023 +0200
+
+    Dodanie użycia raportu do skanera
+
+[33mcommit bbbf649d61dcb0b6259b5e49034d43ea41ccb691[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sat Jun 10 20:08:17 2023 +0200
+
+    Przygotowanie struktury danych raportu
+    
+    Przygotowałem strukturę do kórej powinniśmy zapisywać dane wraz z podstawowymi funkcjami do ich modyfikacji i obsługi
+
+[33mcommit 4cb8c334b892fb35565abbf16762d0143648352f[m
+Author: Szyno9 <127386562+Szyno9@users.noreply.github.com>
+Date:   Sat Jun 10 19:11:30 2023 +0200
+
+    Lista pomieszczen (#26)
+    
+    * Added left section to the main screen,
+    Currently without data due to lack of database
+    
+    * Testowy szkielet pliku
+    
+    Plus test odnośników
+    
+    * Dokładniejszy testowy szkielet pliku
+    
+    * Pierwsze informacje
+    
+    Odnośniki funkcjonują na poziomie gałęzi
+    
+    * Drobne zmiany
+    
+    * Fixed header
+    
+    * merged into main
+    
+    * Saving before large changes
+    
+    * Working list of buildings
+    
+    * Added list of floors from database, styled, and
+    working
+    
+    ---------
+    
+    Co-authored-by: Jozef <jozef@gorowo.pl>
+
+[33mcommit 5efa48fff9267e18b87b4954746abcbb417489cc[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sat Jun 10 15:38:54 2023 +0200
+
+    wstępna wersja dodawania komentarzy do przedmiotow
+
+[33mcommit e32ec14870208d9052d2ee8d5706bb5d135f5fe3[m[33m ([m[1;31morigin/finalScaner[m[33m)[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sat Jun 10 13:00:14 2023 +0200
+
+    Dodanie pobierania przedmiotów wg kategorii
+    
+    Od teraz, strona skanera ma możliwość pobierania informacji nt. tego jakie są konkretne przedmioty wg kategorii. Umożliwia to zobaczenie wszystkich par {barcode : comentarz} podzielnoych wgl kategorii w ktorej znajduje się dany przedmiot
+
+[33mcommit 76a37d73da7a2ce1e47fbe9a83ae302b6c7416c6[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sat Jun 10 11:35:59 2023 +0200
+
+    zmiana pomieszczenia zaciąga dane z bazy
+    
+    Od teraz, strona zmiany pomieszczenia działa tak jak strona wyboru pomieszczenia na początku - aktywnie pobiera ona dane z bazy danych i resetuje się przy wyborze innych pól
+
+[33mcommit 01f5ae21c61226bd5229b9c0858eb3b5d9f49aca[m
+Merge: 640aa92 e8c906b
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sat Jun 10 11:18:06 2023 +0200
+
+    Merge branch 'M&M's' into main
+
+[33mcommit e8c906bb9b8bc57eaa395a79840a279a91656b57[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sat Jun 10 11:15:13 2023 +0200
+
+    usunięcie śmieci z pubspeck.lock
+    
+    Zduplikowany permission_handler i top_snack_bar
+
+[33mcommit f0daa61e3e0547645fc39968867c564f0a8e30dd[m
+Merge: 640aa92 3d93c35
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Sat Jun 10 11:12:54 2023 +0200
+
+    Merge branch 'Markdown' into M&M's
+
+[33mcommit 3d93c3573ddafd9e266cfa756e5eeef16abdd489[m
+Author: Jozef <jozef@gorowo.pl>
+Date:   Fri Jun 9 22:26:15 2023 +0200
+
+    Drobne zmiany
+
+[33mcommit 68aee694e8d2890553b4abde376db7a24ae7147e[m
+Author: Jozef <jozef@gorowo.pl>
+Date:   Fri Jun 9 22:24:17 2023 +0200
+
+    Pierwsze informacje
+    
+    Odnośniki funkcjonują na poziomie gałęzi
+
+[33mcommit 640aa9274c9e53503d06f88040ccc5d27cf54366[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Fri Jun 9 16:21:20 2023 +0200
+
+    Działające połączenie zmian Piotrka, Adama i Jana (#25)
+    
+    * First attempt to make basic searching menu
+    
+    * Made simple gui
+    
+    * Lepszy format, poprawione ułożenie widgetów
+    
+    * Poprawiona wersja graficzna
+    
+    * initial commit
+    
+    * Połączenie z mainem
+    
+    * poprawione widgety
+    
+    * coś nowego
+    
+    * Poprawki dla Adama
+    
+    * card swich on off fix
+    
+    Zmiany która umożliwia schowanie wyświetlanych kart z zakładek Kodu lub raporty po ponownym kliknięciu na ten sam przycisk
+    
+    * poprawione widgety
+    
+    * Portrait Mode lock
+    
+    Zablokowanie możliwości obracania ekranu
+    
+    * Zrobiona baza danych bez usuwania
+    
+    * random commit
+    
+    * Poprawiłem złe importy i dodałem brakujące dependency
+    
+    * 'aaa'
+    
+    * usuniecie niepotrzebnej strony
+    
+    * poprawka do bazy
+    
+    * Dodanie budynkow do db
+    
+    * pubspec changes
+    
+    * dostep do barcode / połączenie z nową bazą
+    
+    * Sprzątanie po krzyśku
+    
+    Najprawdopodobniej wylogowywanie nie działa z powodu polaczenia z dwoma bazami jednocześnie, Wojtek powiedział, że zrobi dzisiaj po zajęciach commita z przeniesieniem z bazy testowej na baze w ktorej Arek zrobil logowanie.
+    
+    * small visual changes
+    
+    * Polaczenie z baza produkcyjna
+    
+    * podłączenie do bazy
+    
+    * czystki
+    
+    * połączenie z bazą produkcyjną
+    
+    * Posprzątane zbędne pliki, połączenie z produkcyjną
+    
+    * sprzątanie, łączenie z nową db
+    
+    * usuwanie zbednych plików
+    
+    * komentarze, i działające pobieranie danych
+    
+    * podwaliny robienia raportu
+    
+    * zmiany adama dodanie proba 1
+    
+    * zmianay adama dodanie proba 2
+    
+    * Baza + skanner  + strona Adama | dzialaja wstepnie
+    
+    * Poprawki warningow
+    
+    Dodanie const, i wyrzucenie 'this'
+    
+    * Usuwanie jakiegoś problemu z bufferem
+    
+    https://stackoverflow.com/questions/61912481/flutter-accessing-hidden-method-lsun-misc-unsafe-error-on-android
+    
+    * lekkie zmiany, nowa baza danych
+    
+    * poprawki do zaciągania pomieszczen
+    
+    * Internet connection check in auth_page.dart
+    
+    * test pobierania danych wprost
+    
+    * zmiana na dzialajacą bazę danych
+    
+    * usuniecie zbędnego kodu
+    
+    * nowa baza, bar code pdf druk
+    
+    * poprawka mala
+    
+    * Dodanie pobierania przedmiotów
+    
+    * Przygotowanie do pobierania elementów do skanowania
+    
+    ---------
+    
+    Co-authored-by: Armless <127135223+AdamCI3@users.noreply.github.com>
+    Co-authored-by: AdamCI3 <ciesielski.adam2002@gmail.com>
+    Co-authored-by: Wojtek Sokołowski <witekpan123@gmail.com>
+    Co-authored-by: Krzysztof <hisboak@gmail.com>
+    Co-authored-by: Jan Dusza <duszajan@icloud.com>
+    Co-authored-by: Krzysztof Borowski <30807244+Lokinado@users.noreply.github.com>
+
+[33mcommit b163069a29397ee5748894a561f1f28316c80314[m
+Author: Jozef <jozef@gorowo.pl>
+Date:   Fri Jun 9 16:16:52 2023 +0200
+
+    Dokładniejszy testowy szkielet pliku
+
+[33mcommit 24e66e850c218cc2a92626f372d2b334fbb07d9d[m
+Author: Jozef <jozef@gorowo.pl>
+Date:   Fri Jun 9 16:10:31 2023 +0200
+
+    Testowy szkielet pliku
+    
+    Plus test odnośników
+
+[33mcommit 03166f1bb7b213adff7b149607f6d00d20961314[m
+Author: Krzysztof <hisboak@gmail.com>
+Date:   Fri Jun 9 14:52:00 2023 +0200
+
+    Added flutter_inventory_app
+
+[33mcommit 84f3d6db2a4778797d920ac05a92ef9c2d378857[m
+Author: Piotr Bauer <piotr.bauer.konto@gmail.com>
+Date:   Fri Jun 9 14:01:15 2023 +0200
+
+    Połączenie bazy i stony adama i skanera - wersja alpha (#22)
+    
+    * First attempt to make basic searching menu
+    
+    * Made simple gui
+    
+    * Lepszy format, poprawione ułożenie widgetów
+    
+    * Poprawiona wersja graficzna
+    
+    * initial commit
+    
+    * Połączenie z mainem
+    
+    * poprawione widgety
+    
+    * coś nowego
+    
+    * Poprawki dla Adama
+    
+    * card swich on off fix
+    
+    Zmiany która umożliwia schowanie wyświetlanych kart z zakładek Kodu lub raporty po ponownym kliknięciu na ten sam przycisk
+    
+    * poprawione widgety
+    
+    * Portrait Mode lock
+    
+    Zablokowanie możliwości obracania ekranu
+    
+    * Zrobiona baza danych bez usuwania
+    
+    * random commit
+    
+    * Poprawiłem złe importy i dodałem brakujące dependency
+    
+    * 'aaa'
+    
+    * usuniecie niepotrzebnej strony
+    
+    * poprawka do bazy
+    
+    * Dodanie budynkow do db
+    
+    * pubspec changes
+    
+    * dostep do barcode / połączenie z nową bazą
+    
+    * Sprzątanie po krzyśku
+    
+    Najprawdopodobniej wylogowywanie nie działa z powodu polaczenia z dwoma bazami jednocześnie, Wojtek powiedział, że zrobi dzisiaj po zajęciach commita z przeniesieniem z bazy testowej na baze w ktorej Arek zrobil logowanie.
+    
+    * small visual changes
+    
+    * Polaczenie z baza produkcyjna
+    
+    * podłączenie do bazy
+    
+    * czystki
+    
+    * połączenie z bazą produkcyjną
+    
+    * Posprzątane zbędne pliki, połączenie z produkcyjną
+    
+    * sprzątanie, łączenie z nową db
+    
+    * usuwanie zbednych plików
+    
+    * komentarze, i działające pobieranie danych
+    
+    * podwaliny robienia raportu
+    
+    * zmiany adama dodanie proba 1
+    
+    * zmianay adama dodanie proba 2
+    
+    * Baza + skanner  + strona Adama | dzialaja wstepnie
+    
+    * Poprawki warningow
+    
+    Dodanie const, i wyrzucenie 'this'
+    
+    * Usuwanie jakiegoś problemu z bufferem
+    
+    https://stackoverflow.com/questions/61912481/flutter-accessing-hidden-method-lsun-misc-unsafe-error-on-android
+    
+    * lekkie zmiany, nowa baza danych
+    
+    * poprawki do zaciągania pomieszczen
+    
+    * test pobierania danych wprost
+    
+    * zmiana na dzialajacą bazę danych
+    
+    * usuniecie zbędnego kodu
+    
+    * nowa baza, bar code pdf druk
+    
+    * poprawka mala
+    
+    * Dodanie pobierania przedmiotów
+    
+    * Przygotowanie do pobierania elementów do skanowania
+    
+    ---------
+    
+    Co-authored-by: Armless <127135223+AdamCI3@users.noreply.github.com>
+    Co-authored-by: AdamCI3 <ciesielski.adam2002@gmail.com>
+    Co-authored-by: Wojtek Sokołowski <witekpan123@gmail.com>
+    Co-authored-by: Krzysztof <hisboak@gmail.com>
+
+[33mcommit 83a50b7d5c1d012c9818922587f4e05b21fd558e[m
+Author: Krzysztof <hisboak@gmail.com>
+Date:   Fri Jun 9 13:36:40 2023 +0200
+
+    Fixed bugs introduced by last merge
+
+[33mcommit ec5dd323c27b31977bd3d29e2640857444cf9397[m
+Author: Jan Dusza <84961730+J-Dusza@users.noreply.github.com>
+Date:   Fri Jun 9 12:51:09 2023 +0200
+
+    Connection checker (#23)
+    
+    * First attempt to make basic searching menu
+    
+    * Made simple gui
+    
+    * Lepszy format, poprawione ułożenie widgetów
+    
+    * Poprawiona wersja graficzna
+    
+    * initial commit
+    
+    * Połączenie z mainem
+    
+    * poprawione widgety
+    
+    * coś nowego
+    
+    * Poprawki dla Adama
+    
+    * card swich on off fix
+    
+    Zmiany która umożliwia schowanie wyświetlanych kart z zakładek Kodu lub raporty po ponownym kliknięciu na ten sam przycisk
+    
+    * poprawione widgety
+    
+    * Portrait Mode lock
+    
+    Zablokowanie możliwości obracania ekranu
+    
+    * Zrobiona baza danych bez usuwania
+    
+    * random commit
+    
+    * Poprawiłem złe importy i dodałem brakujące dependency
+    
+    * 'aaa'
+    
+    * usuniecie niepotrzebnej strony
+    
+    * poprawka do bazy
+    
+    * Dodanie budynkow do db
+    
+    * pubspec changes
+    
+    * dostep do barcode / połączenie z nową bazą
+    
+    * Sprzątanie po krzyśku
+    
+    Najprawdopodobniej wylogowywanie nie działa z powodu polaczenia z dwoma bazami jednocześnie, Wojtek powiedział, że zrobi dzisiaj po zajęciach commita z przeniesieniem z bazy testowej na baze w ktorej Arek zrobil logowanie.
+    
+    * small visual changes
+    
+    * Polaczenie z baza produkcyjna
+    
+    * podłączenie do bazy
+    
+    * czystki
+    
+    * połączenie z bazą produkcyjną
+    
+    * Posprzątane zbędne pliki, połączenie z produkcyjną
+    
+    * sprzątanie, łączenie z nową db
+    
+    * usuwanie zbednych plików
+    
+    * komentarze, i działające pobieranie danych
+    
+    * podwaliny robienia raportu
+    
+    * zmiany adama dodanie proba 1
+    
+    * zmianay adama dodanie proba 2
+    
+    * Baza + skanner  + strona Adama | dzialaja wstepnie
+    
+    * Poprawki warningow
+    
+    Dodanie const, i wyrzucenie 'this'
+    
+    * Usuwanie jakiegoś problemu z bufferem
+    
+    https://stackoverflow.com/questions/61912481/flutter-accessing-hidden-method-lsun-misc-unsafe-error-on-android
+    
+    * poprawki do zaciągania pomieszczen
+    
+    * Internet connection check in auth_page.dart
+    
+    ---------
+    
+    Co-authored-by: Armless <127135223+AdamCI3@users.noreply.github.com>
+    Co-authored-by: AdamCI3 <ciesielski.adam2002@gmail.com>
+    Co-authored-by: Piotr Bauer <piotr.bauer.konto@gmail.com>
+    Co-authored-by: Wojtek Sokołowski <witekpan123@gmail.com>
+    Co-authored-by: Krzysztof <hisboak@gmail.com>

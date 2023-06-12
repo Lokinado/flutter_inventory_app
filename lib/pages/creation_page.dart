@@ -1,18 +1,15 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/color_palette.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/components/element_styling.dart';
 import 'package:inventory_app/database/place_to_list.dart';
 import 'package:inventory_app/components/user_input_dialog.dart';
+import 'package:inventory_app/components/custom_app_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:inventory_app/database/globalsClasses.dart';
-enum EntityType{
-  building,
-  floor,
-  room,
-}
+import 'package:inventory_app/pages/logged_page.dart';
+
 
 class CreationPage extends StatefulWidget {
   CreationPage({super.key});
@@ -21,7 +18,10 @@ class CreationPage extends StatefulWidget {
   State<CreationPage> createState() => _CreationPageState();
 }
 
-class _CreationPageState extends State<CreationPage> {
+class _CreationPageState extends State<CreationPage> with AutomaticKeepAliveClientMixin {
+  
+  bool get wantKeepAlive => true;
+
   List<String> listaBudynkow = [];
   List<String> listaPieter = [];
   List<String> listaPomieszczen = [];
@@ -35,18 +35,16 @@ class _CreationPageState extends State<CreationPage> {
   String pomieszczenie = "";
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final mediasize = MediaQuery.of(context).size;
     double numberBoxSize = 60;
     double szerokoscPrzycisku = mediasize.width - 120;
     inicjalizujBudynki();
     return Scaffold(
-        body: Column(
+      appBar: buildAppBar(),
+        body: 
+        Column(
       children: [
-        Container(
-          width: mediasize.width,
-          height: 60,
-          color: zielonySGGW,
-        ),
         TopBodySection(key: UniqueKey(), size: mediasize, tekst: "Dodawanie", location: Location.center,),
         SizedBox(
           height: mediasize.height * 0.2,
@@ -307,7 +305,8 @@ class _CreationPageState extends State<CreationPage> {
           ],
         ),
       ],
-    ));
+    )
+    );
   }
 
   /* Container addEntityButton (BuildContext context, EntityType atype, String building, String floor, String room) {
