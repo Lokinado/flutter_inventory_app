@@ -35,7 +35,6 @@ class _AddItemPageState extends State<AddItemPage> {
     if (!initalized) {
       getItemTypes();
     }
-    print(itemTypesMap);
 
     final mediaSize = MediaQuery.of(context).size;
     return Scaffold(
