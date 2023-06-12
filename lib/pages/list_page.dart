@@ -2,17 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/components/color_palette.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/database/place_to_list.dart';
-
-class Room {
-  final int building;
-  final int level;
-  final int roomNumber;
-
-  Room(this.building, this.level, this.roomNumber);
-}
+import 'package:inventory_app/pages/creation_page.dart';
+import 'package:inventory_app/pages/show_item_list_page.dart';
 
 class ListPage extends StatefulWidget {
-  ListPage({super.key});
+  const ListPage({super.key});
 
   @override
   State<ListPage> createState() => _ListPageState();
@@ -209,7 +203,4 @@ class _ListPageState extends State<ListPage> {
     ],
   );
   }
-
-  
 }
-

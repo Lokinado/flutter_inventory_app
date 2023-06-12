@@ -39,20 +39,20 @@ class Floor {
 }
 
 class Room {
-  String id;
+  //String id;
   final String name;
   Room({
-    this.id = '',
+    //this.id = '',
     required this.name,
   });
 
   Map<String, dynamic> toJson() => {
-        'id': id,
+        //'id': id,
         'name': name,
       };
 
   static Room fromJson(Map<String, dynamic> json) => Room(
-        id: json['id'],
+        //id: json['id'],
         name: json['name'],
       );
 }
@@ -80,16 +80,16 @@ class Item {
   String id;
   final String name;
   final String comment;
-  final String barcode; // id.floor + id.room + id.item i tyle
-
-  final Timestamp date_created;
-
+  final String barcode;
+  final String type;
+  final Timestamp datecreated;
   Item({
     this.id = '',
     required this.name,
     required this.comment,
     required this.barcode,
-    required this.date_created,
+    required this.datecreated,
+    required this.type,
   });
 
   Map<String, dynamic> toJson() => {
@@ -97,7 +97,8 @@ class Item {
         'name': name,
         'comment': comment,
         'barcode': barcode,
-        'dateCreated': date_created,
+        'datecreated': datecreated,
+        'type': type,
       };
 
   static Item fromJson(Map<String, dynamic> json) => Item(
@@ -105,6 +106,30 @@ class Item {
         name: json['name'],
         comment: json['comment'],
         barcode: json['barcode'],
-        date_created: json['dateCreated'],
+        datecreated: json['datecreated'],
+        type: json['type'],
+      );
+}
+
+class ItemTypeSpecific {
+  String opis;
+  final String producent;
+
+  ItemTypeSpecific({
+    this.opis = '',
+    required this.producent,
+
+  });
+
+  Map<String, dynamic> toJson() => {
+        'opis': opis,
+        'producent': producent,
+
+      };
+
+  static ItemTypeSpecific fromJson(Map<String, dynamic> json) => ItemTypeSpecific(
+        opis: json['opis'],
+        producent: json['producent'],
+
       );
 }

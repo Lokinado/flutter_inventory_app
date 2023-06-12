@@ -27,9 +27,9 @@ class _ListRoomsState extends State<DisplayRooms> {
         future: pobierzPomieszczenia(widget.buildingId, widget.floorId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Text('Something went wrong');
+            return const Text('Something went wrong');
           } else if (snapshot.hasData) {
             final rooms = snapshot.data!;
 

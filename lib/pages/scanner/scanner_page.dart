@@ -109,6 +109,16 @@ class _DemoCamPageState extends State<DemoCamPage> {
       inicjalizujRaz = false;
     }
 
+    //cameraController.pause();
+    //cameraController.resume();
+
+    if (inicjalizujRaz){
+      budynek = widget.budynek;
+      pietro = widget.pietro;
+      pomieszczenie = widget.pomieszczenie;
+      inicjalizujRaz = false;
+    }
+
     /// Pobranie informacji nt. wymiarów okna
     if (odswierzRozmiar) {
       rozmiar = MediaQuery.of(context).size;
@@ -127,11 +137,10 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
       inicjalizujDane = false;
     }
-
     /// Odświeżenie elementów dynamicznych, jako komentarze, czy liczniki
     /// zeskanownaych elementów
     odswierzZeskanowane();
-
+  print("tu lista $przedmiotyWgTypu");
     return Scaffold(
 
         // Nagłówek aplikacji

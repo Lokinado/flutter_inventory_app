@@ -63,12 +63,6 @@ class Report {
   }
 }
 
-
-
-
-
-
-
   /// Funkcja służąca do dodawania nowego pomieszczenie do listy zeskanowanych
   /// przyjmuje ona nową lokalizację do dodania i umieszcza ją w zmiennej skan
   Future nowePomieszczenie(budynek, pietro, pomieszczenie) async {

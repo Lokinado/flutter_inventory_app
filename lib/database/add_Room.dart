@@ -54,8 +54,7 @@ class AddRoom extends StatelessWidget {
         .collection('Floor')
         .doc(floorId)
         .collection('Rooms')
-        .doc();
-    room.id = docRoom.id;
+        .doc(room.name);
 
     final json = room.toJson();
     await docRoom.set(json);

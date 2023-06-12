@@ -214,6 +214,15 @@ class _FinishReportPageState extends State<FinishReportPage> {
         ),
    */
 
+  /*
+  Text(
+        "Raport #" + raport.report_number.toString(),
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 40.0,
+        ),
+   */
+
   @override
   Widget build(BuildContext context) {
     // Jak uzyskać dane
