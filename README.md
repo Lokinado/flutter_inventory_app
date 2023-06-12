@@ -1,4 +1,4 @@
-# Inventory App
+# <img src="https://github.com/Lokinado/flutter_inventory_app/blob/main/lib/images/sggw.png?raw=true" alt="Logo" height="25px"> Inventory App
 ## PL | [EN](https://github.com/Lokinado/flutter_inventory_app#en--pl)
 ### Opis
 Aplikacja do robienia inwentaryzacji tworzona na życzenie. Środki trwałe w pomieszczeniach są identyfikowane po numerze zapisanym na naklejce oraz odwzorowanym za pomocą kodu kreskowego. Istnieje możliwość rozróżnienia budynków, w każdym budynku pięter, a na każdym piętrze pomieszczeń.
