@@ -42,7 +42,7 @@ class Report {
   //         };
 
   Map<String, dynamic> toJson() => {
-        "value": skan,
+        "zeskanowane": skan,
         "report_number": report_number.toString(),
         "date_created": date_created,
       };
