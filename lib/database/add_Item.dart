@@ -5,6 +5,8 @@ import 'package:list_picker/list_picker.dart';
 import 'package:inventory_app/components/element_styling.dart';
 import 'package:inventory_app/components/color_palette.dart';
 import 'dart:math';
+import 'package:inventory_app/components/topbodysection.dart';
+import 'package:inventory_app/components/custom_app_bar.dart';
 
 class AddItem extends StatefulWidget {
   final String buildingId;
@@ -170,118 +172,110 @@ class _AddItemState extends State<AddItem> {
     double numberBoxSize = 60;
 
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: zielonySGGW,
-          toolbarHeight: textHeighOffset * 3,
-          centerTitle: true,
-          title: const Text(
-            "Dodaj Przedmiot",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-            textAlign: TextAlign.center,
-          ),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(34),
-              bottomRight: Radius.circular(34),
-            ),
-          ),
-        ),
-        body: ListView(
-          padding: const EdgeInsets.all(16),
-          children: <Widget>[
-            TextField(
-              controller: controllerComment,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Dodaj komentarz',
-              ),
-            ),
+        appBar: buildAppBar(context),
+        body: Column(
+          children: [
+            TopBodySection(key: UniqueKey(), size: rozmiar, tekst: "Dodaj przedmiot", location: Location.center),
             Container(
-              margin: EdgeInsets.fromLTRB(0, 8, 0, 0),
-              width: szerokoscPrzycisku,
-              height: numberBoxSize,
-              child: ElevatedButton(
-                style: leftTextActive,
-                onPressed: () async {
-                  String? NewSelectedType = await showPickerDialog(
-                    context: context,
-                    label: "Typ",
-                    items: ItemTypes,
-                  );
-                  if ((NewSelectedType != null) && (NewSelectedType != ChosenType)) {
-                    ChosenType = NewSelectedType;
-                    ChosenVersion = "Wersja";
-                    await GetVersions(ChosenType);
-                    setState(() {});
-                  }
-                },
-                child: Text(
-                  ChosenType,
-                  style: TextStyle(
-                    fontSize: 20,
+              height: rozmiar.height*0.7,
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: <Widget>[
+                  TextField(
+                    controller: controllerComment,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Dodaj komentarz',
+                    ),
                   ),
-                  textAlign: TextAlign.left,
-                ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                    width: szerokoscPrzycisku,
+                    height: numberBoxSize,
+                    child: ElevatedButton(
+                      style: leftTextActive,
+                      onPressed: () async {
+                        String? NewSelectedType = await showPickerDialog(
+                          context: context,
+                          label: "Typ",
+                          items: ItemTypes,
+                        );
+                        if ((NewSelectedType != null) && (NewSelectedType != ChosenType)) {
+                          ChosenType = NewSelectedType;
+                          ChosenVersion = "Wersja";
+                          await GetVersions(ChosenType);
+                          setState(() {});
+                        }
+                      },
+                      child: Text(
+                        ChosenType,
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                  ),
+                  GenerateVersionPicker(szerokoscPrzycisku, numberBoxSize),
+                  GenerateVersionDetails(szerokoscPrzycisku, numberBoxSize),
+                  const SizedBox(height: 32),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        width: rozmiar.width*0.4,
+                        child: ElevatedButton(
+                          child: const Text('Dodaj nowy przedmiot'),
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(100, 50),
+                            backgroundColor:
+                            zielonySGGW,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          onPressed: () async {
+                            final item = Item(
+                              name: "Przedmiot",
+                              comment: controllerComment.text,
+                              barcode: next(100000000, 999999999).toString(),
+                              datecreated: Timestamp.now(),
+                              type: "/ItemTypes/" + ChosenType + "/Wersja/" + ChosenVersion, //ObsoleteFunction
+                            );
+                            createItem(item);
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                      Container(
+                        width: rozmiar.width*0.4,
+                        child: ElevatedButton(
+                          child: const Text('Porzuć dodawanie przedmiotu'),
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(100, 50),
+                            backgroundColor:
+                            zielonySGGW,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          onPressed: () async {
+                            final item = Item(
+                              name: "Przedmiot",
+                              comment: controllerComment.text,
+                              barcode: next(100000000, 999999999).toString(),
+                              datecreated: Timestamp.now(),
+                              type: "/ItemTypes/" + ChosenType + "/Wersja/" + ChosenVersion, //ObsoleteFunction
+                            );
+                            createItem(item);
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ),
-            GenerateVersionPicker(szerokoscPrzycisku, numberBoxSize),
-            GenerateVersionDetails(szerokoscPrzycisku, numberBoxSize),
-            const SizedBox(height: 32),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Container(
-                  width: rozmiar.width*0.4,
-                  child: ElevatedButton(
-                    child: const Text('Dodaj nowy przedmiot'),
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(100, 50),
-                      backgroundColor:
-                      zielonySGGW,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    onPressed: () async {
-                      final item = Item(
-                        name: "Przedmiot",
-                        comment: controllerComment.text,
-                        barcode: next(100000000, 999999999).toString(),
-                        datecreated: Timestamp.now(),
-                        type: "/ItemTypes/" + ChosenType + "/Wersja/" + ChosenVersion, //ObsoleteFunction
-                      );
-                      createItem(item);
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-                Container(
-                  width: rozmiar.width*0.4,
-                  child: ElevatedButton(
-                    child: const Text('Porzuć dodawanie przedmiotu'),
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(100, 50),
-                      backgroundColor:
-                      zielonySGGW,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    onPressed: () async {
-                      final item = Item(
-                        name: "Przedmiot",
-                        comment: controllerComment.text,
-                        barcode: next(100000000, 999999999).toString(),
-                        datecreated: Timestamp.now(),
-                        type: "/ItemTypes/" + ChosenType + "/Wersja/" + ChosenVersion, //ObsoleteFunction
-                      );
-                      createItem(item);
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-              ],
             ),
           ],
         ),
