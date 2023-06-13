@@ -231,13 +231,36 @@ class _CreationPageState extends State<CreationPage> with AutomaticKeepAliveClie
                   }
                   else
                   {
-                    createRoom(budynek, pietro, pomieszczenie);
-                    //Navigator.pop(context);
-                    setState(() {
-                      budynek="";
-                      pietro="";
-                      pomieszczenie="";
-                    });
+                    if(!listaBudynkow.contains(budynek))
+                      {
+                        createBuilding(budynek);
+                        createFloor(budynek, pietro);
+                        createRoom(budynek, pietro, pomieszczenie);
+                        setState(() {
+                          budynek="";
+                          pietro="";
+                          pomieszczenie="";
+                        });
+                      }
+                    else if(!listaPieter.contains(pietro))
+                      {
+                        createFloor(budynek, pietro);
+                        createRoom(budynek, pietro, pomieszczenie);
+                        setState(() {
+                          budynek="";
+                          pietro="";
+                          pomieszczenie="";
+                        });
+                      }
+                    else {
+                      createRoom(budynek, pietro, pomieszczenie);
+                      //Navigator.pop(context);
+                      setState(() {
+                        budynek = "";
+                        pietro = "";
+                        pomieszczenie = "";
+                      });
+                    }
                   }
                 }
                 else if(pomieszczenie=="" && pietro!="" && budynek!="")
@@ -250,13 +273,24 @@ class _CreationPageState extends State<CreationPage> with AutomaticKeepAliveClie
                   }
                   else
                   {
-                    createFloor(budynek, pietro);
-                    //Navigator.pop(context);
-                    setState(() {
-                      budynek="";
-                      pietro="";
-                    });
-                  }
+                    if(!listaBudynkow.contains(budynek))
+                      {
+                        createBuilding(budynek);
+                        createFloor(budynek, pietro);
+                        setState(() {
+                          budynek="";
+                          pietro="";
+                        });
+                      }
+                    else {
+                          createFloor(budynek, pietro);
+                          //Navigator.pop(context);
+                          setState(() {
+                            budynek = "";
+                            pietro = "";
+                          });
+                        }
+                      }
                 }
                 else if(pomieszczenie=="" && pietro=="" && budynek!="")
                 {
