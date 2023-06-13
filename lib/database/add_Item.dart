@@ -81,9 +81,6 @@ class _AddItemState extends State<AddItem> {
     var snapshot = await FirebaseFirestore.instance.collection("ItemTypes").doc(Type).collection("Wersja").get();
     for( var i in snapshot.docs ){
       var dane = i.data();
-      print(i.id);
-      print(dane["Opis"]);
-      print(dane["Producent"]);
       Versions.add( i.id );
       VersionDict[i.id] = new Version(i.id, dane["Opis"], dane["Producent"]);
     }
@@ -214,6 +211,7 @@ class _AddItemState extends State<AddItem> {
                   );
                   if ((NewSelectedType != null) && (NewSelectedType != ChosenType)) {
                     ChosenType = NewSelectedType;
+                    ChosenVersion = "Wersja";
                     await GetVersions(ChosenType);
                     setState(() {});
                   }
@@ -271,10 +269,7 @@ class _AddItemState extends State<AddItem> {
         .doc(item.barcode);
     item.id = docItem.id;
 
-    print(item.id);
-
     final json = item.toJson();
-    print(json);
     await docItem.set(json);
 
     /*
