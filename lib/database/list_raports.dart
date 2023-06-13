@@ -1,11 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:inventory_app/database/globalsClasses.dart';
-import 'package:inventory_app/database/list_Floors.dart';
 import 'package:inventory_app/database/place_to_list.dart';
 import 'package:inventory_app/database/report_generator.dart';
 import '../components/color_palette.dart';
-import 'listing_items.dart';
-import 'package:inventory_app/pages/scanner/finish_report.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:pdf/pdf.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class ListRaports extends StatefulWidget {
   @override
@@ -97,15 +100,16 @@ class RaportDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text('Szczegóły Raport $raportId'),
-          backgroundColor: zielonySGGW, // Zmiana koloru na zielony
-          leading: IconButton( // Dodanie strzałki powrotnej
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context); // Powrót do poprzedniego ekranu
-            },
-          ),
+        title: Text('Szczegóły Raport $raportId'),
+        backgroundColor: zielonySGGW, // Zmiana koloru na zielony
+        leading: IconButton(
+          // Dodanie strzałki powrotnej
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context); // Powrót do poprzedniego ekranu
+          },
         ),
+      ),
       body: FutureBuilder<Report>(
         future: pobierzRaportjson(raportId),
         builder: (context, snapshot) {
@@ -124,7 +128,6 @@ class RaportDetailsPage extends StatelessWidget {
                   raport,
                   MediaQuery.of(context).size,
                 ),
-                
               ],
             );
           } else {
@@ -132,9 +135,61 @@ class RaportDetailsPage extends StatelessWidget {
           }
         },
       ),
+   floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          
+        },
+        child: Icon(Icons.picture_as_pdf),
+      ),
     );
   }
 }
+
+void printPdf(Report raport) async {
+  final pdf = pw.Document();
+
+  pdf.addPage(
+    pw.Page(
+      build: (pw.Context context) {
+        return pw.Column(
+          children: [
+            pw.Text(
+              'Raport #' + raport.report_number.toString(),
+              style: pw.TextStyle(
+                fontWeight: pw.FontWeight.bold,
+                fontSize: 30.0,
+              ),
+            ),
+            pw.Text(raport.date_created + ' | ' + raport.skan.keys.first),
+            pw.SizedBox(height: 10),
+            ...generatePdfContent(raport, MediaQuery.of(context as BuildContext).size),
+          ],
+        );
+      },
+    ),
+  );
+
+  await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => pdf.save());
+}
+
+List<pw.Widget> generatePdfContent(Report raport, Size rozmiar) {
+  List<pw.Widget> ret = [];
+  
+
+  return ret;
+}
+
+
+
+
+
+
+
+
+
+
+
+// Funkcja generująca plik PDF
 
 List<Widget> GenerateItems(
     Report raport, Size rozmiar, String Buildings, String Floor, String Room) {
@@ -199,7 +254,7 @@ List<Widget> GenerateFloors(Report raport, Size rozmiar, String Building) {
               style: TextStyle(
                 fontSize: 15.0,
               )),
-           ...GenerateRooms(raport, rozmiar, Building, floor),
+          ...GenerateRooms(raport, rozmiar, Building, floor),
         ],
       ),
     ));
@@ -236,9 +291,8 @@ Widget GenerateRaprotContainer(Report raport, Size rozmiar) {
   }
 
   return Container(
-  
-      height: rozmiar.height *0.8, 
-      width: rozmiar.width*1, 
+      height: rozmiar.height * 0.8,
+      width: rozmiar.width * 1,
       decoration: BoxDecoration(
         border: Border.all(width: 4, color: zielonySGGW),
         borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -274,3 +328,4 @@ Widget GenerateRaprotContainer(Report raport, Size rozmiar) {
         ),
       ));
 }
+
