@@ -56,7 +56,7 @@ class _MainPageState extends State<MainPage>
   Widget build(BuildContext context) {
     super.build(context);
     return Container(
-      color: const Color.fromRGBO(0, 50, 39, 1),
+      color: zielonySGGW,
       child: Container(
         decoration: const BoxDecoration(
           color: Colors.white,
@@ -111,6 +111,7 @@ class _MainPageState extends State<MainPage>
                 ],
               ),
               Container(
+                color: Colors.white,
                 margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
               ),
               _selectedIndex >= 0
@@ -134,6 +135,7 @@ class ListBuildingsClass extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
       child: ListBuildings(),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inventory_app/components/color_palette.dart';
 import 'package:inventory_app/database/globalsClasses.dart';
 import 'package:inventory_app/database/list_Floors.dart';
 import 'listing_items.dart';
@@ -44,8 +45,7 @@ class _ListBuildingsState extends State<ListBuildings> {
                                 });
                               },
                               child: Container(
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 5.0),
+                                margin:const EdgeInsets.symmetric(vertical: 5.0),
                                 decoration: BoxDecoration(
                                   color: Colors.green,
                                   borderRadius: BorderRadius.circular(15),
@@ -88,7 +88,7 @@ class _ListBuildingsState extends State<ListBuildings> {
           });
         },
         child: Icon(Icons.home_filled),
-        backgroundColor: Colors.green,
+        backgroundColor: zielonySGGW,
       ),
     );
   }

@@ -49,8 +49,7 @@ class _ListFloorsState extends State<ListFloors> {
                                 });
                               },
                               child: Container(
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 5.0),
+                                margin:const EdgeInsets.symmetric(vertical: 5.0),
                                 decoration: BoxDecoration(
                                   color: Colors.green,
                                   borderRadius: BorderRadius.circular(15),
