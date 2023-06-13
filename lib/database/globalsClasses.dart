@@ -93,12 +93,8 @@ class Item {
   });
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
         'comment': comment,
-        'barcode': barcode,
-        'datecreated': datecreated,
-        'type': type,
+        'typ': type,
       };
 
   static Item fromJson(Map<String, dynamic> json) => Item(

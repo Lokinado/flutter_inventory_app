@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/color_palette.dart';
 import 'package:inventory_app/components/topbodysection.dart';
+import 'package:inventory_app/database/add_Item.dart';
 import 'package:inventory_app/database/place_to_list.dart';
+import 'package:inventory_app/database/add_Item.dart';
 import 'package:inventory_app/pages/creation_page.dart';
 import 'package:inventory_app/pages/show_item_list_page.dart';
 
@@ -102,16 +104,36 @@ class _ListPageState extends State<ListPage> {
                                                                       collapsedTextColor: Colors.black,
                                                                       children: [
                                                                         for(var room in rooms)
-                                                                          Container(
-                                                                              height: 50.0,
-                                                                              width: mediaWidth.width*0.7,
-                                                                              decoration: BoxDecoration(
-                                                                                  borderRadius: BorderRadius.circular(50.0),
-                                                                                  color: const Color.fromARGB(217, 217, 217, 217)),
-                                                                              margin: const EdgeInsets.only(left: 5.0, bottom: 5.0),
-                                                                              child: ListTile(title: Text("Sala $room"))
-                                                                          ),
 
+                                                                          GestureDetector(
+                                                                            onTap: (){
+                                                                              print(building.toString() + " " + floor.toString() + " " + room.toString());
+
+
+                                                                              //AddItem inst = new AddItem(buildingId: buildingId, floorId: floorId, roomId: roomId, itemTypeId: itemTypeId, nameItemType: nameItemType)
+                                                                              //otwórz widget
+                                                                              Navigator.of(context).push(
+                                                                                MaterialPageRoute(
+                                                                                  builder: (context) => AddItem(
+                                                                                    buildingId: building,
+                                                                                    floorId: floor,
+                                                                                    roomId: room,
+                                                                                    itemTypeId: "AAAAA",
+                                                                                    nameItemType: "BBBBB",
+                                                                                  ),
+                                                                                ),
+                                                                              );
+                                                                            },
+                                                                            child: Container(
+                                                                                height: 50.0,
+                                                                                width: mediaWidth.width*0.7,
+                                                                                decoration: BoxDecoration(
+                                                                                    borderRadius: BorderRadius.circular(50.0),
+                                                                                    color: const Color.fromARGB(217, 217, 217, 217)),
+                                                                                margin: const EdgeInsets.only(left: 5.0, bottom: 5.0),
+                                                                                child: ListTile(title: Text("Sala $room"))
+                                                                            ),
+                                                                          ),
                                                                       ],
                                                                     ),
                                                                   ),
