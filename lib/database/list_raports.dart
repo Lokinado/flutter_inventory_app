@@ -98,6 +98,7 @@ class RaportDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           title: Text('Szczegóły Raport $raportId'),
+          toolbarHeight: 60,
           backgroundColor: zielonySGGW, // Zmiana koloru na zielony
           leading: IconButton( // Dodanie strzałki powrotnej
             icon: Icon(Icons.arrow_back),
@@ -237,7 +238,7 @@ Widget GenerateRaprotContainer(Report raport, Size rozmiar) {
 
   return Container(
   
-      height: rozmiar.height *0.8, 
+      height: rozmiar.height *0.88,
       width: rozmiar.width*1, 
       decoration: BoxDecoration(
         border: Border.all(width: 4, color: zielonySGGW),

@@ -159,7 +159,7 @@ class _FinishReportPageState extends State<FinishReportPage> {
     }
 
     return Container(
-        height: rozmiar.height * 0.6,
+        height: rozmiar.height * 0.7,
         width: rozmiar.width * 0.9,
         decoration: BoxDecoration(
           border: Border.all(width: 4, color: zielonySGGW),
@@ -197,55 +197,8 @@ class _FinishReportPageState extends State<FinishReportPage> {
         ));
   }
 
-  /*
-  Text(
-        "Raport #" + raport.report_number.toString(),
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 40.0,
-        ),
-   */
-  /*
-  Text(
-        "Raport #" + raport.report_number.toString(),
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 40.0,
-        ),
-   */
-
-  /*
-  Text(
-        "Raport #" + raport.report_number.toString(),
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 40.0,
-        ),
-   */
-
   @override
   Widget build(BuildContext context) {
-    // Jak uzyskać dane
-    //var ala = widget.raport;
-
-    /*
-    Report raport = Report();
-    raport.skan = {
-      "Budynek 32":{
-        "Piętro 3":{
-          "Pomieszczenie 3/14":{
-            "Krzeslo 12": "Komentarz",
-            "Krzeslo 31": "Komentarz",
-            "Krzeslo 41": "Komentarz",
-            "Krzeslo 122": "Komentarz",
-            "Krzeslo 331": "Komentarz",
-            "Krzeslo 121": "Komentarz",
-            "Krzeslo 202": "Komentarz",
-          }
-        }
-      }
-    };
-    */
 
     /// Pobranie informacji nt. wymiarów okna
     final Size rozmiar = MediaQuery.of(context).size;
@@ -258,7 +211,7 @@ class _FinishReportPageState extends State<FinishReportPage> {
     if (czyZainic) {
       czanyGrubyTekst = TextStyle(
           fontSize: elementsOffset,
-          color: Colors.white,
+          color: Colors.black,
           fontWeight: FontWeight.w500);
       czyZainic = false;
     }
@@ -351,14 +304,14 @@ class _FinishReportPageState extends State<FinishReportPage> {
                     width: rozmiar.width * 0.33,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: const Color.fromRGBO(255, 0, 0, 0.8),
+                      color: lososiowyCzerwony,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      "Porzuć     zmiany",
+                      "Porzuć zmiany",
                       style: TextStyle(
                           fontSize: elementsOffset,
-                          color: Colors.white,
+                          color: Colors.black,
                           fontWeight: FontWeight.w500),
                       textAlign: TextAlign.center,
                     ),
@@ -377,22 +330,12 @@ class _FinishReportPageState extends State<FinishReportPage> {
                         zielonyTekst,
                         czerwonyTekst);
                     if (wynik) {
+                      widget.raport.zapiszNoweKomentarzeWBazie();
                       Navigator.of(context).pop();
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => ReadyReportPage(
-                              numerRaportu: 10, data: dzisiaj)));
+                              numerRaportu: 10, raport: widget.raport , data: dzisiaj)));
                     }
-                    //Wywolanie funkjcji dodajacej do bazy danych
-                    //
-                    //
-                    //
-                    //
-                    //
-                    //
-                    //
-
-                    print(widget.raport.toJson());
-                    //Dodanie raportu do bazy danych :)
                     raportToDataBase(widget.raport);
                   },
                   child: Container(
@@ -400,14 +343,14 @@ class _FinishReportPageState extends State<FinishReportPage> {
                     width: rozmiar.width * 0.53,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: Color.fromRGBO(16, 142, 15, 1),
+                      color: Colors.green,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       "Zatwierdź raport",
                       style: TextStyle(
                           fontSize: elementsOffset,
-                          color: Colors.white,
+                          color: Colors.black,
                           fontWeight: FontWeight.w500),
                       textAlign: TextAlign.center,
                     ),
