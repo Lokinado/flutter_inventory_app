@@ -343,6 +343,8 @@ class _DemoCamPageState extends State<DemoCamPage> {
   //  Funkcje używane w tym pliku
   //
 
+
+
   /// Widget wyświetlający działąjący skanner
   Widget camera() => SizedBox(
         height: rozmiar.height * 0.3 - 6,

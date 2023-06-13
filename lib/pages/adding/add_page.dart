@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/pages/list_page.dart';

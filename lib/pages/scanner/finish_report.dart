@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/color_palette.dart';
 import 'package:inventory_app/pages/scanner/ready_report.dart';
 import 'package:inventory_app/components/popups.dart';
 import 'package:inventory_app/database/report_generator.dart';
 import 'package:inventory_app/database/report_to_db.dart';
+import 'package:inventory_app/database/place_to_list.dart';
 
 class FinishReportPage extends StatefulWidget {
   FinishReportPage({Key? key, required this.raport}) : super(key: key);
@@ -16,7 +18,6 @@ class FinishReportPage extends StatefulWidget {
 
 class _FinishReportPageState extends State<FinishReportPage> {
   bool isLoading = true;
-
   /// Przechowuje rezultat wyskakujacych popupowych okienek
   late TextEditingController _textEditingController;
 
@@ -196,6 +197,14 @@ class _FinishReportPageState extends State<FinishReportPage> {
         ));
   }
 
+  /*
+  Text(
+        "Raport #" + raport.report_number.toString(),
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 40.0,
+        ),
+   */
   /*
   Text(
         "Raport #" + raport.report_number.toString(),

@@ -56,7 +56,7 @@ class _MainPageState extends State<MainPage>
   Widget build(BuildContext context) {
     super.build(context);
     return Container(
-      color: const Color.fromRGBO(0, 50, 39, 1),
+      color: zielonySGGW,
       child: Container(
         decoration: const BoxDecoration(
           color: Colors.white,
