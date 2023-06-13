@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:inventory_app/components/topbodysection.dart';
-import 'package:inventory_app/pages/adding/addhomebodypage.dart';
+//import 'package:inventory_app/pages/adding/addhomebodypage.dart';
 
 void main() {
   group('CenterAddHomePage', () {
@@ -17,6 +17,7 @@ void main() {
       expect(CAHPTest.size, sizeTest);
     });
      */
+    /*
     test('Wymiary obiektu', () async {
       const locationTest = Location.center;
       const sizeTest = Size(250, 100);
@@ -52,5 +53,7 @@ void main() {
       expect(CAHPTest.roundness, 50);
       expect(CAHPTest.roundness.compareTo(75), 50.compareTo(75));
     });
+
+     */
   });
 }

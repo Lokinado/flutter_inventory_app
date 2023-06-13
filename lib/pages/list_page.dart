@@ -253,7 +253,13 @@ class _ListPageState extends State<ListPage> {
             radius: 22,
             backgroundColor: const Color.fromARGB(255 ,87, 178, 122),
             child: IconButton(
-              onPressed: () =>{},
+              onPressed: () async {
+                await Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => CreationPage()));
+                setState(() {});
+              },
               icon: const Icon(Icons.add, color: Colors.white,),
               style: IconButton.styleFrom(
                 shape: const CircleBorder(),
