@@ -303,9 +303,9 @@ class _DemoCamPageState extends State<DemoCamPage> {
                   child: Container(
                     height: elementsOffset * 4,
                     width: rozmiar.width * 0.33,
-                    alignment: Alignment.centerLeft,
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: const Color.fromRGBO(245, 123, 107, 1),
+                      color: lososiowyCzerwony,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
@@ -327,7 +327,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
                   child: Container(
                     height: elementsOffset * 4,
                     width: rozmiar.width * 0.53,
-                    alignment: Alignment.centerLeft,
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: const Color.fromRGBO(250, 185, 90, 1),
                       borderRadius: BorderRadius.circular(20),

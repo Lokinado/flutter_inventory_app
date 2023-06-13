@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/components/color_palette.dart';
+import 'package:flutter/material.dart';
+import 'package:inventory_app/database/globalsClasses.dart';
+import 'package:inventory_app/database/list_Floors.dart';
+import 'package:inventory_app/database/place_to_list.dart';
+import 'package:inventory_app/database/report_generator.dart';
+import 'package:inventory_app/components/color_palette.dart';
+import 'package:inventory_app/database/listing_items.dart';
+import 'package:inventory_app/pages/scanner/finish_report.dart';
 
 @immutable // zalecane dla wydajności - podpowiedz ide
 class ReadyReportPage extends StatelessWidget {
-   ReadyReportPage({Key? key, required this.numerRaportu, required this.data}) : super(key: key);
+   ReadyReportPage({Key? key, required this.numerRaportu, required this.data, required this.raport}) : super(key: key);
 
   final int numerRaportu; /// Numer raportu przekazany z zewnątrz
   late String data; /// Data raportu przekazana z zewnątrz
+  late Report raport;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +33,7 @@ class ReadyReportPage extends StatelessWidget {
       /// Nagłówek aplikacji
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: const Color.fromRGBO(0, 50, 39, 1),
+        backgroundColor: zielonySGGW,
         toolbarHeight: textHeighOffset * 2 + textHeighOffset,
         centerTitle: true,
         title: SizedBox(
@@ -54,10 +63,17 @@ class ReadyReportPage extends StatelessWidget {
         ),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           SizedBox(
-            height: rozmiar.height*0.64,
+            height: rozmiar.height*0.01,
+          ),
+          GenerateRaprotContainer(
+            raport,
+            MediaQuery.of(context).size,
+          ),
+          SizedBox(
+            height: rozmiar.height*0.01,
           ),
           Container(
             alignment: Alignment.center,
@@ -92,3 +108,141 @@ class ReadyReportPage extends StatelessWidget {
   }
 }
 
+Widget GenerateRaprotContainer(Report raport, Size rozmiar) {
+  for (var budynek in raport.skan.keys) {
+    print(budynek);
+  }
+
+  return Container(
+
+      height: rozmiar.height *0.7,
+      width: rozmiar.width*1,
+      decoration: BoxDecoration(
+        border: Border.all(width: 4, color: zielonySGGW),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+      ),
+      //color: Colors.yellow,
+      padding: EdgeInsets.all(10.0),
+      margin: EdgeInsets.all(6),
+      child: Scrollbar(
+        thumbVisibility: true,
+        child: ListView(
+          padding: const EdgeInsets.all(20),
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(bottom: 10),
+              child: Text(
+                "Raport #" + raport.report_number.toString(),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30.0,
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Text(raport.date_created + " | " + raport.skan.keys.first),
+            ),
+            Container(
+              height: 2,
+              color: Colors.black,
+            ),
+            ...GenerateBuildings(raport, rozmiar),
+          ],
+        ),
+      ));
+}
+
+List<Widget> GenerateItems(
+    Report raport, Size rozmiar, String Buildings, String Floor, String Room) {
+  List<Widget> ret = [];
+  for (var items in raport.skan[Buildings]![Floor]![Room]!.keys) {
+    ret.add(
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.black12,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        alignment: Alignment.centerLeft,
+        padding: EdgeInsets.only(left: 20),
+        margin: EdgeInsets.only(bottom: 8),
+        child: Text(items,
+            style: TextStyle(
+              fontSize: 20.0,
+            )),
+      ),
+    );
+  }
+  return ret;
+}
+
+List<Widget> GenerateRooms(
+    Report raport, Size rozmiar, String Building, String Floor) {
+  List<Widget> ret = [];
+  for (var room in raport.skan[Building]![Floor]!.keys) {
+    ret.add(Container(
+      margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(left: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(room,
+              style: TextStyle(
+                fontSize: 20.0,
+              )),
+          Container(
+            height: 2,
+            margin: EdgeInsets.only(bottom: 10),
+            color: Colors.black,
+          ),
+          ...GenerateItems(raport, rozmiar, Building, Floor, room),
+        ],
+      ),
+    ));
+  }
+  return ret;
+}
+
+List<Widget> GenerateFloors(Report raport, Size rozmiar, String Building) {
+  List<Widget> ret = [];
+  for (var floor in raport.skan[Building]!.keys) {
+    ret.add(Container(
+      margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(left: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(floor,
+              style: TextStyle(
+                fontSize: 15.0,
+              )),
+          ...GenerateRooms(raport, rozmiar, Building, floor),
+        ],
+      ),
+    ));
+  }
+  return ret;
+}
+
+List<Widget> GenerateBuildings(Report raport, Size rozmiar) {
+  List<Widget> ret = [];
+  print("GENERATE BUILDING");
+  print(raport.skan.keys.length);
+  for (var building in raport.skan.keys) {
+    ret.add(Container(
+      margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(left: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(building,
+              style: TextStyle(
+                fontSize: 15.0,
+              )),
+          ...GenerateFloors(raport, rozmiar, building),
+        ],
+      ),
+    ));
+  }
+  return ret;
+}
