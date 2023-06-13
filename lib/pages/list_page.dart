@@ -116,7 +116,7 @@ class _ListPageState extends State<ListPage> {
                                                                               //otwórz widget
                                                                               Navigator.of(context).push(
                                                                                 MaterialPageRoute(
-                                                                                  builder: (context) => AddItem(
+                                                                                  builder: (context) =>   AddItem(
                                                                                     buildingId: building,
                                                                                     floorId: floor,
                                                                                     roomId: room,
@@ -215,7 +215,7 @@ class _ListPageState extends State<ListPage> {
                     ),
                     child: const Center(
                       child: Text(
-                        "Dodaj Wersje     dla typu",
+                        "Dodaj Wersje dla typu",
                         style: TextStyle(
                           fontSize: 18.0,
                           color: Colors.black,

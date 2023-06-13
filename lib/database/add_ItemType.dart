@@ -69,24 +69,48 @@ class AddItemType extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             const SizedBox(height: 32),
-            ElevatedButton(
-              child: const Text('Create new item type'),
-              onPressed: () async {
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  width: rozmiar.width*0.4,
+                  child: ElevatedButton(
+                    child: const Text('Dodaj nowy typ przedmiotu'),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(100, 50),
+                      backgroundColor:
+                      zielonySGGW,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    onPressed: () async {
 
-                Version TypeVariant = new Version(controllerVariant.text, controllerDesc.text, controllerProd.text);
+                      Version TypeVariant = new Version(controllerVariant.text, controllerDesc.text, controllerProd.text);
 
-                createItemType(controllerName.text, TypeVariant);
-                Navigator.pop(context);
-              },
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: ElevatedButton(
-                child: const Text('Porzuć dodawanie typu'),
-                onPressed: () async {
-                  Navigator.pop(context);
-                },
-              ),
+                      createItemType(controllerName.text, TypeVariant);
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+                Container(
+                  width: rozmiar.width*0.4,
+                  child: ElevatedButton(
+                    child: const Text('Porzuć dodawanie typu'),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(100, 50),
+                      backgroundColor:
+                      zielonySGGW,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
 

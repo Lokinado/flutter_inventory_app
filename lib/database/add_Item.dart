@@ -89,7 +89,7 @@ class _AddItemState extends State<AddItem> {
   Widget GenerateVersionPicker(double szerokoscPrzycisku, double numberBoxSize){
     if( Versions.length == 0 ) return SizedBox.shrink();
     return  Container(
-      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      margin: EdgeInsets.fromLTRB(0, 8, 0, 0),
       width: szerokoscPrzycisku,
       height: numberBoxSize,
       child: ElevatedButton(
@@ -198,7 +198,7 @@ class _AddItemState extends State<AddItem> {
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              margin: EdgeInsets.fromLTRB(0, 8, 0, 0),
               width: szerokoscPrzycisku,
               height: numberBoxSize,
               child: ElevatedButton(
@@ -228,29 +228,60 @@ class _AddItemState extends State<AddItem> {
             GenerateVersionPicker(szerokoscPrzycisku, numberBoxSize),
             GenerateVersionDetails(szerokoscPrzycisku, numberBoxSize),
             const SizedBox(height: 32),
-            ElevatedButton(
-              child: const Text('Dodaj nowy przedmiot'),
-              onPressed: () async {
-                final item = Item(
-                  name: "Przedmiot",
-                  comment: controllerComment.text,
-                  barcode: next(100000000, 999999999).toString(),
-                  datecreated: Timestamp.now(),
-                  type: "/ItemTypes/" + ChosenType + "/Wersja/" + ChosenVersion, //ObsoleteFunction
-                );
-
-                createItem(item);
-                Navigator.pop(context);
-              },
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: ElevatedButton(
-                child: const Text('Porzuć dodawanie przedmiotu'),
-                onPressed: () async {
-                  Navigator.pop(context);
-                },
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  width: rozmiar.width*0.4,
+                  child: ElevatedButton(
+                    child: const Text('Dodaj nowy przedmiot'),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(100, 50),
+                      backgroundColor:
+                      zielonySGGW,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    onPressed: () async {
+                      final item = Item(
+                        name: "Przedmiot",
+                        comment: controllerComment.text,
+                        barcode: next(100000000, 999999999).toString(),
+                        datecreated: Timestamp.now(),
+                        type: "/ItemTypes/" + ChosenType + "/Wersja/" + ChosenVersion, //ObsoleteFunction
+                      );
+                      createItem(item);
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+                Container(
+                  width: rozmiar.width*0.4,
+                  child: ElevatedButton(
+                    child: const Text('Porzuć dodawanie przedmiotu'),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(100, 50),
+                      backgroundColor:
+                      zielonySGGW,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    onPressed: () async {
+                      final item = Item(
+                        name: "Przedmiot",
+                        comment: controllerComment.text,
+                        barcode: next(100000000, 999999999).toString(),
+                        datecreated: Timestamp.now(),
+                        type: "/ItemTypes/" + ChosenType + "/Wersja/" + ChosenVersion, //ObsoleteFunction
+                      );
+                      createItem(item);
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),

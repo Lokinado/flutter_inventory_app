@@ -137,6 +137,33 @@ class RaportDetailsPage extends StatelessWidget {
   }
 }
 
+
+
+Widget GenerateSummary(Report raport, Size rozmiar, String Buildings,
+    String Floor, String Room) {
+  if (raport.doZeskanowania.isEmpty) return SizedBox.shrink();
+
+  int NumberOfItems =
+      raport.doZeskanowania[Buildings]![Floor]![Room]!.keys.length;
+  int NumberOfScannedItems =
+      raport.skan[Buildings]![Floor]![Room]!.keys.length;
+
+  return Container(
+    decoration: const BoxDecoration(
+      color: Colors.green,
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    ),
+    alignment: Alignment.center,
+    padding: EdgeInsets.only(left: 20),
+    margin: EdgeInsets.only(bottom: 8),
+    child: Text(
+        "Suma: ${NumberOfScannedItems.toString()}/${NumberOfItems.toString()}",
+        style: const TextStyle(
+          fontSize: 30.0,
+        )),
+  );
+}
+
 List<Widget> GenerateItems(
     Report raport, Size rozmiar, String Buildings, String Floor, String Room) {
   List<Widget> ret = [];
@@ -180,6 +207,7 @@ List<Widget> GenerateRooms(
             color: Colors.black,
           ),
           ...GenerateItems(raport, rozmiar, Building, Floor, room),
+          GenerateSummary(raport, rozmiar, Building, Floor, room)
         ],
       ),
     ));

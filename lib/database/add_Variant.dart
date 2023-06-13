@@ -116,23 +116,47 @@ class _AddVariantState extends State<AddVariant> {
             ),
           ),
           const SizedBox(height: 32),
-          ElevatedButton(
-            child: const Text('Dodaj nową wersję'),
-            onPressed: () async {
-              Version TypeVariant = new Version(controllerVariant.text, controllerDesc.text, controllerProd.text);
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                width: rozmiar.width*0.4,
+                child: ElevatedButton(
+                  child: const Text('Dodaj nową wersję'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(100, 50),
+                    backgroundColor:
+                    zielonySGGW,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  onPressed: () async {
+                    Version TypeVariant = new Version(controllerVariant.text, controllerDesc.text, controllerProd.text);
 
-              createVersion(TypeVariant);
-              Navigator.pop(context);
-            },
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: ElevatedButton(
-              child: const Text('Porzuć dodawanie wersji'),
-              onPressed: () async {
-                Navigator.pop(context);
-              },
-            ),
+                    createVersion(TypeVariant);
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              Container(
+                width: rozmiar.width*0.4,
+                child: ElevatedButton(
+                  child: const Text('Porzuć dodawanie wersji'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(100, 50),
+                    backgroundColor:
+                    zielonySGGW,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ],
           ),
         ],
       ),
