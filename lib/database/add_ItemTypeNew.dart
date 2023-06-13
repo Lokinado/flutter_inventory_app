@@ -42,7 +42,7 @@ class AddItemType extends StatelessWidget {
                   name: controllerName.text,
                 );
 
-                createItemType(itemType);
+                //createItemType(itemType);
                 Navigator.pop(context);
               },
             )
@@ -50,11 +50,11 @@ class AddItemType extends StatelessWidget {
         ),
       );
 
-  Future createItemType(ItemType itemType) async {
-    final docItemType =
-        FirebaseFirestore.instance.collection('ItemTypes').doc();
-    itemType.id = docItemType.id;
-    final json = itemType.toJson();
-    await docItemType.set(json);
-  }
+  // Future createItemType(ItemType itemType) async {
+  //   final docItemType =
+  //       FirebaseFirestore.instance.collection('ItemTypes').doc();
+  //   itemType.id = docItemType.id;
+  //   final json = itemType.toJson();
+  //   await docItemType.set(json);
+  // }
 }

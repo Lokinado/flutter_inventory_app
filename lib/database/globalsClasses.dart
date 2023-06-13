@@ -58,20 +58,15 @@ class Room {
 }
 
 class ItemType {
-  String id;
   final String name;
   ItemType({
-    this.id = '',
     required this.name,
   });
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-      };
+  };
 
   static ItemType fromJson(Map<String, dynamic> json) => ItemType(
-        id: json['id'],
         name: json['name'],
       );
 }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/components/color_palette.dart';
 import 'package:inventory_app/components/topbodysection.dart';
 import 'package:inventory_app/database/add_Item.dart';
+import 'package:inventory_app/database/add_Variant.dart';
 import 'package:inventory_app/database/place_to_list.dart';
+import 'package:inventory_app/database/add_ItemType.dart';
 import 'package:inventory_app/database/add_Item.dart';
 import 'package:inventory_app/pages/creation_page.dart';
 import 'package:inventory_app/pages/show_item_list_page.dart';
@@ -158,28 +160,67 @@ class _ListPageState extends State<ListPage> {
                 }
               }
           ),
-          GestureDetector(
-            onTap: () => print("tu przekierowanie"),
-            child: Container(
-              width: mediaWidth.width*0.9,
-              height: 70.0,
-              margin: const EdgeInsets.all(30.0),
-              decoration: BoxDecoration(
-                color: zielonySlabaSGGW,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(20.0),
-                ),
-              ),
-              child: const Center(
-                child: Text(
-                  "Dodaj i Wygeneruj kody",
-                  style: TextStyle(
-                    fontSize: 22.0,
-                    color: Colors.black,
+          Wrap(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () => {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => AddItemType(),
+                    ),
+                  )
+                },
+                child: Container(
+                  width: mediaWidth.width*0.4,
+                  height: 70.0,
+                  margin: const EdgeInsets.all(30.0),
+                  decoration: BoxDecoration(
+                    color: zielonySlabaSGGW,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(20.0),
+                    ),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      "Dodaj Typ Przedmiotu",
+                      style: TextStyle(
+                        fontSize: 22.0,
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
+              GestureDetector(
+                onTap: () => {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => AddVariant(),
+                    ),
+                  )
+                },
+                child: Container(
+                  width: mediaWidth.width*0.4,
+                  height: 70.0,
+                  margin: const EdgeInsets.all(30.0),
+                  decoration: BoxDecoration(
+                    color: zielonySlabaSGGW,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(20.0),
+                    ),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      "Dodaj Wersje dla typu",
+                      style: TextStyle(
+                        fontSize: 22.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

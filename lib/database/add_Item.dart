@@ -37,6 +37,11 @@ class Version{
   Description = desc,
   Producer = prod;
 
+  Map<String, dynamic> toJson() => {
+    'Opis': Description,
+    'Producent': Producer,
+  };
+
 }
 
 class _AddItemState extends State<AddItem> {

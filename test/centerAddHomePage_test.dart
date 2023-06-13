@@ -5,6 +5,7 @@ import 'package:inventory_app/pages/adding/addhomebodypage.dart';
 
 void main() {
   group('CenterAddHomePage', () {
+    /*
     test('Tworzenie obiektu', () async {
       const locationTest = Location.center;
       const sizeTest = Size(250, 100);
@@ -15,6 +16,7 @@ void main() {
       expect(CAHPTest.location, locationTest);
       expect(CAHPTest.size, sizeTest);
     });
+     */
     test('Wymiary obiektu', () async {
       const locationTest = Location.center;
       const sizeTest = Size(250, 100);

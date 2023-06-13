@@ -1,0 +1,159 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:inventory_app/database/add_Item.dart';
+import 'package:inventory_app/database/globalsClasses.dart';
+import 'package:list_picker/list_picker.dart';
+import 'package:inventory_app/components/element_styling.dart';
+import 'package:inventory_app/components/color_palette.dart';
+import 'dart:math';
+
+class AddVariant extends StatefulWidget {
+
+  @override
+  State<AddVariant> createState() => _AddVariantState();
+}
+
+class _AddVariantState extends State<AddVariant> {
+
+  final controllerVariant = TextEditingController();
+  final controllerDesc = TextEditingController();
+  final controllerProd = TextEditingController();
+
+  bool isInit = false;
+
+  List<String> ItemTypes = [];
+
+  String ChosenType = "Typ";
+
+  Future GetItemTypes() async{
+    ItemTypes.clear();
+    var snapshot = await FirebaseFirestore.instance.collection("ItemTypes").get();
+    for( var i in snapshot.docs ){
+      ItemTypes.add(i.id);
+    }
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context){
+
+    if ( !isInit ){
+      GetItemTypes();
+      isInit = true;
+    }
+    final Size rozmiar = MediaQuery.of(context).size;
+    var textHeighOffset = rozmiar.height * 0.04;
+    var szerokoscPrzycisku = rozmiar.width - 120;
+    double numberBoxSize = 60;
+
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: zielonySGGW,
+        toolbarHeight: textHeighOffset * 3,
+        centerTitle: true,
+        title: const Text(
+          "Dodaj Wersję typu",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+          textAlign: TextAlign.center,
+        ),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(34),
+            bottomRight: Radius.circular(34),
+          ),
+        ),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            width: szerokoscPrzycisku,
+            height: numberBoxSize,
+            child: ElevatedButton(
+              style: leftTextActive,
+              onPressed: () async {
+                String? NewSelectedType = await showPickerDialog(
+                  context: context,
+                  label: "Typ",
+                  items: ItemTypes,
+                );
+                if ((NewSelectedType != null) && (NewSelectedType != ChosenType)) {
+                  ChosenType = NewSelectedType;
+                  setState(() {});
+                }
+              },
+              child: Text(
+                ChosenType,
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+                textAlign: TextAlign.left,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: controllerVariant,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Podaj nazwę wersji przedmiotu',
+            ),
+          ),
+          TextField(
+            controller: controllerDesc,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Podaj opis dla wersji',
+            ),
+          ),
+          TextField(
+            controller: controllerProd,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Podaj producenta dla wersji',
+            ),
+          ),
+          const SizedBox(height: 32),
+          ElevatedButton(
+            child: const Text('Dodaj nową wersję'),
+            onPressed: () async {
+              Version TypeVariant = new Version(controllerVariant.text, controllerDesc.text, controllerProd.text);
+
+              createVersion(TypeVariant);
+              Navigator.pop(context);
+            },
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: ElevatedButton(
+              child: const Text('Porzuć dodawanie wersji'),
+              onPressed: () async {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future createVersion(Version Variant) async {
+    final docVariant = FirebaseFirestore.instance
+        .collection('ItemTypes')
+        .doc(ChosenType)
+        .collection("Wersja")
+        .doc(Variant.Name);
+
+    final json = Variant.toJson();
+    print(json);
+    await docVariant.set(json);
+
+    /*
+    await docItem.update({
+      'barcode': widget.floorId + '-' + widget.roomId + '-' + widget.item.id,
+    });
+    */
+  }
+}
