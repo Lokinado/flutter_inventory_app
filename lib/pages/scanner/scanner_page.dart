@@ -374,7 +374,7 @@ class _DemoCamPageState extends State<DemoCamPage> {
 
               // ... sprawdź czy element jest w bazie i ...
               var czyWBazie =
-                  await checkItemsInRoom(_textEditingController.text);
+                  await checkItemsInRoom(data.toString());
 
               // ... w zależności od odopowiedzi odznacz i pokaż odpowiedni komunikat
               if (czyWBazie) {
@@ -683,7 +683,8 @@ class _DemoCamPageState extends State<DemoCamPage> {
   Future<bool> checkItemsInRoom(barcode) async {
     for (var kategoria in przedmiotyWgTypu.keys) {
       for (var elem in przedmiotyWgTypu[kategoria]!.keys) {
-        if (elem == barcode) {
+        print("Barcode : $barcode, element: $elem");
+        if (elem.toString().trim() == barcode.toString().trim()) {
           zeskanowanePrzedmioty[kategoria]![barcode] = "";
           return true;
         }
