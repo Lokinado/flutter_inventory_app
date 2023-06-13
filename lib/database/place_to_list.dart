@@ -132,7 +132,7 @@ Future<Report> pobierzRaportjson(String raportID) async {
   print(raport.doZeskanowania);
   print("po pobraniu");
   return raport;
-}
+} 
 
 // Future<DaneRaportu> konwertujNaDaneRaportu(Map<String, dynamic> dane) async {
 //   String dateCreated = dane['date_created'];
