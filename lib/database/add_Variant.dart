@@ -5,6 +5,8 @@ import 'package:inventory_app/database/globalsClasses.dart';
 import 'package:list_picker/list_picker.dart';
 import 'package:inventory_app/components/element_styling.dart';
 import 'package:inventory_app/components/color_palette.dart';
+import 'package:inventory_app/components/custom_app_bar.dart';
+import 'package:inventory_app/components/topbodysection.dart';
 import 'dart:math';
 
 class AddVariant extends StatefulWidget {
@@ -47,94 +49,85 @@ class _AddVariantState extends State<AddVariant> {
     double numberBoxSize = 60;
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: zielonySGGW,
-        toolbarHeight: textHeighOffset * 3,
-        centerTitle: true,
-        title: const Text(
-          "Dodaj Wersję typu",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-          textAlign: TextAlign.center,
-        ),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(34),
-            bottomRight: Radius.circular(34),
-          ),
-        ),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: <Widget>[
+      appBar: buildAppBar(context),
+      body: Column(
+        children: [
+          TopBodySection(key: UniqueKey(), size: rozmiar, tekst: "Dodaj Wersję typu", location: Location.center),
           Container(
-            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-            width: szerokoscPrzycisku,
-            height: numberBoxSize,
-            child: ElevatedButton(
-              style: leftTextActive,
-              onPressed: () async {
-                String? NewSelectedType = await showPickerDialog(
-                  context: context,
-                  label: "Typ",
-                  items: ItemTypes,
-                );
-                if ((NewSelectedType != null) && (NewSelectedType != ChosenType)) {
-                  ChosenType = NewSelectedType;
-                  setState(() {});
-                }
-              },
-              child: Text(
-                ChosenType,
-                style: TextStyle(
-                  fontSize: 20,
+            height: 400,
+            child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                width: szerokoscPrzycisku,
+                height: numberBoxSize,
+                child: ElevatedButton(
+                  style: leftTextActive,
+                  onPressed: () async {
+                    String? NewSelectedType = await showPickerDialog(
+                      context: context,
+                      label: "Typ",
+                      items: ItemTypes,
+                    );
+                    if ((NewSelectedType != null) && (NewSelectedType != ChosenType)) {
+                      ChosenType = NewSelectedType;
+                      setState(() {});
+                    }
+                  },
+                  child: Text(
+                    ChosenType,
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
                 ),
-                textAlign: TextAlign.left,
               ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          TextField(
-            controller: controllerVariant,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Podaj nazwę wersji przedmiotu',
-            ),
-          ),
-          TextField(
-            controller: controllerDesc,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Podaj opis dla wersji',
-            ),
-          ),
-          TextField(
-            controller: controllerProd,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Podaj producenta dla wersji',
-            ),
-          ),
-          const SizedBox(height: 32),
-          ElevatedButton(
-            child: const Text('Dodaj nową wersję'),
-            onPressed: () async {
-              Version TypeVariant = new Version(controllerVariant.text, controllerDesc.text, controllerProd.text);
-
-              createVersion(TypeVariant);
-              Navigator.pop(context);
-            },
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: ElevatedButton(
-              child: const Text('Porzuć dodawanie wersji'),
-              onPressed: () async {
-                Navigator.pop(context);
-              },
-            ),
-          ),
-        ],
+              const SizedBox(height: 8),
+              TextField(
+                controller: controllerVariant,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Podaj nazwę wersji przedmiotu',
+                ),
+              ),
+              TextField(
+                controller: controllerDesc,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Podaj opis dla wersji',
+                ),
+              ),
+              TextField(
+                controller: controllerProd,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Podaj producenta dla wersji',
+                ),
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton(
+                child: const Text('Dodaj nową wersję'),
+                onPressed: () async {
+                  Version TypeVariant = new Version(controllerVariant.text, controllerDesc.text, controllerProd.text);
+                
+                  createVersion(TypeVariant);
+                  Navigator.pop(context);
+                },
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: ElevatedButton(
+                  child: const Text('Porzuć dodawanie wersji'),
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ],
+                  ),
+          ),]
       ),
     );
   }

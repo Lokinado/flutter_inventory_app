@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/database/add_Item.dart';
 import 'package:inventory_app/components/color_palette.dart';
 import 'package:inventory_app/database/globalsClasses.dart';
+import 'package:inventory_app/components/custom_app_bar.dart';
+import 'package:inventory_app/components/topbodysection.dart';
 
 class AddItemType extends StatelessWidget {
 
@@ -19,77 +21,70 @@ class AddItemType extends StatelessWidget {
     var szerokoscPrzycisku = rozmiar.width - 120;
     double numberBoxSize = 60;
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: zielonySGGW,
-          toolbarHeight: textHeighOffset * 3,
-          centerTitle: true,
-          title: const Text(
-            "Dodaj Typ przedmiotu",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-            textAlign: TextAlign.center,
-          ),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(34),
-              bottomRight: Radius.circular(34),
-            ),
-          ),
-        ),
-        body: ListView(
-          padding: const EdgeInsets.all(16),
-          children: <Widget>[
-            TextField(
-              controller: controllerName,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Podaj nazwę typu',
-              ),
-            ),
-            TextField(
-              controller: controllerVariant,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Podaj nazwę wersji przedmiotu',
-              ),
-            ),
-            TextField(
-              controller: controllerDesc,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Podaj opis dla wersji',
-              ),
-            ),
-            TextField(
-              controller: controllerProd,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Podaj producenta dla wersji',
-              ),
-            ),
-            const SizedBox(height: 24),
-            const SizedBox(height: 32),
-            ElevatedButton(
-              child: const Text('Create new item type'),
-              onPressed: () async {
-
-                Version TypeVariant = new Version(controllerVariant.text, controllerDesc.text, controllerProd.text);
-
-                createItemType(controllerName.text, TypeVariant);
-                Navigator.pop(context);
-              },
+        appBar: buildAppBar(context),
+        body: Column(
+          children: [
+            TopBodySection(key: UniqueKey(), size: rozmiar, tekst: "Dodaj typ przedmiotu", location: Location.center
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: ElevatedButton(
-                child: const Text('Porzuć dodawanie typu'),
-                onPressed: () async {
-                  Navigator.pop(context);
-                },
+              height: 400,
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: <Widget>[
+                  TextField(
+                    controller: controllerName,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Podaj nazwę typu',
+                    ),
+                  ),
+                  TextField(
+                    controller: controllerVariant,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Podaj nazwę wersji przedmiotu',
+                    ),
+                  ),
+                  TextField(
+                    controller: controllerDesc,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Podaj opis dla wersji',
+                    ),
+                  ),
+                  TextField(
+                    controller: controllerProd,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Podaj producenta dla wersji',
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  const SizedBox(height: 32),
+                  ElevatedButton(
+                    child: const Text('Create new item type'),
+                    onPressed: () async {
+            
+                      Version TypeVariant = new Version(controllerVariant.text, controllerDesc.text, controllerProd.text);
+            
+                      createItemType(controllerName.text, TypeVariant);
+                      Navigator.pop(context);
+                    },
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: ElevatedButton(
+                      child: const Text('Porzuć dodawanie typu'),
+                      onPressed: () async {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ],
+            
               ),
             ),
           ],
-
         ),
       );
   }
