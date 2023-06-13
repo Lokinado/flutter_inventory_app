@@ -297,11 +297,11 @@ class _PickPlaceState extends State<PickPlace>
                       width: rozmiar.width - 40,
                       height: 60.0,
                       child: ElevatedButton(
-                        style: pietro != ""
+                        style: pomieszczenie != ""
                             ? centerTextActive
                             : centerTextNotActive,
                         onPressed: () async {
-                          if (pietro != "") {
+                          if (pomieszczenie != "") {
                             var wynik =
                                 await doSkanowaniaPomieszczenia(context);
                             if (wynik != null) {

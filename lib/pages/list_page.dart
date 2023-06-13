@@ -160,68 +160,74 @@ class _ListPageState extends State<ListPage> {
                 }
               }
           ),
-          Wrap(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () => {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => AddItemType(),
+          Container(
+            margin: EdgeInsets.only(bottom: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () => {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => AddItemType(),
+                      ),
+                    )
+                  },
+                  child: Container(
+                    width: mediaWidth.width*0.4,
+                    height: 70.0,
+                    //margin: const EdgeInsets.all(30.0),
+                    decoration: const BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20.0),
+                      ),
                     ),
-                  )
-                },
-                child: Container(
-                  width: mediaWidth.width*0.4,
-                  height: 70.0,
-                  margin: const EdgeInsets.all(30.0),
-                  decoration: BoxDecoration(
-                    color: zielonySlabaSGGW,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(20.0),
-                    ),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      "Dodaj Typ Przedmiotu",
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        color: Colors.black,
+                    child: const Center(
+                      child: Text(
+                        "Dodaj Typ Przedmiotu",
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
                 ),
-              ),
-              GestureDetector(
-                onTap: () => {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => AddVariant(),
+                GestureDetector(
+                  onTap: () => {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => AddVariant(),
+                      ),
+                    )
+                  },
+                  child: Container(
+                    width: mediaWidth.width*0.4,
+                    height: 70.0,
+                    //margin: const EdgeInsets.all(30.0),
+                    decoration: const BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20.0),
+                      ),
                     ),
-                  )
-                },
-                child: Container(
-                  width: mediaWidth.width*0.4,
-                  height: 70.0,
-                  margin: const EdgeInsets.all(30.0),
-                  decoration: BoxDecoration(
-                    color: zielonySlabaSGGW,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(20.0),
-                    ),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      "Dodaj Wersje dla typu",
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        color: Colors.black,
+                    child: const Center(
+                      child: Text(
+                        "Dodaj Wersje     dla typu",
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          )
         ],
       ),
     );
