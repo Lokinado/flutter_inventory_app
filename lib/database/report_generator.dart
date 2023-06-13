@@ -126,7 +126,7 @@ class Report {
                     "/Floors/$pietro/Rooms/$pomieszczenie/Items")
                 .doc(przedmiot)
                 .update({
-              "comment": skan[budynek]![pietro]![pomieszczenie]!["comment"],
+              "comment": skan[budynek]![pietro]![pomieszczenie]![przedmiot],
             });
           }
         }
@@ -151,12 +151,8 @@ class Report {
             await pobieraniePrzedmiotow(budynek, floor, room);
         doZeskanowania[budynek]![floor]![room] = {};
         for (var key in result.keys) {
-          print("OK I ADD " + key);
-          print("OK I ADD " + result[key].toString());
           doZeskanowania[budynek]![floor]![room]![key] = "OK";
         }
-        print("ROZM");
-        print(doZeskanowania[budynek]![floor]![room]!.keys.length);
       }
     }
   }
