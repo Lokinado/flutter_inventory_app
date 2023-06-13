@@ -84,6 +84,7 @@ class DisplayItems extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => ShowItem(
                               name: item[0],
+                              buildingId: buildingId,
                               roomId: roomId,
                               floorId: floorId,
                               itemtype: item[2].toString(),
