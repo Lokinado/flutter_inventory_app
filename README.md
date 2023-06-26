@@ -95,8 +95,8 @@ The most noteworthy frameworks and technologies.
 
 <br>
 
-## Clone the repo
-1. Sklonuj repozytorium
+## Build & Run
+1. Clone the repo
 ```sh
 git clone https://github.com/Lokinado/flutter_inventory_app
 ```
