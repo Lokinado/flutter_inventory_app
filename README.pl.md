@@ -99,7 +99,7 @@ Flutter inventory app
 ## Budowanie i uruchamianie
 1. Sklonuj repozytorium
 ```sh
-git clone https://github.com/Lokinado/CheckersOnline
+git clone https://github.com/Lokinado/flutter_inventory_app
 ```
 2. Otwórz terminal w głównym katalogu projektu i zbuduj aplikacje korzystając z Flutter CLI
 ```sh
