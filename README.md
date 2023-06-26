@@ -5,7 +5,7 @@ title = "Flutter Inventory App"
 date = "2023-06-13"
 description = "The application for conducting the inventory process."
 summary = "The application for conducting the inventory process."
-draft="true"
+draft="false"
 tags = [
     "android", 
     "dart",
